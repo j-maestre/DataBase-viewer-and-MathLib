@@ -10,6 +10,8 @@
 #include <esat_extra/imgui.h>
 #include <esat_extra/sqlite3.h>
 
+#include "data_base_controller.h"
+
 
 
 
@@ -19,14 +21,15 @@ int esat::main(int argc, char **argv) {
   esat::WindowInit(1400, 810);
   esat::WindowSetMouseVisibility(true);
 
- 
+  DataBaseController db_controller;
 
   while (esat::WindowIsOpened() && !esat::IsSpecialKeyDown(esat::kSpecialKey_Escape)) {
     last_time = esat::Time();
     esat::DrawBegin();
     esat::DrawClear(0, 0, 0);
 
-    
+    db_controller.OpenDB("../data/chinook.db");
+    db_controller.ShowWindow();
 
     esat::DrawEnd();
     do{//Control fps

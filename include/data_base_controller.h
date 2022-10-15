@@ -8,6 +8,9 @@
 #ifndef __DATA_BASE_CONTROLLER_H__ 
 #define __DATA_BASE_CONTROLLER_H__ 1 
 
+#include "esat_extra/sqlite3.h"
+
+
 class DataBaseController{
     public:
     // Public functions
@@ -20,10 +23,16 @@ class DataBaseController{
         DataBaseController(const DataBaseController&) = delete; // Palabra clave, para decirle que no exista ese constructor. Tambien se puede poner default en vez de delete para que lo haga el compilador por defecto
         void operator = (const DataBaseController&) = delete; // Sobre carga de operador para la clase
         ~DataBaseController(); // Destructor
-        void ShowTable();
+
+        void ShowWindow();
+        bool OpenDB(char *name);
 
     private:
     // Private functions
+    
+    void ShowTable();
+    
+    sqlite3* db;
 
     // Consulta Select
     void ExecuteSelect(char *query); // Devolverá una tabla
@@ -34,9 +43,5 @@ class DataBaseController{
 
 };
 
-
-DataBaseController::DataBaseController(){
-
-};
 
 #endif

@@ -2,10 +2,15 @@
 
 #include "data_base_controller.h"
 #include <stdio.h>
+#include "esat_extra/imgui.h"
 
 DataBaseController::DataBaseController(){}
 DataBaseController::~DataBaseController(){}
 
+DataBaseController& DataBaseController::Instance(){
+    static DataBaseController db_controller;
+    return db_controller;
+};
 
 int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
     for(int i=0; i < num_colums; i++){
@@ -25,12 +30,17 @@ bool DataBaseController::OpenDB(char *name){
 }
 
 void DataBaseController::ExecuteSelect(char *query){
-    const char *tmp= "SELECT name FROM sqlite_master WHERE type = 'table'";
     char *errmsg;
-    sqlite3_exec(db,tmp,CallbackGetTablesName,nullptr,&errmsg);
+    sqlite3_exec(db,query,CallbackGetTablesName,nullptr,&errmsg);
 
 }
 void DataBaseController::ShowWindow(){
-    ExecuteSelect("");
+    ExecuteSelect("SELECT name FROM sqlite_master WHERE type = 'table'");
+}
+
+void DataBaseController::MainWindow(){
+    if(ImGui::Begin("DB Viewer")){
+
+    }
 }
 

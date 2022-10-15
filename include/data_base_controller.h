@@ -11,12 +11,12 @@
 #include "esat_extra/sqlite3.h"
 
 
+
 class DataBaseController{
     public:
     // Public functions
         
-        // Constructor
-        DataBaseController();
+        static DataBaseController& Instance();
         
         //** Importante **
         // Constructor de copia
@@ -30,6 +30,9 @@ class DataBaseController{
     private:
     // Private functions
     
+    // Constructor
+    DataBaseController();
+    
     void ShowTable();
     
     sqlite3* db;
@@ -40,7 +43,17 @@ class DataBaseController{
     // Cualquier tipo de consulta excepto Select
     void ExecuteQuery(char *query);
 
+    // Ventana principal
+    void MainWindow();
 
+    // Zona de eleccion de tabla
+    void TablesNameWindow();
+    
+    // Mostrar contenido de tabla
+    void PreviewWindow();
+    
+    // Execute user SQL
+    void SQLWindow();
 };
 
 

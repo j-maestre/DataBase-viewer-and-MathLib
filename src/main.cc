@@ -21,15 +21,17 @@ int esat::main(int argc, char **argv) {
   esat::WindowInit(1400, 810);
   esat::WindowSetMouseVisibility(true);
 
-  DataBaseController db_controller;
+  DataBaseController& db_controller = DataBaseController::Instance();
 
   while (esat::WindowIsOpened() && !esat::IsSpecialKeyDown(esat::kSpecialKey_Escape)) {
     last_time = esat::Time();
     esat::DrawBegin();
     esat::DrawClear(0, 0, 0);
 
+
     db_controller.OpenDB("../data/chinook.db");
     db_controller.ShowWindow();
+
 
     esat::DrawEnd();
     do{//Control fps

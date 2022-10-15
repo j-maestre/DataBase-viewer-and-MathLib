@@ -2,5 +2,5 @@
 
 cls
 
-del *.obj *.ilk *.pdb *.ini 
-del ../bin/*.exe
+del *.obj *.ilk *.pdb *.ini
+del .\bin\test.exe

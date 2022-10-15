@@ -27,15 +27,25 @@ class DataBaseController{
         void ShowWindow();
         bool OpenDB(char *name);
 
+        void SetNumTables(int);
+        void SetTableName(int, char*);
+
+        void GetTablesName();
+
     private:
     // Private functions
+    sqlite3* db;
+    char **tables_name;
+    int num_tables;
+    char *err_msg;
+
+
     
     // Constructor
     DataBaseController();
     
     void ShowTable();
     
-    sqlite3* db;
 
     // Consulta Select
     void ExecuteSelect(char *query); // Devolverá una tabla
@@ -54,6 +64,8 @@ class DataBaseController{
     
     // Execute user SQL
     void SQLWindow();
+
+
 };
 
 

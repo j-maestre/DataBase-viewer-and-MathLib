@@ -36,14 +36,14 @@ bool DataBaseController::OpenDB(char *name){
     sqlite3_open(name,&db_);
 
     // Get total tables
-    sqlite3_exec(db_, "SELECT COUNT(name) FROM sqlite_master WHERE type = 'table'",
+    sqlite3_exec(db_, "SELECT COUNT(name) FROM sqlite_master WHERE (type = 'table' AND name != 'sqlite_sequence' AND name != 'sqlite_stat1')",
                                               GetNumTables, &num_tables_, &err_msg_);
     tables_name_ = (char**) malloc(sizeof(char*) * (num_tables_));
     for(int i = 0; i < num_tables_; i++){
         tables_name_[i] = (char*) malloc(sizeof(char) * 50);
     }
     
-    sqlite3_exec(db_,"SELECT name FROM sqlite_master WHERE type = 'table'",
+    sqlite3_exec(db_,"SELECT name FROM sqlite_master WHERE (type = 'table' AND name != 'sqlite_sequence' AND name != 'sqlite_stat1')",
                                         CallbackGetTablesName, tables_name_,&err_msg_);
     GetTablesName();
 

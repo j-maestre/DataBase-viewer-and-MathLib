@@ -13,19 +13,17 @@ DataBaseController& DataBaseController::Instance(){
 };
 
 int GetNumTables(void *notused,int num_colums, char **data, char **colum_name){
-  DataBaseController* db_ptr = (DataBaseController*) notused;
+  int *num_tables = (int *) notused;
   printf("Total de tablas-> %s\n",data[0]);
-  db_ptr->SetNumTables(atoi(data[0]));
+  *num_tables = atoi(data[0]);
   return 0;
 }
 
 int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
-  DataBaseController* db_ptr = (DataBaseController*) notused;
   static int actual_pos = 0;
-  // Guardar el nombre de las tablas
+  char **tables_name = (char **) notused;
   for(int i=0; i < num_colums; i++){
-    db_ptr->SetTableName(actual_pos,data[i]);
-    //printf("Nombre tabla %d -> %s\n",actual_pos, data[i]);
+    strcpy(tables_name[actual_pos], data[i]);
     actual_pos++;
   }
   return 0;
@@ -38,13 +36,15 @@ bool DataBaseController::OpenDB(char *name){
     sqlite3_open(name,&db_);
 
     // Get total tables
-    sqlite3_exec(db_,"SELECT COUNT(name) FROM sqlite_master WHERE type = 'table'",GetNumTables,this,&err_msg_);
+    sqlite3_exec(db_, "SELECT COUNT(name) FROM sqlite_master WHERE type = 'table'",
+                                              GetNumTables, &num_tables_, &err_msg_);
     tables_name_ = (char**) malloc(sizeof(char*) * (num_tables_));
     for(int i = 0; i < num_tables_; i++){
         tables_name_[i] = (char*) malloc(sizeof(char) * 50);
     }
     
-    sqlite3_exec(db_,"SELECT name FROM sqlite_master WHERE type = 'table'",CallbackGetTablesName,this,&err_msg_);
+    sqlite3_exec(db_,"SELECT name FROM sqlite_master WHERE type = 'table'",
+                                        CallbackGetTablesName, tables_name_,&err_msg_);
     GetTablesName();
 
 
@@ -94,17 +94,6 @@ void DataBaseController::TablesNameWindow(){
 
 
   ImGui::EndChild();
-}
-
-
-// Setters
-void DataBaseController::SetNumTables(int num){
-  num_tables_ = num;
-}
-
-void DataBaseController::SetTableName(int pos, char *name){
-  //printf("Guardando en %d la tabla %s\n",pos,name);
-  strcpy(tables_name_[pos], name);
 }
 
 

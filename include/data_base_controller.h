@@ -28,8 +28,6 @@ class DataBaseController{
 
   void ShowWindow();
   bool OpenDB(char *name);
-  void SetNumTables(int);
-  void SetTableName(int, char*);
   void GetTablesName();
 
  private:

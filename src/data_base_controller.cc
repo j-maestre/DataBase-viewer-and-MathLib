@@ -114,10 +114,11 @@ void DataBaseController::MainWindow(){
           memset(db_name_,'\0',50);
           ImGui::CloseCurrentPopup();
         }else{
+          // La bd ya está abierta
           open_error_popup = true;
         }
       }else{
-        //La bd ya está abierta
+        // El input esta vacio
         open_error_popup = true;
       }
       
@@ -134,10 +135,6 @@ void DataBaseController::MainWindow(){
     ImGui::EndPopup();
   }
   // End open data base
-
-
-
-
 
 
   TablesNameWindow();

@@ -6,6 +6,7 @@
 
 DataBaseController::DataBaseController(){
   db_opened_ = false;
+  table_selected_ = false;
 }
 DataBaseController::~DataBaseController(){}
 
@@ -31,6 +32,10 @@ int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colu
   return 0;
 }
 
+int CallbackGetTable(void *notused,int num_colums, char **data, char **colum_name){
+  
+}
+
 
 bool DataBaseController::OpenDB(char *name){
 
@@ -51,6 +56,7 @@ bool DataBaseController::OpenDB(char *name){
     GetTablesName();
 
     db_opened_ = true;
+    table_selected_ = false;
     return true;
   }
 
@@ -59,7 +65,7 @@ bool DataBaseController::OpenDB(char *name){
 
 void DataBaseController::ExecuteSelect(char *query){
   char *errmsg;
-  sqlite3_exec(db_,query,CallbackGetTablesName,nullptr,&errmsg);
+  sqlite3_exec(db_,query,CallbackGetTable,nullptr,&errmsg);
 }
 
 
@@ -86,7 +92,7 @@ void DataBaseController::MainWindow(){
   // Menu db options
   if(ImGui::BeginMenuBar()){
     if(ImGui::BeginMenu("Options")){
-      if(ImGui::MenuItem("Open")){
+      if(ImGui::MenuItem("Open","Ctrl+O")){
         open_popup = true;
         open_error_popup = false;
       }
@@ -146,8 +152,22 @@ void DataBaseController::MainWindow(){
 
 
   TablesNameWindow();
+  ShowTable();
 
   ImGui::End();
+}
+
+
+
+void DataBaseController::ShowTable(){
+
+  if(table_selected_){
+    printf("NOMBRE-> %s\n",current_table_);
+    char *query = {"SELECT * FROM "};
+    strcpy(query,current_table_);
+    ExecuteSelect(query);
+
+  }
 }
 
 
@@ -162,7 +182,13 @@ void DataBaseController::TablesNameWindow(){
   }
   ImGui::Text("TABLAS");
 
-
+  for(int i = 0; i < num_tables_; i++){
+    if(ImGui::SmallButton(tables_name_[i])){
+      table_selected_ = true;
+      strcpy(current_table_,tables_name_[i]);
+    }
+    ImGui::Separator();
+  }
 
   ImGui::EndChild();
 }

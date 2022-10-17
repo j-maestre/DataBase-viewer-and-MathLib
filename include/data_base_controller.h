@@ -38,6 +38,8 @@ class DataBaseController{
   char *err_msg_;
   bool db_opened_;
   char db_name_[50];
+  char current_table_[20];
+  bool table_selected_;
 
   // Constructor
   DataBaseController();

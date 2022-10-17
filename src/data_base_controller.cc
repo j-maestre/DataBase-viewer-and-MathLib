@@ -4,7 +4,9 @@
 #include <esat_extra/imgui.h>
 #include "data_base_controller.h"
 
-DataBaseController::DataBaseController(){}
+DataBaseController::DataBaseController(){
+  db_opened_ = false;
+}
 DataBaseController::~DataBaseController(){}
 
 DataBaseController& DataBaseController::Instance(){
@@ -31,7 +33,8 @@ int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colu
 
 
 bool DataBaseController::OpenDB(char *name){
-  if(sqlite3_open_v2(name,&db_,SQLITE_OPEN_READONLY,NULL) == SQLITE_OK){
+
+  if(sqlite3_open_v2(name,&db_,SQLITE_OPEN_READONLY,NULL) == SQLITE_OK && !db_opened_){
     sqlite3_close(db_);
     sqlite3_open(name,&db_);
 
@@ -47,7 +50,7 @@ bool DataBaseController::OpenDB(char *name){
                                         CallbackGetTablesName, tables_name_,&err_msg_);
     GetTablesName();
 
-
+    db_opened_ = true;
     return true;
   }
 
@@ -66,14 +69,77 @@ void DataBaseController::ShowWindow(){
 }
 
 void DataBaseController::MainWindow(){
+  static bool open_popup = false;
+  static bool open_error_popup = false;
+
   ImGuiWindowFlags flags = ImGuiWindowFlags_::ImGuiWindowFlags_None;
   flags |= ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar;
   flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoMove;
   
   if(!ImGui::Begin("DB Viewer", NULL,flags)){
+
+    
     ImGui::End();
     return;
   }
+
+  // Menu db options
+  if(ImGui::BeginMenuBar()){
+    if(ImGui::BeginMenu("Options")){
+      if(ImGui::MenuItem("Open")){
+        open_popup = true;
+        open_error_popup = false;
+      }
+
+      ImGui::EndMenu();
+    }
+
+    ImGui::EndMenuBar();
+  }
+
+
+  // Pop up open data base
+  if(open_popup){
+    open_popup = false;
+    ImGui::OpenPopup("Select DB");
+  }
+  if(ImGui::BeginPopupModal("Select DB", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+    ImGui::Text("Data Base name");
+
+    if(ImGui::InputText("##db_name",db_name_,50, ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Acept")){
+
+      // Controll errors
+      if(strlen(db_name_) > 0){
+        if(OpenDB(db_name_)){
+          memset(db_name_,'\0',50);
+          ImGui::CloseCurrentPopup();
+        }else{
+          open_error_popup = true;
+        }
+      }else{
+        //La bd ya está abierta
+        open_error_popup = true;
+      }
+      
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("Close")){
+        ImGui::CloseCurrentPopup();
+    }
+
+    // Error messages
+    if(open_error_popup){
+      db_opened_ ?ImGui::Text("Data base is opened!"):ImGui::Text("Data base no found!");
+    }
+    ImGui::EndPopup();
+  }
+  // End open data base
+
+
+
+
+
+
   TablesNameWindow();
 
   ImGui::End();

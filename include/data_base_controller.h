@@ -36,6 +36,8 @@ class DataBaseController{
   char **tables_name_;
   int num_tables_;
   char *err_msg_;
+  bool db_opened_;
+  char db_name_[50];
 
   // Constructor
   DataBaseController();

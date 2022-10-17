@@ -4,9 +4,28 @@
 #include <esat_extra/imgui.h>
 #include "data_base_controller.h"
 
+int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
+  static int actual_pos = 0;
+  char **tables_name;
+  if(num_colums == 0 && data == nullptr && colum_name == nullptr) {
+    int **aux = (int **)notused;
+    *aux = &actual_pos;
+  } else {
+    tables_name = (char **) notused;
+    for(int i=0; i < num_colums; i++){
+      strcpy(tables_name[actual_pos], data[i]);
+      actual_pos++;
+    }
+  }
+
+  return 0;
+}
+
+
 DataBaseController::DataBaseController(){
   db_opened_ = false;
   table_selected_ = false;
+  CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
 }
 DataBaseController::~DataBaseController(){}
 
@@ -22,18 +41,11 @@ int GetNumTables(void *notused,int num_colums, char **data, char **colum_name){
   return 0;
 }
 
-int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
-  static int actual_pos = 0;
-  char **tables_name = (char **) notused;
-  for(int i=0; i < num_colums; i++){
-    strcpy(tables_name[actual_pos], data[i]);
-    actual_pos++;
-  }
-  return 0;
-}
 
 int CallbackGetTable(void *notused,int num_colums, char **data, char **colum_name){
-  
+
+
+ return 0; 
 }
 
 
@@ -71,6 +83,9 @@ void DataBaseController::ExecuteSelect(char *query){
 
 
 void DataBaseController::ShowWindow(){
+  printf("------------------------------------------\n");
+  printf("actual_pos_ref_ -> %d [%p]\n", *actual_pos_ref_, actual_pos_ref_); // esta petando aqui
+  printf("------------------------------------------\n");
   MainWindow();
 }
 
@@ -156,7 +171,6 @@ void DataBaseController::MainWindow(){
 
   ImGui::End();
 }
-
 
 
 void DataBaseController::ShowTable(){

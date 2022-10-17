@@ -40,6 +40,7 @@ class DataBaseController{
   char db_name_[50];
   char current_table_[20];
   bool table_selected_;
+  int* actual_pos_ref_; 
 
   // Constructor
   DataBaseController();

@@ -103,9 +103,13 @@ void DataBaseController::MainWindow(){
     open_popup = false;
     ImGui::OpenPopup("Select DB");
   }
+  ImVec2 center;
+  center.x = ImGui::GetWindowPos().x + (ImGui::GetWindowSize().x / 2);
+  center.y = ImGui::GetWindowPos().y + (ImGui::GetWindowSize().y / 2);
+  ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
   if(ImGui::BeginPopupModal("Select DB", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
-    ImGui::Text("Data Base name");
-
+    ImGui::Text("Open database\nWrite the path from the .exe file to hte database.\nMake sure write the extension of the file.");
+    ImGui::Separator();
     if(ImGui::InputText("##db_name",db_name_,50, ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Acept")){
 
       // Controll errors
@@ -130,7 +134,11 @@ void DataBaseController::MainWindow(){
 
     // Error messages
     if(open_error_popup){
-      db_opened_ ?ImGui::Text("Data base is opened!"):ImGui::Text("Data base no found!");
+      if (db_opened_) {
+        ImGui::TextColored({255, 0, 0, 255}, "Can't open the database. \nDatabase already open. Close the database to open another.");
+      } else {
+        ImGui::TextColored({255, 0, 0, 255}, "Can't open the database. \nMake sure the path from the .exe file to the database is correct.");
+      }
     }
     ImGui::EndPopup();
   }

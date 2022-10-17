@@ -106,3 +106,7 @@ void DestroyTable(Table *table) {
   }
   table = nullptr;
 }
+
+Table* TableCast(void *table) {
+  return (Table *)table;
+}

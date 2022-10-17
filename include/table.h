@@ -67,12 +67,4 @@ int  RunTable(Table *table, int (*callback)(void *, int, char **, char **), void
  */
 void DestroyTable(Table *table);
 
-/**
- * @brief This function casts the void pointer into Table pointer.
- * 
- * @param talbe Void pointer to the table you want to cast.
- * @return Table* 
- */
-Table* TableCast(void *talbe);
-
 #endif

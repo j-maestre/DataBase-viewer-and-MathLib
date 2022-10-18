@@ -11,6 +11,7 @@
 #define __DATA_BASE_CONTROLLER_H__ 1 
 
 #include <esat_extra/sqlite3.h>
+#include "table.h"
 
 class DataBaseController{
  public:
@@ -29,6 +30,8 @@ class DataBaseController{
   void ShowWindow();
   bool OpenDB(char *name);
   void GetTablesName();
+  void SetActualTable(Table *);
+  Table* GetActualTable();
 
  private:
   // Private functions
@@ -40,6 +43,8 @@ class DataBaseController{
   char db_name_[50];
   char current_table_[20];
   bool table_selected_;
+  bool table_created_;
+  Table *actual_table_;
   int* actual_pos_ref_; 
 
   // Constructor

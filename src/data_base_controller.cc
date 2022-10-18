@@ -3,6 +3,7 @@
 #include <string.h>
 #include <esat_extra/imgui.h>
 #include "data_base_controller.h"
+#include "table.h"
 
 int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
   static int actual_pos = 0;
@@ -25,14 +26,21 @@ int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colu
 DataBaseController::DataBaseController(){
   db_opened_ = false;
   table_selected_ = false;
+  table_created_ = false;
+  actual_table_ = nullptr;
   CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
 }
+
 DataBaseController::~DataBaseController(){}
 
 DataBaseController& DataBaseController::Instance(){
   static DataBaseController db_controller;
   return db_controller;
 };
+
+void DataBaseController::SetActualTable(Table *table){
+  actual_table_ = table;
+}
 
 int GetNumTables(void *notused,int num_colums, char **data, char **colum_name){
   int *num_tables = (int *) notused;
@@ -42,10 +50,50 @@ int GetNumTables(void *notused,int num_colums, char **data, char **colum_name){
 }
 
 
-int CallbackGetTable(void *notused,int num_colums, char **data, char **colum_name){
+int CallbackGetTable(void *table_to_insert,int num_colums, char **data, char **colum_name){
 
+  // Aqui iremos metiendo la info en la Table creada
 
- return 0; 
+  Table *table = (Table*) table_to_insert;
+  static bool col_inserted = false;
+  
+  printf("----- COLUMNS-> %d -----\n",num_colums);
+  //for(int i = 0; i < num_colums; i++){
+    //InsertColNames(table,);
+    printf("Colum name-> %s Data-> %s\n",colum_name[0], data[0]);
+    
+    if(!col_inserted){
+      InsertColNames(table, colum_name);
+      col_inserted = true;
+    }
+    InsertRow(table,data);
+    NextRow(table);
+    printf("Fila insertada\n");
+    // Despues de llamar a insert row, llamo a next row
+    // Primero meto el nombre de las columnas, con colum_name
+    // Luego le meto la info de las columnas, osea la fila, con data
+    // Y luego NextRow()
+  //}
+  return 0; 
+}
+
+int CallbackGetTotalRows(void *table_,int num_colums, char **data, char **colum_name){
+  Table **table = (Table**) table_;
+  //DataBaseController *db_ctl = (DataBaseController*) db_controller;
+
+  for(int i = 0; i < num_colums; i++){
+    //printf("Colum name-> %s, Total Rows-> %s, Total columns-> %d\n",colum_name[i],data[i], num_colums);
+    if(strcmp(colum_name[i],"count_columns") == 0){
+      // Columna que cuenta cuantas filas hay
+      // num_columns-1 porque una de las columnas corresponde a la de COUNT(*)
+      CreateTeable(table,num_colums-1,atoi(data[i]));
+
+      printf("Tabla creada\n");
+      //SetActualTable(table);
+      //La tabla la crea bien
+    }
+  }
+  return 0;
 }
 
 
@@ -83,9 +131,9 @@ void DataBaseController::ExecuteSelect(char *query){
 
 
 void DataBaseController::ShowWindow(){
-  printf("------------------------------------------\n");
+  /*printf("------------------------------------------\n");
   printf("actual_pos_ref_ -> %d [%p]\n", *actual_pos_ref_, actual_pos_ref_); // esta petando aqui
-  printf("------------------------------------------\n");
+  printf("------------------------------------------\n");*/
   MainWindow();
 }
 
@@ -175,11 +223,22 @@ void DataBaseController::MainWindow(){
 
 void DataBaseController::ShowTable(){
 
-  if(table_selected_){
-    printf("NOMBRE-> %s\n",current_table_);
-    char *query = {"SELECT * FROM "};
-    strcpy(query,current_table_);
-    ExecuteSelect(query);
+  if(table_selected_ && !table_created_){
+    // Reset de la tabla pa meter la nueva
+    if(actual_table_ != nullptr)DestroyTable(actual_table_);
+    char *err_msg;
+
+    // Get total columns and total rows
+    char query_rows_columns[50] = {"SELECT *,COUNT(*) as 'count_columns' FROM "};
+    strcat(query_rows_columns,current_table_);
+    sqlite3_exec(db_,query_rows_columns,CallbackGetTotalRows,&actual_table_,&err_msg);
+
+    // Get data from table
+    char query_data[50] = "SELECT * FROM ";
+    strcat(query_data,current_table_);
+    sqlite3_exec(db_,query_data,CallbackGetTable,actual_table_, &err_msg);
+
+    table_created_ = true;
 
   }
 }
@@ -199,6 +258,7 @@ void DataBaseController::TablesNameWindow(){
   for(int i = 0; i < num_tables_; i++){
     if(ImGui::SmallButton(tables_name_[i])){
       table_selected_ = true;
+      table_created_ = false;
       strcpy(current_table_,tables_name_[i]);
     }
     ImGui::Separator();
@@ -213,4 +273,10 @@ void DataBaseController::GetTablesName(){
   for(int i = 0; i < num_tables_; i++){
     printf("%d-> %s\n",i,tables_name_[i]);
   }
+}
+
+
+
+Table* DataBaseController::GetActualTable(){
+  return actual_table_;
 }

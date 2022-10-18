@@ -40,14 +40,14 @@ class DataBaseController{
   int num_tables_;
   char *err_msg_;
   bool db_opened_;
-  char db_name_[50];
+  char db_name_[500];
   char current_table_[20];
   bool table_selected_;
   bool table_created_;
   Table *actual_table_;
   bool cols_name_inserted_;
   int* actual_pos_ref_; 
-  
+
 
   /**
    * @brief Construct a new Data Base Controller object

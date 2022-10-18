@@ -4,7 +4,7 @@
 #include <esat_extra/imgui.h>
 #include "data_base_controller.h"
 #include "table.h"
-#include "../../nfd/include/nfd.h"
+#include "nfd.h"
 
 int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
   static int actual_pos = 0;
@@ -176,14 +176,12 @@ void DataBaseController::MainWindow(){
     open_file_explorer = false;
     ImGui::OpenPopup("Select DB");
 
-
-
     //Open file explorer
     nfdchar_t *outPath = NULL;
     nfdresult_t result = NFD_OpenDialog( NULL, NULL, &outPath );
     if ( result == NFD_OKAY ) {
-        puts("Success!");
         puts(outPath);
+        strcpy(db_name_,outPath);
         free(outPath);
     }
     else if ( result == NFD_CANCEL ) {
@@ -192,10 +190,7 @@ void DataBaseController::MainWindow(){
     else {
         printf("Error: %s\n", NFD_GetError() );
     }
-
-
-
-
+    
 
   }
   ImVec2 center;
@@ -205,7 +200,8 @@ void DataBaseController::MainWindow(){
   if(ImGui::BeginPopupModal("Select DB", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
     ImGui::Text("Open database\nWrite the path from the .exe file to hte database.\nMake sure write the extension of the file.");
     ImGui::Separator();
-    if(ImGui::InputText("##db_name",db_name_,50, ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Acept")){
+    ImGui::PushItemWidth(500);
+    if(ImGui::InputText("##db_name",db_name_,500, ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue) || ImGui::Button("Acept")){
 
       // Controll errors
       if(strlen(db_name_) > 0){

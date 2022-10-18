@@ -48,21 +48,47 @@ class DataBaseController{
   bool cols_name_inserted_;
   int* actual_pos_ref_; 
 
-  // Constructor
+  /**
+   * @brief Construct a new Data Base Controller object
+   * 
+   */
   DataBaseController();
 
   void ShowTable();
-  // Consulta Select
+  /**
+   * @brief Execute Select query
+   * 
+   * @param query Select query
+   */
   void ExecuteSelect(char *query); // Devolverá una tabla
-  // Cualquier tipo de consulta excepto Select
+
+  /**
+   * @brief Execute any type of Query
+   * 
+   * @param query SQL query
+   */
   void ExecuteQuery(char *query);
-  // Ventana principal
+
+  /**
+   * @brief Open main window with all subpages
+   * 
+   */
   void MainWindow();
-  // Zona de eleccion de tabla
+  /**
+   * @brief Select table window
+   * 
+   */
   void TablesNameWindow();
-  // Mostrar contenido de tabla
+  /**
+   * @brief Shows content of table
+   * 
+   */
   void PreviewWindow();
-  // Execute user SQL
+
+  /**
+   * @brief execute user's query
+   * 
+   */
   void SQLWindow();
 
 

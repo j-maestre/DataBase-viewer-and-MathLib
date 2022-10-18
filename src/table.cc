@@ -46,7 +46,7 @@ void InsertColNames(Table *table, char **col_names) {
   }
 }
 
-void InsertRow(Table *table, char**row_data) {
+int InsertRow(Table *table, char**row_data) {
   for (int i = 0; i < table->cols; i++) {
     if (*(*(table->data_table + table->curr_row) + i) == nullptr) {
       *(*(table->data_table + table->curr_row) + i) = (char *) malloc(
@@ -62,6 +62,7 @@ void InsertRow(Table *table, char**row_data) {
     strcpy(*(*(table->data_table + table->curr_row) + i),
             row_data[i] ? row_data[i] : "NULL");
   }
+  return 0;
 }
 
 void NextRow(Table *table) {

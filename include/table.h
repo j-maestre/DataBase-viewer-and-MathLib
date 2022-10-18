@@ -1,6 +1,5 @@
 /**
  * @file table.h
- * @author Xema Maestre <maestrequi@esat-alumni.com>
  * @author Hector Ochando <ochandoca@esat.alumni.com>
  * @brief 
  * 
@@ -17,15 +16,15 @@ typedef struct Table Table;
  * @param table Reference of the pointer to the Table object.
  * @param col_num Number of columns.
  * @param row_num Number of rows.
- * @return int 
+ * @return int Error: 0 == OK
  */
 int  CreateTeable(Table **table, int col_num, int row_num);
 
 /**
  * @brief Insert col_names in the Table
  * 
- * @param table 
- * @param col_names 
+ * @param table Pointer to the Table where is gonna be inserted the column names
+ * @param col_names Pointer to the column names.
  */
 void InsertColNames(Table *table, char **col_names);
 
@@ -33,18 +32,22 @@ void InsertColNames(Table *table, char **col_names);
  * @brief Insert a data row into the Table in the current position.
  * 
  * The current position can be modified with NextRow();
- * 
- * @param table 
- * @param row_data 
+ *  
+ * @param table Table is where is gonna be inserted row_data
+ * @param index Index of the row on row_data is gonna be inseted
+ * @param row_data Row data is gonna be inseted in the Table
+ * @return int Errot: 0 == OK
  */
-void InsertRow(Table *table, char**row_data);
+int InsertRow(Table *table, int index, char**row_data);
 
 /**
- * @brief Change to the next row of the Table to be inserted in InsertRow();
+ * @brief Create a new row and copy the row_data
  * 
- * @param table 
+ * @param table Pointer to the Table is gonna be modified
+ * @param row_data Row data is gonna be inserted in the table
+ * @return int Error: 0 == OK
  */
-void NextRow(Table *table);
+int InsetNewRow(Table *table, char **row_data);
 
 /**
  * @brief This function run the Table and execute the callback.
@@ -54,16 +57,39 @@ void NextRow(Table *table);
  * and the col name int the second char **.
  * 
  * @param table The Table we whant to run.
- * @param callback The function is gona be executed with the data.
+ * @param callback The function is gonna be executed with the data.
  * @param user_data The user data you can pass to the callback
- * @return int 
+ * @return int Error: 0 == OK
  */
 int  RunTable(Table *table, int (*callback)(void *, int, char **, char **), void *user_data);
 
 /**
+ * @brief Get the columns names of the Table
+ * 
+ * @param table The Table we gonna be get the columns names
+ * @return char** Pointer to the name of the columns
+ */
+char** GetColumnsNames(Table *table);
+
+/**
+ * @brief Get the columns number of the Table
+ * 
+ * @param table Pointer to the Table we gonna have the columns number
+ * @return int Number of the columns
+ */
+int GetColumnsNumber(Table *table);
+
+/**
+ * @brief Get the rows rumber of the Table
+ * 
+ * @return int Number of the rows
+ */
+int GetRowsNumber(Table *table);
+
+/**
  * @brief This function free memory from the table and set the table to nullptr.
  * 
- * @param table This is the Tabel you want to delete.
+ * @param table Pointer to the Tabel is gonna be deleted.
  */
 void DestroyTable(Table *table);
 

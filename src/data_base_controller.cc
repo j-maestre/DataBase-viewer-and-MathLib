@@ -28,6 +28,7 @@ DataBaseController::DataBaseController(){
   table_selected_ = false;
   table_created_ = false;
   actual_table_ = nullptr;
+  cols_name_inserted_ = false;
   CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
 }
 
@@ -50,30 +51,28 @@ int GetNumTables(void *notused,int num_colums, char **data, char **colum_name){
 }
 
 
+
+int CallbackGetTableColums(void *table_to_insert,int num_colums, char **data, char **colum_name){
+
+  //Insert col names
+  Table *table = (Table*) table_to_insert;
+  printf("Colum name-> %s Data-> %s\n",colum_name[0], data[0]);
+  InsertColNames(table, colum_name);
+
+  printf("Columnas insertadas\n");
+  return 0; 
+}
 int CallbackGetTable(void *table_to_insert,int num_colums, char **data, char **colum_name){
 
   // Aqui iremos metiendo la info en la Table creada
-
   Table *table = (Table*) table_to_insert;
-  static bool col_inserted = false;
-  
   printf("----- COLUMNS-> %d -----\n",num_colums);
-  //for(int i = 0; i < num_colums; i++){
-    //InsertColNames(table,);
-    printf("Colum name-> %s Data-> %s\n",colum_name[0], data[0]);
-    
-    if(!col_inserted){
-      InsertColNames(table, colum_name);
-      col_inserted = true;
-    }
-    InsertRow(table,data);
-    NextRow(table);
-    printf("Fila insertada\n");
-    // Despues de llamar a insert row, llamo a next row
-    // Primero meto el nombre de las columnas, con colum_name
-    // Luego le meto la info de las columnas, osea la fila, con data
-    // Y luego NextRow()
-  //}
+  printf("Colum name-> %s Data-> %s\n",colum_name[0], data[0]);
+
+  InsertRow(table,data);
+  NextRow(table);
+  printf("Fila insertada\n");
+
   return 0; 
 }
 
@@ -236,7 +235,13 @@ void DataBaseController::ShowTable(){
     // Get data from table
     char query_data[50] = "SELECT * FROM ";
     strcat(query_data,current_table_);
+
+    // Insert row data
     sqlite3_exec(db_,query_data,CallbackGetTable,actual_table_, &err_msg);
+
+    //Insert col names
+    strcat(query_data," LIMIT 1");
+    sqlite3_exec(db_,query_data,CallbackGetTableColums,actual_table_, &err_msg);
 
     table_created_ = true;
 

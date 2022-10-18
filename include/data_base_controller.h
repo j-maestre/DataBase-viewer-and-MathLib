@@ -45,6 +45,7 @@ class DataBaseController{
   bool table_selected_;
   bool table_created_;
   Table *actual_table_;
+  bool cols_name_inserted_;
   int* actual_pos_ref_; 
 
   // Constructor

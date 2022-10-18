@@ -22,7 +22,7 @@ int esat::main(int argc, char **argv) {
   esat::WindowSetMouseVisibility(true);
 
   DataBaseController& db_controller = DataBaseController::Instance();
-  db_controller.OpenDB("../data/chinook.db");
+  //db_controller.OpenDB("../data/chinook.db");
   
   
   while (esat::WindowIsOpened() && !esat::IsSpecialKeyDown(esat::kSpecialKey_Escape)) {

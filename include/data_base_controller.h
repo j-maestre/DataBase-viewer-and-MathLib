@@ -47,6 +47,7 @@ class DataBaseController{
   Table *actual_table_;
   bool cols_name_inserted_;
   int* actual_pos_ref_; 
+  
 
   /**
    * @brief Construct a new Data Base Controller object

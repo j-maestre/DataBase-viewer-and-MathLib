@@ -4,6 +4,7 @@
 #include <esat_extra/imgui.h>
 #include "data_base_controller.h"
 #include "table.h"
+#include "../../nfd/include/nfd.h"
 
 int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
   static int actual_pos = 0;
@@ -21,7 +22,6 @@ int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colu
 
   return 0;
 }
-
 
 DataBaseController::DataBaseController(){
   db_opened_ = false;
@@ -50,8 +50,6 @@ int GetNumTables(void *notused,int num_colums, char **data, char **colum_name){
   return 0;
 }
 
-
-
 int CallbackGetTableColums(void *table_to_insert,int num_colums, char **data, char **colum_name){
 
   //Insert col names
@@ -62,6 +60,7 @@ int CallbackGetTableColums(void *table_to_insert,int num_colums, char **data, ch
   printf("Columnas insertadas\n");
   return 0; 
 }
+
 int CallbackGetTable(void *table_to_insert,int num_colums, char **data, char **colum_name){
 
   // Aqui iremos metiendo la info en la Table creada
@@ -69,8 +68,9 @@ int CallbackGetTable(void *table_to_insert,int num_colums, char **data, char **c
   printf("----- COLUMNS-> %d -----\n",num_colums);
   printf("Colum name-> %s Data-> %s\n",colum_name[0], data[0]);
 
-  InsertRow(table,data);
-  NextRow(table);
+  //InsertRow(table,data);
+  //InsertRow(table,llamar a "GetIndex",data);
+  //NextRow(table);
   printf("Fila insertada\n");
 
   return 0; 
@@ -95,6 +95,10 @@ int CallbackGetTotalRows(void *table_,int num_colums, char **data, char **colum_
   return 0;
 }
 
+int CallbackSaveTable(void *table_,int num_colums, char **data, char **colum_name){
+  // Aqui entra una vez por cada fila
+  return 0;
+}
 
 bool DataBaseController::OpenDB(char *name){
 
@@ -127,8 +131,6 @@ void DataBaseController::ExecuteSelect(char *query){
   sqlite3_exec(db_,query,CallbackGetTable,nullptr,&errmsg);
 }
 
-
-
 void DataBaseController::ShowWindow(){
   /*printf("------------------------------------------\n");
   printf("actual_pos_ref_ -> %d [%p]\n", *actual_pos_ref_, actual_pos_ref_); // esta petando aqui
@@ -139,6 +141,7 @@ void DataBaseController::ShowWindow(){
 void DataBaseController::MainWindow(){
   static bool open_popup = false;
   static bool open_error_popup = false;
+  static bool open_file_explorer = false;
 
   ImGuiWindowFlags flags = ImGuiWindowFlags_::ImGuiWindowFlags_None;
   flags |= ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar;
@@ -157,6 +160,7 @@ void DataBaseController::MainWindow(){
       if(ImGui::MenuItem("Open","Ctrl+O")){
         open_popup = true;
         open_error_popup = false;
+        open_file_explorer = true;
       }
 
       ImGui::EndMenu();
@@ -169,7 +173,30 @@ void DataBaseController::MainWindow(){
   // Pop up open data base
   if(open_popup){
     open_popup = false;
+    open_file_explorer = false;
     ImGui::OpenPopup("Select DB");
+
+
+
+    //Open file explorer
+    nfdchar_t *outPath = NULL;
+    nfdresult_t result = NFD_OpenDialog( NULL, NULL, &outPath );
+    if ( result == NFD_OKAY ) {
+        puts("Success!");
+        puts(outPath);
+        free(outPath);
+    }
+    else if ( result == NFD_CANCEL ) {
+        puts("User pressed cancel.");
+    }
+    else {
+        printf("Error: %s\n", NFD_GetError() );
+    }
+
+
+
+
+
   }
   ImVec2 center;
   center.x = ImGui::GetWindowPos().x + (ImGui::GetWindowSize().x / 2);
@@ -219,7 +246,6 @@ void DataBaseController::MainWindow(){
   ImGui::End();
 }
 
-
 void DataBaseController::ShowTable(){
 
   if(table_selected_ && !table_created_){
@@ -239,15 +265,21 @@ void DataBaseController::ShowTable(){
     // Insert row data
     sqlite3_exec(db_,query_data,CallbackGetTable,actual_table_, &err_msg);
 
-    //Insert col names
+    // Insert col names
     strcat(query_data," LIMIT 1");
     sqlite3_exec(db_,query_data,CallbackGetTableColums,actual_table_, &err_msg);
+
+    // Show table content
+    /*if(ImGui::BeginTable("Table content",actual_table_->cols)){
+      RunTable(actual_table_,CallbackSaveTable);
+      ImGui::EndTable();
+    }*/
+
 
     table_created_ = true;
 
   }
 }
-
 
 void DataBaseController::TablesNameWindow(){
   ImVec2 size = {0,0};
@@ -272,15 +304,12 @@ void DataBaseController::TablesNameWindow(){
   ImGui::EndChild();
 }
 
-
 void DataBaseController::GetTablesName(){
   printf("----- Nombre de las tablas -----\n");
   for(int i = 0; i < num_tables_; i++){
     printf("%d-> %s\n",i,tables_name_[i]);
   }
 }
-
-
 
 Table* DataBaseController::GetActualTable(){
   return actual_table_;

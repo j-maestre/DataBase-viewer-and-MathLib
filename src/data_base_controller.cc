@@ -238,8 +238,71 @@ void DataBaseController::MainWindow(){
 
   TablesNameWindow();
   ShowTable();
+  PreviewWindow();
 
   ImGui::End();
+}
+
+int CallbackPreviewTable(void *notused, int num_colums, char **data, char **col_name){
+ 
+  ImGui::TableNextRow();  
+  for(int i = 0; i < num_colums; i++){
+    ImGui::TableSetColumnIndex(i);
+    //static char data_2[70] = {"Row columna 1\0"};
+
+    //if(ImGui::InputText("##data",data[i],70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
+    if(ImGui::InputText("##data","data[i]",70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
+      // Update de la row
+      // Mostrar pop up-> ¿Desea actualizar la tabla? -> Tabla actualizada, Error actuaizando
+    } 
+  }
+
+  //Pintar basura
+    ImGui::TableSetColumnIndex(num_colums);
+    if(ImGui::ColorButton("Delete row", ImVec4(255,0,0,0),ImGuiColorEditFlags_::ImGuiColorEditFlags_NoTooltip)){
+      //Delete row
+
+    }
+    if(ImGui::IsItemHovered()){
+      ImGui::SameLine();
+      ImGui::TextColored(ImVec4(255,0,0,255),"Delete row");
+      
+      // no va
+      //ImGui::SetMouseCursor(ImGuiMouseCursor_::ImGuiMouseCursor_Hand);
+    }
+    //ImGui::ImageButton("../data/trash.png",ImVec2(30,30));
+
+  return 0;
+} 
+
+
+void DataBaseController::PreviewWindow(){
+  
+  ImVec2 size = {0,0};
+  size.x = 0;
+  size.y = ImGui::GetWindowSize().y * 2.0f/3.0f;
+  ImGui::SameLine();
+  if(!ImGui::BeginChild("Table content",size,true)){
+    ImGui::EndChild();
+    return;
+  }
+  // Callback to print data table
+  if(ImGui::BeginTable("##Table_content",3)){
+    // Llamar a GetColumNames y poner el nombre de las columnas
+    // temporal
+    ImGui::TableSetupColumn("Columna 1");
+    ImGui::TableSetupColumn("Columna 2");
+    ImGui::TableSetupColumn("");
+    ImGui::TableHeadersRow();
+    //RunTable(actual_table_,CallbackPreviewTable);
+    
+    CallbackPreviewTable(nullptr,2,nullptr,nullptr);
+    ImGui::EndTable();
+  }
+
+  ImGui::EndChild();
+
+
 }
 
 void DataBaseController::ShowTable(){
@@ -264,12 +327,6 @@ void DataBaseController::ShowTable(){
     // Insert col names
     strcat(query_data," LIMIT 1");
     sqlite3_exec(db_,query_data,CallbackGetTableColums,actual_table_, &err_msg);
-
-    // Show table content
-    /*if(ImGui::BeginTable("Table content",actual_table_->cols)){
-      RunTable(actual_table_,CallbackSaveTable);
-      ImGui::EndTable();
-    }*/
 
 
     table_created_ = true;

@@ -36,17 +36,20 @@ class DataBaseController{
  private:
   // Private functions
   sqlite3* db_;
-  char **tables_name_;
   int num_tables_;
+  char **tables_name_;
   char *err_msg_;
+  int* actual_pos_ref_; 
+  
   bool db_opened_;
   char db_name_[500];
   char current_table_[20];
   bool table_selected_;
+
+  Table *actual_table_; // 20 bytes
+  
   bool table_created_;
-  Table *actual_table_;
   bool cols_name_inserted_;
-  int* actual_pos_ref_; 
 
 
   /**

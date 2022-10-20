@@ -32,7 +32,16 @@ DataBaseController::DataBaseController(){
   CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
 }
 
-DataBaseController::~DataBaseController(){}
+DataBaseController::~DataBaseController(){
+  sqlite3_close(db_);
+  for (int i = 0; i < num_tables_; i++){
+    free(tables_name_[i]);
+  }
+  free(tables_name_);
+  DestroyTable(actual_table_);
+  free(err_msg_);
+  free(actual_pos_ref_);
+}
 
 DataBaseController& DataBaseController::Instance(){
   static DataBaseController db_controller;

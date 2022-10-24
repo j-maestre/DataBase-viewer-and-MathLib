@@ -76,7 +76,8 @@ int CallbackGetTable(void *table_to_insert,int num_colums, char **data, char **c
   Table *table = (Table*) table_to_insert;
   printf("----- COLUMNS-> %d -----\n",num_colums);
   printf("Colum name-> %s Data-> %s\n",colum_name[0], data[0]);
-
+  CreateTeable(&table,num_colums,80);
+  
   //InsertRow(table,data);
   //InsertRow(table,llamar a "GetIndex",data);
   //NextRow(table);
@@ -94,7 +95,7 @@ int CallbackGetTotalRows(void *table_,int num_colums, char **data, char **colum_
     if(strcmp(colum_name[i],"count_columns") == 0){
       // Columna que cuenta cuantas filas hay
       // num_columns-1 porque una de las columnas corresponde a la de COUNT(*)
-      CreateTeable(table,num_colums-1,atoi(data[i]));
+      //CreateTeable(table,num_colums-1,atoi(data[i]));
 
       printf("Tabla creada\n");
       //SetActualTable(table);
@@ -247,7 +248,7 @@ void DataBaseController::MainWindow(){
 
   TablesNameWindow();
   ShowTable();
-  PreviewWindow();
+  if(table_created_)PreviewWindow();
 
   ImGui::End();
 }
@@ -284,7 +285,6 @@ int CallbackPreviewTable(void *notused, int num_colums, char **data, char **col_
   return 0;
 } 
 
-
 void DataBaseController::PreviewWindow(){
   
   ImVec2 size = {0,0};
@@ -296,11 +296,15 @@ void DataBaseController::PreviewWindow(){
     return;
   }
   // Callback to print data table
-  if(ImGui::BeginTable("##Table_content",3)){
+  int num_columns = GetColumnsNumber(actual_table_);
+  char **col_names = GetColumnsNames(actual_table_);
+  printf("Num columns-> %d\n",num_columns);
+  if(ImGui::BeginTable("##Table_content",num_columns)){
     // Llamar a GetColumNames y poner el nombre de las columnas
     // temporal
-    ImGui::TableSetupColumn("Columna 1");
-    ImGui::TableSetupColumn("Columna 2");
+    for(int i = 0; i<num_columns; i++){
+      ImGui::TableSetupColumn(col_names[i]);
+    }
     ImGui::TableSetupColumn("");
     ImGui::TableHeadersRow();
     //RunTable(actual_table_,CallbackPreviewTable);
@@ -324,18 +328,23 @@ void DataBaseController::ShowTable(){
     // Get total columns and total rows
     char query_rows_columns[50] = {"SELECT *,COUNT(*) as 'count_columns' FROM "};
     strcat(query_rows_columns,current_table_);
+    //Esto solo lo tendre qyue usar para saber el numero total de columnas 
     sqlite3_exec(db_,query_rows_columns,CallbackGetTotalRows,&actual_table_,&err_msg);
+
 
     // Get data from table
     char query_data[50] = "SELECT * FROM ";
     strcat(query_data,current_table_);
 
+
+
     // Insert row data
+    // Aqui inserto el nombre de las columnas y las filas
     sqlite3_exec(db_,query_data,CallbackGetTable,actual_table_, &err_msg);
 
     // Insert col names
-    strcat(query_data," LIMIT 1");
-    sqlite3_exec(db_,query_data,CallbackGetTableColums,actual_table_, &err_msg);
+    //strcat(query_data," LIMIT 1");
+    //sqlite3_exec(db_,query_data,CallbackGetTableColums,actual_table_, &err_msg);
 
 
     table_created_ = true;

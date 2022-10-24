@@ -99,10 +99,10 @@ void DestroyTable(Table *table) {
   if (nullptr == table) {
     return;
   }
-
+  
   for (int i = 0; i < table->data_table.size(); i++) {
     for (int j = 0; j < table->cols; j++) {
-      free(((table->data_table[i]) + j));
+      free(*((table->data_table[i]) + j));
     }
     free(table->data_table[i]);
   }

@@ -11,7 +11,7 @@
 #include <esat_extra/sqlite3.h>
 
 #include "data_base_controller.h"
-#include "table.h"
+/*#include "table.h"
 
 int Callback(void *tbl, int num, char **data, char **colnames) {
   Table *table = (Table*) tbl;
@@ -30,7 +30,7 @@ int PrintCallback(void *tbl, int num, char **data, char **colnames) {
 
 Table *t;
 sqlite3 *db;
-char *err;
+char *err;*/
 
 
 int esat::main(int argc, char **argv) {
@@ -38,17 +38,18 @@ int esat::main(int argc, char **argv) {
   double current_time,last_time;
   esat::WindowInit(1400, 810);
   esat::WindowSetMouseVisibility(true);
-  sqlite3_open("../data/chinook.db", &db);
-  /*CreateTeable(&t, 2, 50);
+  /*sqlite3_open("../data/chinook.db", &db);
+  CreateTeable(&t, 2, 80);
   sqlite3_exec(db, "SELECT AlbumId, Title FROM albums", Callback, (void *)t, &err);
   char** colnames = GetColumnsNames(t);
   for (int i = 0; i < GetColumnsNumber(t); i++) {
     printf("%s ", colnames[i]);
   }
   printf("\n");
-  RunTable(t, PrintCallback, NULL);*/
+  RunTable(t, PrintCallback, NULL);
+  DestroyTable(t);*/
   DataBaseController& db_controller = DataBaseController::Instance();
-  //db_controller.OpenDB("../data/chinook.db");
+  db_controller.OpenDB("../data/chinook.db");
   
   
   while (esat::WindowIsOpened() && !esat::IsSpecialKeyDown(esat::kSpecialKey_Escape)) {
@@ -57,7 +58,7 @@ int esat::main(int argc, char **argv) {
     esat::DrawClear(0, 0, 0);
 
 
-    db_controller.ShowWindow();
+    //db_controller.ShowWindow();
 
 
     esat::DrawEnd();

@@ -18,7 +18,7 @@ typedef struct Table Table;
  * @param row_num Number of rows.
  * @return int Error: 0 == OK
  */
-int  CreateTeable(Table **table, int col_num, int row_num);
+int  CreateTeable(Table **table, int col_num, int reg_max_size);
 
 /**
  * @brief Insert col_names in the Table
@@ -38,16 +38,7 @@ void InsertColNames(Table *table, char **col_names);
  * @param row_data Row data is gonna be inseted in the Table
  * @return int Errot: 0 == OK
  */
-int InsertRow(Table *table, int index, char**row_data);
-
-/**
- * @brief Create a new row and copy the row_data
- * 
- * @param table Pointer to the Table is gonna be modified
- * @param row_data Row data is gonna be inserted in the table
- * @return int Error: 0 == OK
- */
-int InsetNewRow(Table *table, char **row_data);
+int InsertRow(Table *table, char**row_data);
 
 /**
  * @brief This function run the Table and execute the callback.

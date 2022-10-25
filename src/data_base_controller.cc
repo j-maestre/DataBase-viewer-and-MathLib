@@ -74,9 +74,9 @@ int CallbackGetTable(void *table_to_insert,int num_colums, char **data, char **c
 
   // Aqui iremos metiendo la info en la Table creada
   Table *table = (Table*) table_to_insert;
-  printf("----- COLUMNS-> %d -----\n",num_colums);
-  printf("Colum name-> %s Data-> %s\n",colum_name[0], data[0]);
-  CreateTeable(&table,num_colums,80);
+  //printf("----- COLUMNS-> %d -----\n",num_colums);
+  //printf("Colum name-> %s Data-> %s\n",colum_name[0], data[0]);
+  //CreateTeable(&table,num_colums,80);
   
   //InsertRow(table,data);
   //InsertRow(table,llamar a "GetIndex",data);
@@ -86,22 +86,41 @@ int CallbackGetTable(void *table_to_insert,int num_colums, char **data, char **c
   return 0; 
 }
 
-int CallbackGetTotalRows(void *table_,int num_colums, char **data, char **colum_name){
-  Table **table = (Table**) table_;
-  //DataBaseController *db_ctl = (DataBaseController*) db_controller;
+int CallbackGetTotalRows(void *table_,int num_columns, char **data, char **colum_name){
+  Table *table = (Table*) table_;
 
-  for(int i = 0; i < num_colums; i++){
-    //printf("Colum name-> %s, Total Rows-> %s, Total columns-> %d\n",colum_name[i],data[i], num_colums);
-    if(strcmp(colum_name[i],"count_columns") == 0){
-      // Columna que cuenta cuantas filas hay
-      // num_columns-1 porque una de las columnas corresponde a la de COUNT(*)
-      //CreateTeable(table,num_colums-1,atoi(data[i]));
+  //Aqui tengo el numero de columnas y su nombre
+  char **name_columns = (char**) malloc( sizeof(char**)*num_columns);
 
-      printf("Tabla creada\n");
-      //SetActualTable(table);
-      //La tabla la crea bien
-    }
+  for(int i = 0; i < num_columns; i++){
+    name_columns[i] = (char*) malloc(sizeof(char)*80);
+    strcpy(name_columns[i],colum_name[i]);
+    printf("Num columns-> %d, Colum name-> %s, Data[%d]-> %s\n",num_columns,colum_name[i],i,data[i]);
+
   }
+  CreateTeable(&table,num_columns,80);
+  InsertColNames(table,name_columns);
+
+  // La tabla la crea bien
+
+  return 0;
+}
+
+int CallbackInsertRows(void *table_,int num_columns, char **data, char **colum_name){
+  Table *table = (Table*) table_;
+  char **row = (char**) malloc( sizeof(char*)*num_columns);
+
+  for(int i = 0; i < num_columns; i++){
+    row[i] = (char*) malloc(sizeof(char)*80);
+    strcpy(row[i],data[i]);
+    printf("* Num columns-> %d, Colum name-> %s, Data[%d]-> %s *\n",num_columns,colum_name[i],i,data[i]);
+
+  }
+
+  printf("-----\n");
+
+  InsertRow(table,row);
+
   return 0;
 }
 
@@ -326,21 +345,25 @@ void DataBaseController::ShowTable(){
     char *err_msg;
 
     // Get total columns and total rows
-    char query_rows_columns[50] = {"SELECT *,COUNT(*) as 'count_columns' FROM "};
+    //char query_rows_columns[50] = {"SELECT *,COUNT(*) as 'count_columns' FROM "};
+    char query_rows_columns[50] = {"SELECT * FROM "};
     strcat(query_rows_columns,current_table_);
-    //Esto solo lo tendre qyue usar para saber el numero total de columnas 
+    strcat(query_rows_columns," LIMIT 1");
+    //Esto solo lo tendre que usar para saber el numero total de columnas 
     sqlite3_exec(db_,query_rows_columns,CallbackGetTotalRows,&actual_table_,&err_msg);
+
+    // Tabla creada y columnas y nombre de columnas insertadas
+
+    // Ahora insertar las filas
 
 
     // Get data from table
     char query_data[50] = "SELECT * FROM ";
     strcat(query_data,current_table_);
 
-
-
     // Insert row data
-    // Aqui inserto el nombre de las columnas y las filas
-    sqlite3_exec(db_,query_data,CallbackGetTable,actual_table_, &err_msg);
+    // Aqui inserto las filas
+    sqlite3_exec(db_,query_data,CallbackInsertRows,&actual_table_, &err_msg);
 
     // Insert col names
     //strcat(query_data," LIMIT 1");

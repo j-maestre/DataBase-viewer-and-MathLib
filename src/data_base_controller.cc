@@ -86,41 +86,17 @@ int CallbackGetTable(void *table_to_insert,int num_colums, char **data, char **c
   return 0; 
 }
 
-int CallbackGetTotalRows(void *table_,int num_columns, char **data, char **colum_name){
-  Table *table = (Table*) table_;
-
-  //Aqui tengo el numero de columnas y su nombre
-  char **name_columns = (char**) malloc( sizeof(char**)*num_columns);
-
-  for(int i = 0; i < num_columns; i++){
-    name_columns[i] = (char*) malloc(sizeof(char)*80);
-    strcpy(name_columns[i],colum_name[i]);
-    printf("Num columns-> %d, Colum name-> %s, Data[%d]-> %s\n",num_columns,colum_name[i],i,data[i]);
-
-  }
-  CreateTeable(&table,num_columns,80);
-  InsertColNames(table,name_columns);
-
-  // La tabla la crea bien
+int CallbackGetTotalRows(void *_cols,int num_columns, char **data, char **colum_name){
+  int *cols = (int*) _cols;
+  *cols = num_columns;  
 
   return 0;
 }
 
 int CallbackInsertRows(void *table_,int num_columns, char **data, char **colum_name){
-  Table *table = (Table*) table_;
-  char **row = (char**) malloc( sizeof(char*)*num_columns);
-
-  for(int i = 0; i < num_columns; i++){
-    row[i] = (char*) malloc(sizeof(char)*80);
-    strcpy(row[i],data[i]);
-    printf("* Num columns-> %d, Colum name-> %s, Data[%d]-> %s *\n",num_columns,colum_name[i],i,data[i]);
-
-  }
-
-  printf("-----\n");
-
-  InsertRow(table,row);
-
+  Table **table = (Table**) table_;
+  InsertRow(*table,data);
+  InsertColNames(*table,colum_name);
   return 0;
 }
 
@@ -267,7 +243,7 @@ void DataBaseController::MainWindow(){
 
   TablesNameWindow();
   ShowTable();
-  if(table_created_)PreviewWindow();
+  PreviewWindow();
 
   ImGui::End();
 }
@@ -280,7 +256,7 @@ int CallbackPreviewTable(void *notused, int num_colums, char **data, char **col_
     //static char data_2[70] = {"Row columna 1\0"};
 
     //if(ImGui::InputText("##data",data[i],70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
-    if(ImGui::InputText("##data","data[i]",70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
+    if(ImGui::InputText("##data",data[i],70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
       // Update de la row
       // Mostrar pop up-> ¿Desea actualizar la tabla? -> Tabla actualizada, Error actuaizando
     } 
@@ -314,23 +290,26 @@ void DataBaseController::PreviewWindow(){
     ImGui::EndChild();
     return;
   }
-  // Callback to print data table
-  int num_columns = GetColumnsNumber(actual_table_);
-  char **col_names = GetColumnsNames(actual_table_);
-  printf("Num columns-> %d\n",num_columns);
-  if(ImGui::BeginTable("##Table_content",num_columns)){
-    // Llamar a GetColumNames y poner el nombre de las columnas
-    // temporal
-    for(int i = 0; i<num_columns; i++){
-      ImGui::TableSetupColumn(col_names[i]);
+  if(table_created_){
+      // Callback to print data table
+      int num_columns = GetColumnsNumber(actual_table_);
+      char **col_names = GetColumnsNames(actual_table_);
+      /*printf("Num columns-> %d\n",num_columns);
+      printf("Colum 0 name-> %s\n",col_names[0]);*/
+
+      if(ImGui::BeginTable("##Table_content",num_columns+1)){
+
+        for(int i = 0; i<num_columns; i++){
+          ImGui::TableSetupColumn(col_names[i]);
+        }
+        ImGui::TableSetupColumn("");
+        ImGui::TableHeadersRow();
+        RunTable(actual_table_,CallbackPreviewTable, nullptr);
+
+        ImGui::EndTable();
+      }
+
     }
-    ImGui::TableSetupColumn("");
-    ImGui::TableHeadersRow();
-    //RunTable(actual_table_,CallbackPreviewTable);
-    
-    CallbackPreviewTable(nullptr,2,nullptr,nullptr);
-    ImGui::EndTable();
-  }
 
   ImGui::EndChild();
 
@@ -350,9 +329,11 @@ void DataBaseController::ShowTable(){
     strcat(query_rows_columns,current_table_);
     strcat(query_rows_columns," LIMIT 1");
     //Esto solo lo tendre que usar para saber el numero total de columnas 
-    sqlite3_exec(db_,query_rows_columns,CallbackGetTotalRows,&actual_table_,&err_msg);
-
-    // Tabla creada y columnas y nombre de columnas insertadas
+    // Hacer puntero de int para pasarlo al callback y guardar el numero de columnas, y despues del exec crear la tabla
+    int *num_cols_aux = new int;
+    sqlite3_exec(db_,query_rows_columns,CallbackGetTotalRows,num_cols_aux,&err_msg);
+    CreateTeable(&actual_table_, *num_cols_aux,120);
+    delete num_cols_aux;
 
     // Ahora insertar las filas
 

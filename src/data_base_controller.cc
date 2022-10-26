@@ -248,12 +248,27 @@ void DataBaseController::MainWindow(){
   ImGui::End();
 }
 
-int CallbackPreviewTable(void *notused, int num_colums, char **data, char **col_name){
- 
+void DeleteRow(char *table_name,char *colum_name, char *id){
+  char query[100] = {"'DELETE FROM "};
+  strcat(query,table_name);
+  strcat(query," WHERE ");
+  strcat(query,colum_name);
+  strcat(query," = ");
+  strcat(query,id);
+  printf("Query-> %s\n",query);
+
+
+}
+
+int CallbackPreviewTable(Table *table,void *current_table, int num_colums, char **data, char **col_name){
+  char *table_name = (char*) current_table;
+  
+  
   ImGui::TableNextRow();  
   for(int i = 0; i < num_colums; i++){
     ImGui::TableSetColumnIndex(i);
     //static char data_2[70] = {"Row columna 1\0"};
+    //printf("ROW DATA-> colname: %s, data: %s\n",col_name[i],data[i]);
 
     //if(ImGui::InputText("##data",data[i],70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
     if(ImGui::InputText("##data",data[i],70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
@@ -266,7 +281,7 @@ int CallbackPreviewTable(void *notused, int num_colums, char **data, char **col_
     ImGui::TableSetColumnIndex(num_colums);
     if(ImGui::ColorButton("Delete row", ImVec4(255,0,0,0),ImGuiColorEditFlags_::ImGuiColorEditFlags_NoTooltip)){
       //Delete row
-
+      DeleteRow(table_name,col_name[0],data[0]);
     }
     if(ImGui::IsItemHovered()){
       ImGui::SameLine();
@@ -304,7 +319,7 @@ void DataBaseController::PreviewWindow(){
         }
         ImGui::TableSetupColumn("");
         ImGui::TableHeadersRow();
-        RunTable(actual_table_,CallbackPreviewTable, nullptr);
+        RunTable(actual_table_,CallbackPreviewTable, current_table_);
 
         ImGui::EndTable();
       }
@@ -323,33 +338,23 @@ void DataBaseController::ShowTable(){
     if(actual_table_ != nullptr)DestroyTable(actual_table_);
     char *err_msg;
 
-    // Get total columns and total rows
-    //char query_rows_columns[50] = {"SELECT *,COUNT(*) as 'count_columns' FROM "};
+    printf("\nSHOW TABLE\n");
+
+    //Create table with num columns
     char query_rows_columns[50] = {"SELECT * FROM "};
     strcat(query_rows_columns,current_table_);
     strcat(query_rows_columns," LIMIT 1");
-    //Esto solo lo tendre que usar para saber el numero total de columnas 
-    // Hacer puntero de int para pasarlo al callback y guardar el numero de columnas, y despues del exec crear la tabla
+
     int *num_cols_aux = new int;
     sqlite3_exec(db_,query_rows_columns,CallbackGetTotalRows,num_cols_aux,&err_msg);
     CreateTeable(&actual_table_, *num_cols_aux,120);
+    
     delete num_cols_aux;
 
-    // Ahora insertar las filas
-
-
-    // Get data from table
+    // Insert row data
     char query_data[50] = "SELECT * FROM ";
     strcat(query_data,current_table_);
-
-    // Insert row data
-    // Aqui inserto las filas
     sqlite3_exec(db_,query_data,CallbackInsertRows,&actual_table_, &err_msg);
-
-    // Insert col names
-    //strcat(query_data," LIMIT 1");
-    //sqlite3_exec(db_,query_data,CallbackGetTableColums,actual_table_, &err_msg);
-
 
     table_created_ = true;
 

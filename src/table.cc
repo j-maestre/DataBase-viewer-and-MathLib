@@ -113,7 +113,9 @@ void DestroyTable(Table *table) {
     free(table->col_names[i]);
   }
   free(table->col_names);
-
+  if (table->name_ != nullptr) {
+    free(table->name_);
+  }
   delete table;
 }
 

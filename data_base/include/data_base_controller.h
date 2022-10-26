@@ -31,6 +31,7 @@ class DataBaseController{
   bool OpenDB(char *name);
   void GetTablesName();
   void SetActualTable(Table *);
+  void SetTableCreated(bool state);
   Table* GetActualTable();
 
  private:
@@ -94,6 +95,7 @@ class DataBaseController{
    * 
    */
   void SQLWindow();
+
 
 
 };

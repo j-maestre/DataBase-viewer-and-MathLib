@@ -282,19 +282,14 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
     //} 
   }
 
-    char tmp[120];
-    snprintf(tmp,120,"##%d",rand()%200);
-    strcat(tmp,col_name[0]);
-    strcat(tmp,data[0]);
-    //printf("%s\n",tmp);
-
     //Pintar basura
     ImGui::TableSetColumnIndex(num_colums);
-    ImGui::ColorButton(tmp, ImVec4(255,0,0,0),ImGuiColorEditFlags_::ImGuiColorEditFlags_NoTooltip);
+    ImGui::ColorButton("#button", ImVec4(255,0,0,0),ImGuiColorEditFlags_::ImGuiColorEditFlags_NoTooltip);
     if(ImGui::IsItemClicked()){
       //IsMouseDoubleClicked
       //Delete row
       DeleteRow(table_name,col_name[0],data[0],db);
+      DataBaseController::Instance().SetTableCreated(false);
     }
     if(ImGui::IsItemHovered()){
       ImGui::SameLine();
@@ -406,4 +401,8 @@ void DataBaseController::GetTablesName(){
 
 Table* DataBaseController::GetActualTable(){
   return actual_table_;
+}
+
+void DataBaseController::SetTableCreated(bool state){
+  table_created_ = state;
 }

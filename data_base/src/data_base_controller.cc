@@ -138,9 +138,6 @@ void DataBaseController::ExecuteSelect(char *query){
 }
 
 void DataBaseController::ShowWindow(){
-  /*printf("------------------------------------------\n");
-  printf("actual_pos_ref_ -> %d [%p]\n", *actual_pos_ref_, actual_pos_ref_); // esta petando aqui
-  printf("------------------------------------------\n");*/
   MainWindow();
 }
 
@@ -245,8 +242,13 @@ void DataBaseController::MainWindow(){
   TablesNameWindow();
   ShowTable();
   PreviewWindow();
+  QueryWindow();
 
   ImGui::End();
+}
+
+void DataBaseController::QueryWindow(){
+  
 }
 
 void DeleteRow(char *table_name,char *colum_name, char *id, sqlite3* db){
@@ -303,6 +305,21 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
 } 
 
 void DataBaseController::PreviewWindow(){
+
+  ImGuiTableFlags table_flags = ImGuiTableFlags_::ImGuiTableFlags_None;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_RowBg;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_Borders;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_BordersH;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_BordersOuterH;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_BordersInnerH;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_BordersV;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_BordersOuterV;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_BordersInnerV;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_BordersOuter;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_BordersInner;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_Resizable;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_ScrollX;
+  table_flags |= ImGuiTableFlags_::ImGuiTableFlags_ScrollY;
   
   ImVec2 size = {0,0};
   size.x = 0;
@@ -316,10 +333,9 @@ void DataBaseController::PreviewWindow(){
       // Callback to print data table
       int num_columns = GetColumnsNumber(actual_table_);
       char **col_names = GetColumnsNames(actual_table_);
-      /*printf("Num columns-> %d\n",num_columns);
-      printf("Colum 0 name-> %s\n",col_names[0]);*/
 
-      if(ImGui::BeginTable("##Table_content",num_columns+1)){
+
+      if(ImGui::BeginTable("##Table_content",num_columns+1,table_flags,ImVec2((1.175494351e-38F),0))){
 
         for(int i = 0; i<num_columns; i++){
           ImGui::TableSetupColumn(col_names[i]);

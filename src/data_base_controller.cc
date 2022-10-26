@@ -248,21 +248,22 @@ void DataBaseController::MainWindow(){
   ImGui::End();
 }
 
-void DeleteRow(char *table_name,char *colum_name, char *id){
-  char query[100] = {"'DELETE FROM "};
+void DeleteRow(char *table_name,char *colum_name, char *id, sqlite3* db){
+  char query[100] = {"DELETE FROM "};
   strcat(query,table_name);
   strcat(query," WHERE ");
   strcat(query,colum_name);
   strcat(query," = ");
   strcat(query,id);
   printf("Query-> %s\n",query);
-
+  sqlite3_exec(db,query,nullptr,nullptr,nullptr);
 
 }
 
-int CallbackPreviewTable(Table *table,void *current_table, int num_colums, char **data, char **col_name){
-  char *table_name = (char*) current_table;
-  
+int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **data, char **col_name){
+  char table_name[30];
+  strcpy(table_name,GetTableName(table));
+  sqlite3* db = (sqlite3*) data_base;
   
   ImGui::TableNextRow();  
   for(int i = 0; i < num_colums; i++){
@@ -281,7 +282,7 @@ int CallbackPreviewTable(Table *table,void *current_table, int num_colums, char 
     ImGui::TableSetColumnIndex(num_colums);
     if(ImGui::ColorButton("Delete row", ImVec4(255,0,0,0),ImGuiColorEditFlags_::ImGuiColorEditFlags_NoTooltip)){
       //Delete row
-      DeleteRow(table_name,col_name[0],data[0]);
+      DeleteRow(table_name,col_name[0],data[0],db);
     }
     if(ImGui::IsItemHovered()){
       ImGui::SameLine();
@@ -319,7 +320,7 @@ void DataBaseController::PreviewWindow(){
         }
         ImGui::TableSetupColumn("");
         ImGui::TableHeadersRow();
-        RunTable(actual_table_,CallbackPreviewTable, current_table_);
+        RunTable(actual_table_,CallbackPreviewTable, db_);
 
         ImGui::EndTable();
       }
@@ -347,7 +348,8 @@ void DataBaseController::ShowTable(){
 
     int *num_cols_aux = new int;
     sqlite3_exec(db_,query_rows_columns,CallbackGetTotalRows,num_cols_aux,&err_msg);
-    CreateTeable(&actual_table_, *num_cols_aux,120);
+    CreateTable(&actual_table_, *num_cols_aux,120);
+    SetTableName(actual_table_,current_table_);
     
     delete num_cols_aux;
 

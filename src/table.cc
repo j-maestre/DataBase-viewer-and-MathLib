@@ -138,7 +138,7 @@ void SetTableName(Table *table, char *name){
 
 char* GetTableName(Table *table){
   if (nullptr == table) {
-    return;
+    return nullptr;
   }
   return table->name_;
 }

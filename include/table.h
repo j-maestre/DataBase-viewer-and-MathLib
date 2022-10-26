@@ -52,7 +52,7 @@ int InsertRow(Table *table, char**row_data);
  * @param user_data The user data you can pass to the callback
  * @return int Error: 0 == OK
  */
-int  RunTable(Table *table, int (*callback)(void *, int, char **, char **), void *user_data);
+int  RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char **), void *user_data);
 
 /**
  * @brief Get the columns names of the Table

@@ -28,6 +28,7 @@ class DataBaseController{
   void operator = (const DataBaseController&) = delete; // Sobre carga de operador para la clase
 
   void ShowWindow();
+  void QueryWindow();
   bool OpenDB(char *name);
   void GetTablesName();
   void SetActualTable(Table *);

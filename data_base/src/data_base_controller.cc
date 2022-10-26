@@ -6,6 +6,17 @@
 #include "table.h"
 #include "nfd.h"
 
+void HelpMarker(const char* desc){
+    ImGui::TextDisabled("(?)");
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+        ImGui::TextUnformatted(desc);
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+    }
+}
 
 int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
   static int actual_pos = 0;
@@ -248,7 +259,24 @@ void DataBaseController::MainWindow(){
 }
 
 void DataBaseController::QueryWindow(){
-  
+  ImVec2 vec = {0.0f,0.0f}; // 0 es para que ocupe el 100% del contenedor
+  char query[501] = "\0";
+  if(!ImGui::BeginChild("Query",vec,true)){
+    
+    ImGui::EndChild();
+    return;
+  }
+  HelpMarker("SQL Sentence");
+  //ImGui::Text("SQL Sentence");
+  ImGuiInputTextFlags flags = ImGuiInputTextFlags_::ImGuiInputTextFlags_None;
+  //flags |= ImGuiInputTextFlags_EnterReturnsTrue;
+  flags |= ImGuiInputTextFlags_AllowTabInput;
+
+  ImGui::InputTextMultiline("##sentece",query,500,ImVec2(0.0f,0.0f),flags);
+  if(ImGui::Button("Execute")){
+    sqlite3_exec(db_,query,nullptr,nullptr,nullptr);
+  }
+  ImGui::EndChild();
 }
 
 void DeleteRow(char *table_name,char *colum_name, char *id, sqlite3* db){

@@ -54,7 +54,7 @@ int InsertRow(Table *table, char** row_data) {
   
   for (int i = 0; i < table->cols; i++) {
     aux[i] = (char *)malloc((sizeof(char) * table->data_max_size) + 1);
-    strncpy(aux[i], row_data[i], table->data_max_size);
+    strncpy(aux[i], row_data[i] ? row_data[i] : "NULL", table->data_max_size);
     *(aux[i] + table->data_max_size) = '\0';
   }
   table->data_table.push_back(aux);

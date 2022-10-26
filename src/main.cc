@@ -14,6 +14,7 @@
 
 
 int esat::main(int argc, char **argv) {
+  srand(NULL);
   unsigned char fps=60;
   double current_time,last_time;
   esat::WindowInit(1400, 810);

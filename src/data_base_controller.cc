@@ -6,6 +6,7 @@
 #include "table.h"
 #include "nfd.h"
 
+
 int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
   static int actual_pos = 0;
   char **tables_name;
@@ -40,7 +41,7 @@ DataBaseController::~DataBaseController(){
   free(tables_name_);
   DestroyTable(actual_table_);
   free(err_msg_);
-  free(actual_pos_ref_);
+  //free(actual_pos_ref_);
 }
 
 DataBaseController& DataBaseController::Instance(){
@@ -268,19 +269,30 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
   ImGui::TableNextRow();  
   for(int i = 0; i < num_colums; i++){
     ImGui::TableSetColumnIndex(i);
-    //static char data_2[70] = {"Row columna 1\0"};
-    //printf("ROW DATA-> colname: %s, data: %s\n",col_name[i],data[i]);
+    char tmp[120];
+    snprintf(tmp,120,"##%d",rand()%200);
+    strcat(tmp,col_name[i]);
+    strcat(tmp,data[i]);
 
-    //if(ImGui::InputText("##data",data[i],70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
-    if(ImGui::InputText("##data",data[i],70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
+    //printf("---- %s -----\n",tmp);
+    //if(ImGui::InputText(tmp,data[i],70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
+    ImGui::Text(data[i]);
       // Update de la row
       // Mostrar pop up-> ¿Desea actualizar la tabla? -> Tabla actualizada, Error actuaizando
-    } 
+    //} 
   }
 
-  //Pintar basura
+    char tmp[120];
+    snprintf(tmp,120,"##%d",rand()%200);
+    strcat(tmp,col_name[0]);
+    strcat(tmp,data[0]);
+    //printf("%s\n",tmp);
+
+    //Pintar basura
     ImGui::TableSetColumnIndex(num_colums);
-    if(ImGui::ColorButton("Delete row", ImVec4(255,0,0,0),ImGuiColorEditFlags_::ImGuiColorEditFlags_NoTooltip)){
+    ImGui::ColorButton(tmp, ImVec4(255,0,0,0),ImGuiColorEditFlags_::ImGuiColorEditFlags_NoTooltip);
+    if(ImGui::IsItemClicked()){
+      //IsMouseDoubleClicked
       //Delete row
       DeleteRow(table_name,col_name[0],data[0],db);
     }
@@ -288,7 +300,6 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
       ImGui::SameLine();
       ImGui::TextColored(ImVec4(255,0,0,255),"Delete row");
       
-      // no va
       //ImGui::SetMouseCursor(ImGuiMouseCursor_::ImGuiMouseCursor_Hand);
     }
     //ImGui::ImageButton("../data/trash.png",ImVec2(30,30));

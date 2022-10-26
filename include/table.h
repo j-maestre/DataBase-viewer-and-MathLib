@@ -18,7 +18,7 @@ typedef struct Table Table;
  * @param row_num Number of rows.
  * @return int Error: 0 == OK
  */
-int  CreateTeable(Table **table, int col_num, int reg_max_size);
+int  CreateTable(Table **table, int col_num, int reg_max_size);
 
 /**
  * @brief Insert col_names in the Table
@@ -83,5 +83,9 @@ int GetRowsNumber(Table *table);
  * @param table Pointer to the Tabel is gonna be deleted.
  */
 void DestroyTable(Table *table);
+
+void SetTableName(Table *table, char *name);
+
+char* GetTableName(Table *table);
 
 #endif

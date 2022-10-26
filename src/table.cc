@@ -11,13 +11,15 @@ struct Table {
   int data_max_size;
   std::vector<char **> data_table;
   char **col_names;
+  char *name_;
 };
 
-int CreateTeable(Table **table, int col_num, int data_size) {
+int CreateTable(Table **table, int col_num, int data_size) {
   *table = new Table;
   (*table)->cols = col_num;
   (*table)->col_names = nullptr;
   (*table)->data_max_size = data_size;
+  (*table)->name_ = nullptr;
   return 0;
 }
 
@@ -59,14 +61,14 @@ int InsertRow(Table *table, char** row_data) {
   return 0;
 }
 
-int RunTable(Table *table, int (*callback)(void *, int, char **, char **), void *user_data) {
+int RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char **), void *user_data) {
   if (nullptr == table) {
     return -1;
   }
   int state = 0;
 
   for (int i = 0; i < table->data_table.size() && 0 == state; i++) {
-    state = callback(user_data, table->cols, table->data_table[i], table->col_names);
+    state = callback(table, user_data, table->cols, table->data_table[i], table->col_names);
   }
 
   return state;
@@ -113,4 +115,28 @@ void DestroyTable(Table *table) {
   free(table->col_names);
 
   delete table;
+}
+
+void SetTableName(Table *table, char *name){
+  if (nullptr == table) {
+    return;
+  }
+  if (nullptr == name) {
+    return;
+  }
+  if (table->name_ != nullptr) {
+    return;
+  }
+  char *aux = (char *)malloc(sizeof(char) * table->data_max_size + 1);
+
+  strncpy(aux, name, table->data_max_size);
+  *(aux + table->data_max_size) = '\0';
+  table->name_ = aux;
+}
+
+char* GetTableName(Table *table){
+  if (nullptr == table) {
+    return;
+  }
+  return table->name_;
 }

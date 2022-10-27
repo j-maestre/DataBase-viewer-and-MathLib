@@ -393,11 +393,15 @@ void DataBaseController::PreviewWindow(){
         ImGui::SameLine();
         ImGui::Text(error_message_);
       } else {
-        ImGui::TextColored(ImVec4(0,255,0,255),"[OK]");
-        ImGui::SameLine();
-        ImGui::Text(query_aux_);
+        if(strlen(query_aux_)>0){
+          ImGui::TextColored(ImVec4(0,255,0,255),"[OK]");
+          ImGui::SameLine();
+          ImGui::Text(query_aux_);
+        }else{
+          ImGui::TextColored(ImVec4(238/255.0f,210/255.0f,2/255.0f,255),"[EMPTY]");
+        }
       }
-
+      ImGui::Separator();
       if (true) {
       }
       ImGui::EndTabItem();

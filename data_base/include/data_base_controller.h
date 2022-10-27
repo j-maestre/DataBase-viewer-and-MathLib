@@ -53,6 +53,10 @@ class DataBaseController{
   bool table_created_;
   bool cols_name_inserted_;
 
+  char *error_message_;
+  char query_[501];
+  char query_aux_[501];
+  
 
   /**
    * @brief Construct a new Data Base Controller object

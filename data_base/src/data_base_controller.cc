@@ -41,6 +41,9 @@ DataBaseController::DataBaseController(){
   table_created_ = false;
   actual_table_ = nullptr;
   cols_name_inserted_ = false;
+  error_message_ = nullptr;
+  memset(query_,'\0',501);
+  memset(query_aux_,'\0',501);
   CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
 }
 
@@ -259,7 +262,7 @@ void DataBaseController::MainWindow(){
 
 void DataBaseController::QueryWindow(){
   ImVec2 vec = {0.0f,0.0f}; // 0 es para que ocupe el 100% del contenedor
-  static char query[501] = "\0";
+  
   if(!ImGui::BeginChild("Query",vec,true)){
     
     ImGui::EndChild();
@@ -271,13 +274,13 @@ void DataBaseController::QueryWindow(){
   //flags |= ImGuiInputTextFlags_EnterReturnsTrue;
   flags |= ImGuiInputTextFlags_AllowTabInput;
 
-  ImGui::InputTextMultiline("##sentece",query,500,ImVec2(ImGui::GetWindowSize().x,0.0f),flags);
+  ImGui::InputTextMultiline("##sentece",query_,500,ImVec2(ImGui::GetWindowSize().x,0.0f),flags);
   if(ImGui::Button("Execute")){
-    printf("%s\n",query);
-    sqlite3_exec(db_,query,nullptr,nullptr,nullptr);
-    memset(query,'\0',501);
+    //printf("%s\n",query_);
+    sqlite3_exec(db_,query_,nullptr,nullptr,&error_message_);
+    strncpy(query_aux_,query_,501);
+    memset(query_,'\0',501);
     SetTableCreated(false);
-
   }
   ImGui::EndChild();
 }
@@ -385,7 +388,16 @@ void DataBaseController::PreviewWindow(){
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("SQL")) {
-      ImGui::Text("//TODO: Make the viewer for the sql user query");
+      if(error_message_){
+        ImGui::TextColored(ImVec4(255,0,0,255),"[ERROR]");
+        ImGui::SameLine();
+        ImGui::Text(error_message_);
+      } else {
+        ImGui::TextColored(ImVec4(0,255,0,255),"[OK]");
+        ImGui::SameLine();
+        ImGui::Text(query_aux_);
+      }
+
       if (true) {
       }
       ImGui::EndTabItem();

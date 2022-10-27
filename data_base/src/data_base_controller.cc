@@ -159,7 +159,6 @@ void DataBaseController::MainWindow(){
 
   ImGuiWindowFlags flags = ImGuiWindowFlags_::ImGuiWindowFlags_None;
   flags |= ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar;
-  flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoMove;
   
   if(!ImGui::Begin("DB Viewer", NULL,flags)){
 
@@ -171,7 +170,7 @@ void DataBaseController::MainWindow(){
   // Menu db options
   if(ImGui::BeginMenuBar()){
     if(ImGui::BeginMenu("Options")){
-      if(ImGui::MenuItem("Open","Ctrl+O")){
+      if(ImGui::MenuItem("Open","O")){
         open_popup = true;
         open_error_popup = false;
         open_file_explorer = true;
@@ -260,7 +259,7 @@ void DataBaseController::MainWindow(){
 
 void DataBaseController::QueryWindow(){
   ImVec2 vec = {0.0f,0.0f}; // 0 es para que ocupe el 100% del contenedor
-  char query[501] = "\0";
+  static char query[501] = "\0";
   if(!ImGui::BeginChild("Query",vec,true)){
     
     ImGui::EndChild();
@@ -272,9 +271,13 @@ void DataBaseController::QueryWindow(){
   //flags |= ImGuiInputTextFlags_EnterReturnsTrue;
   flags |= ImGuiInputTextFlags_AllowTabInput;
 
-  ImGui::InputTextMultiline("##sentece",query,500,ImVec2(0.0f,0.0f),flags);
+  ImGui::InputTextMultiline("##sentece",query,500,ImVec2(ImGui::GetWindowSize().x,0.0f),flags);
   if(ImGui::Button("Execute")){
+    printf("%s\n",query);
     sqlite3_exec(db_,query,nullptr,nullptr,nullptr);
+    memset(query,'\0',501);
+    SetTableCreated(false);
+
   }
   ImGui::EndChild();
 }

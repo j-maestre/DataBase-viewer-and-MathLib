@@ -357,26 +357,38 @@ void DataBaseController::PreviewWindow(){
     ImGui::EndChild();
     return;
   }
-  if(table_created_){
-      // Callback to print data table
-      int num_columns = GetColumnsNumber(actual_table_);
-      char **col_names = GetColumnsNames(actual_table_);
+  if (ImGui::BeginTabBar("ViewerTabs")) {
+    if (ImGui::BeginTabItem("Data")) {
+      if (table_selected_) {
+        if(table_created_){
+          // Callback to print data table
+          int num_columns = GetColumnsNumber(actual_table_);
+          char **col_names = GetColumnsNames(actual_table_);
 
 
-      if(ImGui::BeginTable("##Table_content",num_columns+1,table_flags,ImVec2((1.175494351e-38F),0))){
+          if(ImGui::BeginTable("##Table_content",num_columns+1,table_flags,ImVec2((1.175494351e-38F),0))){
 
-        for(int i = 0; i<num_columns; i++){
-          ImGui::TableSetupColumn(col_names[i]);
+            for(int i = 0; i<num_columns; i++){
+              ImGui::TableSetupColumn(col_names[i]);
+            }
+            ImGui::TableSetupColumn("");
+            ImGui::TableHeadersRow();
+            RunTable(actual_table_,CallbackPreviewTable, db_);
+
+            ImGui::EndTable();
+          }
         }
-        ImGui::TableSetupColumn("");
-        ImGui::TableHeadersRow();
-        RunTable(actual_table_,CallbackPreviewTable, db_);
-
-        ImGui::EndTable();
       }
-
+      ImGui::EndTabItem();
     }
-
+    if (ImGui::BeginTabItem("SQL")) {
+      ImGui::Text("//TODO: Make the viewer for the sql user query");
+      if (true) {
+      }
+      ImGui::EndTabItem();
+    }
+    ImGui::EndTabBar();
+  }
   ImGui::EndChild();
 
 

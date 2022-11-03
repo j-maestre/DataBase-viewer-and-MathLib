@@ -15,10 +15,11 @@
 
 #include "data_base_controller.h"
 
-bool showfps = false;
+
 
 void RenderFPS(double current_time, double last_time) {
-  if(esat::IsSpecialKeyPressed(esat::kSpecialKey_F1)){
+  static bool showfps = false;
+  if(esat::IsSpecialKeyDown(esat::kSpecialKey_F1)){
     showfps = !showfps;
   }
 

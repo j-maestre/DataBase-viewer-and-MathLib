@@ -260,6 +260,21 @@ void DataBaseController::MainWindow(){
   ImGui::End();
 }
 
+int CallbackSetQueryTable(void *table_,int num_colums, char **data, char **colum_name){
+  Table *table = (Table*) table_;
+  InsertRow(table,data);
+  return 0;
+}
+
+int CallbackSetQueryTableColumns(void *table_,int num_colums, char **data, char **colum_name){
+  Table *table = (Table*) table_;
+  //Sacar el num de columnas que ya viene y crear la tabla
+  printf("Num columns-> %d, Data-> %s, Colum name-> %s\n",num_colums,*data,*colum_name);
+
+  CreateTable(&table,num_colums,120);
+  return 0;
+}
+
 void DataBaseController::QueryWindow(){
   ImVec2 vec = {0.0f,0.0f}; // 0 es para que ocupe el 100% del contenedor
   
@@ -274,10 +289,23 @@ void DataBaseController::QueryWindow(){
   //flags |= ImGuiInputTextFlags_EnterReturnsTrue;
   flags |= ImGuiInputTextFlags_AllowTabInput;
 
+  static bool bol_aux = false;
+  if(!bol_aux)strcat(query_,"SELECT * FROM albums");
+  bol_aux = true;
+  
+  char query_aux[500];
+
+  
+
   ImGui::InputTextMultiline("##sentece",query_,500,ImVec2(ImGui::GetWindowSize().x,0.0f),flags);
   if(ImGui::Button("Execute")){
-    //printf("%s\n",query_);
-    sqlite3_exec(db_,query_,nullptr,nullptr,&error_message_);
+    // Antes, sacar el numero de columnas de la query y crear la tabla, luego hacer la query e ir rellenando la tabla
+    strcpy(query_aux,query_);
+    strcat(query_aux," LIMIT 1\n");
+    printf("ANtes de table columns\nquery-> %s\n",query_aux);
+    sqlite3_exec(db_,query_aux,CallbackSetQueryTableColumns,query_table_,&error_message_);
+
+    sqlite3_exec(db_,query_,CallbackSetQueryTable,nullptr,&error_message_);
     strncpy(query_aux_,query_,501);
     memset(query_,'\0',501);
     SetTableCreated(false);
@@ -402,8 +430,22 @@ void DataBaseController::PreviewWindow(){
         }
       }
       ImGui::Separator();
-      if (true) {
+      //Show query table
+      int num_query_columns = GetColumnsNumber(query_table_);
+      printf("Query columns-> %d\n", num_query_columns);
+
+      if(ImGui::BeginTable("##QueryContent", num_query_columns, table_flags,ImVec2((1.175494351e-38F),0))){
+
+        for (int i = 0; i < num_query_columns+1; i++){
+          ImGui::TableSetupColumn(" ");
+        }
+        ImGui::TableHeadersRow();
+        RunTable(actual_table_,CallbackPreviewTable, db_);
+        
+        ImGui::EndTable();
       }
+      
+
       ImGui::EndTabItem();
     }
     ImGui::EndTabBar();

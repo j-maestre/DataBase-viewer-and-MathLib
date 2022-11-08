@@ -78,11 +78,11 @@ int RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char *
   if (nullptr == table) {
     return -1;
   }
-  if (from > to){
-    return -1;
-  }
   int state = 0;
   int r_to = (to > table->data_table.size()) ? table->data_table.size() : to;
+  if (from > r_to){
+    return -1;
+  }
   for (int i = from; i < r_to && 0 == state; i++) {
     state = callback(table, user_data, table->cols, table->data_table[i], table->col_names);
   }

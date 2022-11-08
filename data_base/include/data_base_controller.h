@@ -27,11 +27,15 @@ class DataBaseController{
 
   void operator = (const DataBaseController&) = delete; // Sobre carga de operador para la clase
 
+    /**
+   * @brief Open main window with all subpages
+   * 
+   */
+  void MainWindow();
   bool OpenDB(char *name);
   void GetTablesName();
   void SetActualTable(Table *);
   void SetTableCreated(bool state);
-  void ShowWindow();
   Table* GetActualTable();
 
  private:
@@ -57,6 +61,8 @@ class DataBaseController{
   char query_[501];
   char query_aux_[501];
 
+  unsigned int pagination; 
+
   void QueryWindow();
   
 
@@ -81,11 +87,7 @@ class DataBaseController{
    */
   void ExecuteQuery(char *query);
 
-  /**
-   * @brief Open main window with all subpages
-   * 
-   */
-  void MainWindow();
+
   /**
    * @brief Select table window
    * 

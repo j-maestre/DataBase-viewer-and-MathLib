@@ -43,6 +43,7 @@ DataBaseController::DataBaseController(){
   cols_name_inserted_ = false;
   error_message_ = nullptr;
   query_table_ = nullptr;
+  pagination = 20;
   memset(query_,'\0',501);
   memset(query_aux_,'\0',501);
   CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
@@ -75,33 +76,6 @@ int GetNumTables(void *notused,int num_colums, char **data, char **colum_name){
   return 0;
 }
 
-int CallbackGetTableColums(void *table_to_insert,int num_colums, char **data, char **colum_name){
-
-  //Insert col names
-  Table *table = (Table*) table_to_insert;
-  printf("Colum name-> %s Data-> %s\n",colum_name[0], data[0]);
-  InsertColNames(table, colum_name);
-
-  printf("Columnas insertadas\n");
-  return 0; 
-}
-
-int CallbackGetTable(void *table_to_insert,int num_colums, char **data, char **colum_name){
-
-  // Aqui iremos metiendo la info en la Table creada
-  Table *table = (Table*) table_to_insert;
-  //printf("----- COLUMNS-> %d -----\n",num_colums);
-  //printf("Colum name-> %s Data-> %s\n",colum_name[0], data[0]);
-  //CreateTeable(&table,num_colums,80);
-  
-  //InsertRow(table,data);
-  //InsertRow(table,llamar a "GetIndex",data);
-  //NextRow(table);
-  printf("Fila insertada\n");
-
-  return 0; 
-}
-
 int CallbackGetTotalColumns(void *_cols,int num_columns, char **data, char **colum_name){
   int *cols = (int*) _cols;
   *cols = num_columns;  
@@ -113,11 +87,6 @@ int CallbackInsertRows(void *table_,int num_columns, char **data, char **colum_n
   Table **table = (Table**) table_;
   InsertRow(*table,data);
   InsertColNames(*table,colum_name);
-  return 0;
-}
-
-int CallbackSaveTable(void *table_,int num_colums, char **data, char **colum_name){
-  // Aqui entra una vez por cada fila
   return 0;
 }
 
@@ -145,15 +114,6 @@ bool DataBaseController::OpenDB(char *name){
   }
 
   return false;
-}
-
-void DataBaseController::ExecuteSelect(char *query){
-  char *errmsg;
-  sqlite3_exec(db_,query,CallbackGetTable,nullptr,&errmsg);
-}
-
-void DataBaseController::ShowWindow(){
-  MainWindow();
 }
 
 void DataBaseController::MainWindow(){
@@ -259,12 +219,6 @@ void DataBaseController::MainWindow(){
   QueryWindow();
 
   ImGui::End();
-}
-
-int CallbackSetQueryTable(void *table_,int num_colums, char **data, char **colum_name){
-  Table *table = (Table*) table_;
-  InsertRow(table,data);
-  return 0;
 }
 
 void DataBaseController::QueryWindow(){
@@ -526,10 +480,6 @@ void DataBaseController::GetTablesName(){
   for(int i = 0; i < num_tables_; i++){
     printf("%d-> %s\n",i,tables_name_[i]);
   }
-}
-
-Table* DataBaseController::GetActualTable(){
-  return actual_table_;
 }
 
 void DataBaseController::SetTableCreated(bool state){

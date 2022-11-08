@@ -56,7 +56,7 @@ int esat::main(int argc, char **argv) {
     esat::DrawClear(0, 0, 0);
 
 
-    db_controller.ShowWindow();
+    db_controller.MainWindow();
     //ImGui::ShowDemoWindow();
 
     do{//Control fps

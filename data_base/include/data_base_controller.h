@@ -16,7 +16,7 @@
 class DataBaseController{
  public:
   // Public functions
-  
+  friend int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **data, char **col_name);
   static DataBaseController& Instance();
 
   //** Importante **
@@ -27,12 +27,11 @@ class DataBaseController{
 
   void operator = (const DataBaseController&) = delete; // Sobre carga de operador para la clase
 
-  void ShowWindow();
-  void QueryWindow();
   bool OpenDB(char *name);
   void GetTablesName();
   void SetActualTable(Table *);
   void SetTableCreated(bool state);
+  void ShowWindow();
   Table* GetActualTable();
 
  private:
@@ -49,6 +48,7 @@ class DataBaseController{
   bool table_selected_;
 
   Table *actual_table_; // 20 bytes
+  Table *query_table_;
   
   bool table_created_;
   bool cols_name_inserted_;
@@ -56,6 +56,8 @@ class DataBaseController{
   char *error_message_;
   char query_[501];
   char query_aux_[501];
+
+  void QueryWindow();
   
 
   /**

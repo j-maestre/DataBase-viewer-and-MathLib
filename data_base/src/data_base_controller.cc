@@ -42,6 +42,7 @@ DataBaseController::DataBaseController(){
   actual_table_ = nullptr;
   cols_name_inserted_ = false;
   error_message_ = nullptr;
+  query_table_ = nullptr;
   memset(query_,'\0',501);
   memset(query_aux_,'\0',501);
   CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
@@ -101,7 +102,7 @@ int CallbackGetTable(void *table_to_insert,int num_colums, char **data, char **c
   return 0; 
 }
 
-int CallbackGetTotalRows(void *_cols,int num_columns, char **data, char **colum_name){
+int CallbackGetTotalColumns(void *_cols,int num_columns, char **data, char **colum_name){
   int *cols = (int*) _cols;
   *cols = num_columns;  
 
@@ -266,15 +267,6 @@ int CallbackSetQueryTable(void *table_,int num_colums, char **data, char **colum
   return 0;
 }
 
-int CallbackSetQueryTableColumns(void *table_,int num_colums, char **data, char **colum_name){
-  Table *table = (Table*) table_;
-  //Sacar el num de columnas que ya viene y crear la tabla
-  printf("Num columns-> %d, Data-> %s, Colum name-> %s\n",num_colums,*data,*colum_name);
-
-  CreateTable(&table,num_colums,120);
-  return 0;
-}
-
 void DataBaseController::QueryWindow(){
   ImVec2 vec = {0.0f,0.0f}; // 0 es para que ocupe el 100% del contenedor
   
@@ -299,16 +291,31 @@ void DataBaseController::QueryWindow(){
 
   ImGui::InputTextMultiline("##sentece",query_,500,ImVec2(ImGui::GetWindowSize().x,0.0f),flags);
   if(ImGui::Button("Execute")){
-    // Antes, sacar el numero de columnas de la query y crear la tabla, luego hacer la query e ir rellenando la tabla
+    // execute user's query
+    DestroyTable(query_table_);
+    query_table_ = nullptr;
     strcpy(query_aux,query_);
     strcat(query_aux," LIMIT 1\n");
-    printf("ANtes de table columns\nquery-> %s\n",query_aux);
-    sqlite3_exec(db_,query_aux,CallbackSetQueryTableColumns,query_table_,&error_message_);
 
-    sqlite3_exec(db_,query_,CallbackSetQueryTable,nullptr,&error_message_);
+    int *numcols_tmp = new int;
+    sqlite3_exec(db_,query_,CallbackGetTotalColumns,numcols_tmp,&error_message_);
+
+    //Check is is a SELECT query
+    char *check_select = (char*) malloc(sizeof(char)*7);
+    snprintf(check_select,7,"%s",query_);
+    strupr(check_select);
+
+    if(strcmp(check_select,"SELECT") == 0 && !error_message_){
+      CreateTable(&query_table_, *numcols_tmp,120);
+      sqlite3_exec(db_,query_,CallbackInsertRows,&query_table_,&error_message_);
+    }
+
+
+
     strncpy(query_aux_,query_,501);
-    memset(query_,'\0',501);
+    //memset(query_,'\0',501);
     SetTableCreated(false);
+    delete numcols_tmp;
   }
   ImGui::EndChild();
 }
@@ -327,7 +334,7 @@ void DeleteRow(char *table_name,char *colum_name, char *id, sqlite3* db){
 
 int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **data, char **col_name){
   char table_name[30];
-  strcpy(table_name,GetTableName(table));
+  strcpy(table_name,GetTableName(table)?GetTableName(table):"NULL");
   sqlite3* db = (sqlite3*) data_base;
   
   ImGui::TableNextRow();  
@@ -347,19 +354,23 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
   }
 
     //Pintar basura
-    ImGui::TableSetColumnIndex(num_colums);
-    ImGui::ColorButton("#button", ImVec4(255,0,0,0),ImGuiColorEditFlags_::ImGuiColorEditFlags_NoTooltip);
-    if(ImGui::IsItemClicked()){
-      //IsMouseDoubleClicked
-      //Delete row
-      DeleteRow(table_name,col_name[0],data[0],db);
-      DataBaseController::Instance().SetTableCreated(false);
-    }
-    if(ImGui::IsItemHovered()){
-      ImGui::SameLine();
-      ImGui::TextColored(ImVec4(255,0,0,255),"Delete row");
-      
-      //ImGui::SetMouseCursor(ImGuiMouseCursor_::ImGuiMouseCursor_Hand);
+    
+    if(DataBaseController::Instance().actual_table_ == table){
+
+      ImGui::TableSetColumnIndex(num_colums);
+      ImGui::ColorButton("#button", ImVec4(255,0,0,0),ImGuiColorEditFlags_::ImGuiColorEditFlags_NoTooltip);
+      if(ImGui::IsItemClicked()){
+        //IsMouseDoubleClicked
+        //Delete row
+        DeleteRow(table_name,col_name[0],data[0],db);
+        DataBaseController::Instance().SetTableCreated(false);
+      }
+      if(ImGui::IsItemHovered()){
+        ImGui::SameLine();
+        ImGui::TextColored(ImVec4(255,0,0,255),"Delete row");
+        
+        //ImGui::SetMouseCursor(ImGuiMouseCursor_::ImGuiMouseCursor_Hand);
+      }
     }
     //ImGui::ImageButton("../data/trash.png",ImVec2(30,30));
 
@@ -416,6 +427,7 @@ void DataBaseController::PreviewWindow(){
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("SQL")) {
+      //Preview of SQL Query window
       if(error_message_){
         ImGui::TextColored(ImVec4(255,0,0,255),"[ERROR]");
         ImGui::SameLine();
@@ -429,22 +441,24 @@ void DataBaseController::PreviewWindow(){
           ImGui::TextColored(ImVec4(238/255.0f,210/255.0f,2/255.0f,255),"[EMPTY]");
         }
       }
-      ImGui::Separator();
-      //Show query table
-      int num_query_columns = GetColumnsNumber(query_table_);
-      printf("Query columns-> %d\n", num_query_columns);
+      if(query_table_ != nullptr){
 
-      if(ImGui::BeginTable("##QueryContent", num_query_columns, table_flags,ImVec2((1.175494351e-38F),0))){
+        ImGui::Separator();
+        //Show query table
+        int num_query_columns = GetColumnsNumber(query_table_);
 
-        for (int i = 0; i < num_query_columns+1; i++){
-          ImGui::TableSetupColumn(" ");
+        if(ImGui::BeginTable("##QueryContent", num_query_columns, table_flags,ImVec2((1.175494351e-38F),0))){
+          char **col_names = GetColumnsNames(query_table_);
+          for (int i = 0; i < num_query_columns; i++){
+            ImGui::TableSetupColumn(col_names[i]);
+          }
+          ImGui::TableHeadersRow();
+          RunTable(query_table_,CallbackPreviewTable, db_);
+          
+          ImGui::EndTable();
         }
-        ImGui::TableHeadersRow();
-        RunTable(actual_table_,CallbackPreviewTable, db_);
-        
-        ImGui::EndTable();
       }
-      
+
 
       ImGui::EndTabItem();
     }
@@ -462,15 +476,13 @@ void DataBaseController::ShowTable(){
     if(actual_table_ != nullptr)DestroyTable(actual_table_);
     char *err_msg;
 
-    printf("\nSHOW TABLE\n");
-
     //Create table with num columns
     char query_rows_columns[50] = {"SELECT * FROM "};
     strcat(query_rows_columns,current_table_);
     strcat(query_rows_columns," LIMIT 1");
 
     int *num_cols_aux = new int;
-    sqlite3_exec(db_,query_rows_columns,CallbackGetTotalRows,num_cols_aux,&err_msg);
+    sqlite3_exec(db_,query_rows_columns,CallbackGetTotalColumns,num_cols_aux,&err_msg);
     CreateTable(&actual_table_, *num_cols_aux,120);
     SetTableName(actual_table_,current_table_);
     

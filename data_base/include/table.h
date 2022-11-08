@@ -55,6 +55,23 @@ int InsertRow(Table *table, char**row_data);
 int  RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char **), void *user_data);
 
 /**
+ * @brief This function run the Table and execute the callback.
+ * 
+ * The callback will recibe from the arguments the user_data into void *,
+ * the column number into int, the row of values into the first char **,
+ * and the col name int the second char **.
+ * 
+ * @param table The Table we whant to run.
+ * @param callback The function is gonna be executed with the data.
+ * @param user_data The user data you can pass to the callback
+ * @param from The index of the row where the callback starts 
+ * @param to The index of the row where the callback finish
+ * @return int Error: 0 == OK
+ */
+int  RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char **), void *user_data, int from, int to);
+
+
+/**
  * @brief Get the columns names of the Table
  * 
  * @param table The Table we gonna be get the columns names

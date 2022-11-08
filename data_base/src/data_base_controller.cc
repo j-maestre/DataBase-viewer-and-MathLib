@@ -139,6 +139,13 @@ void DataBaseController::MainWindow(){
         open_error_popup = false;
         open_file_explorer = true;
       }
+      if(ImGui::MenuItem("Close")){
+        //open_popup = true;
+        //open_error_popup = false;
+        //open_file_explorer = true;
+        
+        CloseDB();
+      }
 
       ImGui::EndMenu();
     }
@@ -244,7 +251,7 @@ void DataBaseController::QueryWindow(){
   
 
   ImGui::InputTextMultiline("##sentece",query_,500,ImVec2(ImGui::GetWindowSize().x,0.0f),flags);
-  if(ImGui::Button("Execute")){
+  if(ImGui::Button("Execute") && db_opened_){
     // execute user's query
     DestroyTable(query_table_);
     query_table_ = nullptr;
@@ -484,4 +491,16 @@ void DataBaseController::GetTablesName(){
 
 void DataBaseController::SetTableCreated(bool state){
   table_created_ = state;
+}
+
+void DataBaseController::CloseDB(){
+
+  DestroyTable(actual_table_);
+  DestroyTable(query_table_);
+  actual_table_ = nullptr;
+  query_table_ = nullptr;
+  free(tables_name_);
+  num_tables_ = 0;
+  db_opened_ = false;
+  sqlite3_close(db_);
 }

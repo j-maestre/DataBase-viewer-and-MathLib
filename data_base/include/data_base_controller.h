@@ -36,6 +36,7 @@ class DataBaseController{
   void GetTablesName();
   void SetActualTable(Table *);
   void SetTableCreated(bool state);
+  void CloseDB();
   Table* GetActualTable();
 
  private:

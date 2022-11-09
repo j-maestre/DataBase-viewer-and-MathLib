@@ -68,6 +68,7 @@ class DataBaseController{
   // edit row data
   char **row_data_;
   char **row_data_copy_;
+  unsigned int max_colums;
 
   void QueryWindow();
   

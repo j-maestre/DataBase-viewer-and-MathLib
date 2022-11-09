@@ -45,6 +45,12 @@ DataBaseController::DataBaseController(){
   query_table_ = nullptr;
   pagination = 20;
   edit_popup_open_ = false;
+  max_colums = 30;
+  row_data_copy_ = (char**) malloc(sizeof(char*)*max_colums);
+  for(int i = 0; i < max_colums; i++){
+    row_data_copy_[i] = (char*) calloc('\0',sizeof(char)*120);  
+  }
+
   memset(query_,'\0',501);
   memset(query_aux_,'\0',501);
   CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
@@ -295,8 +301,6 @@ void DeleteRow(char *table_name,char *colum_name, char *id, sqlite3* db){
 
 }
 
-
-
 int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **data, char **col_name){
   
   DataBaseController& db_controller = DataBaseController::Instance();
@@ -343,12 +347,9 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
         db_controller.edit_popup_open_ = true;
         db_controller.row_data_ = data;
 
-        db_controller.row_data_copy_ = (char**) malloc(sizeof(char*)*GetColumnsNumber(db_controller.actual_table_));
         int cols_num = GetColumnsNumber(db_controller.actual_table_);
-
         for(int i = 0; i < cols_num; i++){
-          db_controller.row_data_copy_[i] = (char*) malloc(sizeof(char)*120);
-          strcat(db_controller.row_data_copy_[i],data[i]);
+          snprintf(db_controller.row_data_copy_[i],120,"%s",data[i]);
         }
 
       }
@@ -435,7 +436,7 @@ void DataBaseController::PreviewWindow(){
             char label[40] = {"##Rowdata"};
             snprintf(label,120,"##%s",colum_names[i]);
 
-            ImGui::InputText(label,row_data_[i],120);
+            ImGui::InputText(label,row_data_copy_[i],120);
           }
           ImGui::TableNextRow();
           ImGui::TableSetColumnIndex(0);
@@ -444,27 +445,34 @@ void DataBaseController::PreviewWindow(){
             // Update en la DB
             char query[300];
             snprintf(query,120,"%s%s%s","UPDATE ",GetTableName(actual_table_), " SET ");
-            printf("%s\n",query);
-
             for(int i = 0; i<num_columns;i++){
               strncat(query,colum_names[i], 300);
               strncat(query," = ", 300);
-              strncat(query,row_data_[i], 300);
+              strncat(query,"'", 300);
+              strncat(query,row_data_copy_[i], 300);
+              strncat(query,"'", 300);
               if(i<num_columns-1)strncat(query,", ", 300);
-              //printf("%s[%s]\n",colum_names[i],row_data_[i]);
             }
-            strncat(query," WHERE ", 300);
 
-            // Condicion where similiar al for de antes
+            // Condicion where del update
+            strncat(query," WHERE ", 300);
             for (int i = 0; i < num_columns; i++){
               strncat(query,colum_names[i], 300);
               strncat(query," = ", 300);
-              strncat(query,row_data_copy_[i], 300);
+              strncat(query,"'", 300);
+              strncat(query,row_data_[i], 300);
+              strncat(query,"'", 300);
               if(i<num_columns-1)strncat(query, " AND ", 300);
             }
-            
-            printf("%s\n",query);
+
+            //printf("%s\n",query);
+            sqlite3_exec(db_,query,nullptr,nullptr,&err_msg_);
+            ImGui::CloseCurrentPopup();
+            SetTableCreated(false);
+
+            //printf("%s\n",err_msg_);
           }
+
           ImGui::SameLine();
           if(ImGui::Button("Close")){
             ImGui::CloseCurrentPopup();
@@ -473,7 +481,7 @@ void DataBaseController::PreviewWindow(){
 
           ImGui::EndTable();
         }
-        //GetColumnsNames()
+
 
         ImGui::EndPopup();
       }

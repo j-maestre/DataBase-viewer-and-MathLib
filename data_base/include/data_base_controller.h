@@ -62,7 +62,12 @@ class DataBaseController{
   char query_[501];
   char query_aux_[501];
 
-  unsigned int pagination; 
+  unsigned int pagination;
+  bool edit_popup_open_;
+
+  // edit row data
+  char **row_data_;
+  char **row_data_copy_;
 
   void QueryWindow();
   

@@ -44,6 +44,7 @@ DataBaseController::DataBaseController(){
   error_message_ = nullptr;
   query_table_ = nullptr;
   pagination = 20;
+  edit_popup_open_ = false;
   memset(query_,'\0',501);
   memset(query_aux_,'\0',501);
   CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
@@ -56,6 +57,7 @@ DataBaseController::~DataBaseController(){
   }
   free(tables_name_);
   DestroyTable(actual_table_);
+  DestroyTable(query_table_);
   free(err_msg_);
   //free(actual_pos_ref_);
 }
@@ -293,7 +295,12 @@ void DeleteRow(char *table_name,char *colum_name, char *id, sqlite3* db){
 
 }
 
+
+
 int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **data, char **col_name){
+  
+  DataBaseController& db_controller = DataBaseController::Instance();
+  
   char table_name[30];
   strcpy(table_name,GetTableName(table)?GetTableName(table):"NULL");
   sqlite3* db = (sqlite3*) data_base;
@@ -316,24 +323,36 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
 
     //Pintar basura
     
-    if(DataBaseController::Instance().actual_table_ == table){
+    if(db_controller.actual_table_ == table){
+
+      // Columna Delete & Edit
 
       ImGui::TableSetColumnIndex(num_colums);
-      ImGui::ColorButton("#button", ImVec4(255,0,0,0),ImGuiColorEditFlags_::ImGuiColorEditFlags_NoTooltip);
+      ImGui::Button("Delete");
       if(ImGui::IsItemClicked()){
         //IsMouseDoubleClicked
         //Delete row
         DeleteRow(table_name,col_name[0],data[0],db);
-        DataBaseController::Instance().SetTableCreated(false);
+        db_controller.SetTableCreated(false);
       }
-      if(ImGui::IsItemHovered()){
-        ImGui::SameLine();
-        ImGui::TextColored(ImVec4(255,0,0,255),"Delete row");
-        
-        //ImGui::SetMouseCursor(ImGuiMouseCursor_::ImGuiMouseCursor_Hand);
+  
+
+      ImGui::SameLine();
+      ImGui::Button("Edit");
+      if(ImGui::IsItemClicked()){
+        db_controller.edit_popup_open_ = true;
+        db_controller.row_data_ = data;
+
+        db_controller.row_data_copy_ = (char**) malloc(sizeof(char*)*GetColumnsNumber(db_controller.actual_table_));
+        int cols_num = GetColumnsNumber(db_controller.actual_table_);
+
+        for(int i = 0; i < cols_num; i++){
+          db_controller.row_data_copy_[i] = (char*) malloc(sizeof(char)*120);
+          strcat(db_controller.row_data_copy_[i],data[i]);
+        }
+
       }
     }
-    //ImGui::ImageButton("../data/trash.png",ImVec2(30,30));
 
   return 0;
 } 
@@ -385,6 +404,79 @@ void DataBaseController::PreviewWindow(){
           }
         }
       }
+
+      // Edit Row popup
+      if (edit_popup_open_ == true) {
+        printf("edit_popup_open_ == true\n");
+        ImGui::OpenPopup("Edit Row");
+        edit_popup_open_ = false;
+      }
+      ImVec2 center;
+      center.x = ImGui::GetWindowPos().x + (ImGui::GetWindowSize().x / 2);
+      center.y = ImGui::GetWindowPos().y + (ImGui::GetWindowSize().y / 2);
+      ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+      //Pop up data
+      if(ImGui::BeginPopupModal("Edit Row", NULL)){
+        ImGui::Text(GetTableName(actual_table_));
+        int num_columns = GetColumnsNumber(actual_table_);
+        char **colum_names = GetColumnsNames(actual_table_);
+        if(ImGui::BeginTable(GetTableName(actual_table_),num_columns)){
+
+          // Set Colum names
+          for(int i = 0; i<num_columns; i++){
+            ImGui::TableSetupColumn(colum_names[i]);
+          }
+          ImGui::TableHeadersRow();
+          ImGui::TableNextRow();
+          // Set data in columns
+          for (int i = 0; i < num_columns; i++){
+            ImGui::TableSetColumnIndex(i);
+            char label[40] = {"##Rowdata"};
+            snprintf(label,120,"##%s",colum_names[i]);
+
+            ImGui::InputText(label,row_data_[i],120);
+          }
+          ImGui::TableNextRow();
+          ImGui::TableSetColumnIndex(0);
+          ImGui::Separator();
+          if(ImGui::Button("Save")){
+            // Update en la DB
+            char query[300];
+            snprintf(query,120,"%s%s%s","UPDATE ",GetTableName(actual_table_), " SET ");
+            printf("%s\n",query);
+
+            for(int i = 0; i<num_columns;i++){
+              strncat(query,colum_names[i], 300);
+              strncat(query," = ", 300);
+              strncat(query,row_data_[i], 300);
+              if(i<num_columns-1)strncat(query,", ", 300);
+              //printf("%s[%s]\n",colum_names[i],row_data_[i]);
+            }
+            strncat(query," WHERE ", 300);
+
+            // Condicion where similiar al for de antes
+            for (int i = 0; i < num_columns; i++){
+              strncat(query,colum_names[i], 300);
+              strncat(query," = ", 300);
+              strncat(query,row_data_copy_[i], 300);
+              if(i<num_columns-1)strncat(query, " AND ", 300);
+            }
+            
+            printf("%s\n",query);
+          }
+          ImGui::SameLine();
+          if(ImGui::Button("Close")){
+            ImGui::CloseCurrentPopup();
+          }
+          
+
+          ImGui::EndTable();
+        }
+        //GetColumnsNames()
+
+        ImGui::EndPopup();
+      }
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("SQL")) {
@@ -419,8 +511,6 @@ void DataBaseController::PreviewWindow(){
           ImGui::EndTable();
         }
       }
-
-
       ImGui::EndTabItem();
     }
     ImGui::EndTabBar();

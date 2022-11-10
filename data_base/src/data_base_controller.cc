@@ -6,6 +6,8 @@
 #include "table.h"
 #include "nfd.h"
 
+
+
 void HelpMarker(const char* desc){
     ImGui::TextDisabled("(?)");
     if (ImGui::IsItemHovered())
@@ -97,6 +99,161 @@ int CallbackInsertRows(void *table_,int num_columns, char **data, char **colum_n
   InsertColNames(*table,colum_name);
   return 0;
 }
+
+int GetDataType(char *type){
+
+  char type_tmp[17];
+  snprintf(type_tmp,17,"%s",type);
+  if(strcmp(type_tmp,"DOUBLE PRECISION") == 0){
+    return DOUBLE_PRECISION;
+  }
+  //*******
+  snprintf(type_tmp,11,"%s",type);
+  if(strcmp(type_tmp,"MEDIUMBLOB") == 0){
+    return MEDIUMBLOB;
+  }
+  if(strcmp(type_tmp,"MEDIUMTEXT") == 0){
+    return MEDIUMTEXT;
+  }
+
+  //*******
+  snprintf(type_tmp,10,"%s",type);
+  if(strcmp(type_tmp,"TIMESTAMP") == 0){
+    return TIMESTAMP;
+  }
+  if(strcmp(type_tmp,"VARBINARY") == 0){
+    return VARBINARY;
+  }
+  if(strcmp(type_tmp,"MEDIUMINT") == 0){
+    return MEDIUMINT;
+  }
+
+  //*******
+  snprintf(type_tmp,9,"%s",type);
+  if(strcmp(type_tmp,"LONGBLOB") == 0){
+    return LONGBLOB;
+  }
+  if(strcmp(type_tmp,"SMALLINT") == 0){
+    return SMALLINT;
+  }
+  if(strcmp(type_tmp,"LONGTEXT") == 0){
+    return LONGTEXT;
+  }
+  if(strcmp(type_tmp,"TINYTEXT") == 0){
+    return TINYTEXT;
+  }
+  if(strcmp(type_tmp,"DATETIME") == 0){
+    return DATETIME;
+  }
+  if(strcmp(type_tmp,"TINYBLOB") == 0){
+    return TINYBLOB;
+  }
+  if(strcmp(type_tmp,"NVARCHAR") == 0){
+    return NVARCHAR;
+  }
+  //********
+  snprintf(type_tmp,8,"%s",type);
+  if(strcmp(type_tmp,"INTEGER") == 0){
+    return INTEGER;
+  }
+  if(strcmp(type_tmp,"BOOLEAN") == 0){
+    return BOOLEAN;
+  }
+  if(strcmp(type_tmp,"TINYINT") == 0){
+    return TINYINT;
+  }
+  if(strcmp(type_tmp,"DECIMAL") == 0){
+    return DECIMAL;
+  }
+  if(strcmp(type_tmp,"VARCHAR") == 0){
+    return VARCHAR;
+  }
+
+  //*******
+  snprintf(type_tmp,7,"%s",type);
+  if(strcmp(type_tmp,"DOUBLE") == 0){
+    return DOUBLE;
+  }
+  if(strcmp(type_tmp,"BINARY") == 0){
+    return BINARY;
+  }
+  if(strcmp(type_tmp,"BIGINT") == 0){
+    return BIGINT;
+  }
+
+  //*******
+  snprintf(type_tmp,6,"%s",type);
+  if(strcmp(type_tmp,"FLOAT") == 0){
+    return FLOAT;
+  }
+
+  //******
+  snprintf(type_tmp,5,"%s",type);
+  if(strcmp(type_tmp,"YEAR") == 0){
+    return YEAR;
+  }
+  if(strcmp(type_tmp,"TIME") == 0){
+    return TIME;
+  }
+  if(strcmp(type_tmp,"BOOL") == 0){
+    return BOOL;
+  }
+  if(strcmp(type_tmp,"BLOB") == 0){
+    return BLOB;
+  }
+  if(strcmp(type_tmp,"TEXT") == 0){
+    return TEXT;
+  }
+  if(strcmp(type_tmp,"DATE") == 0){
+    return DATE;
+  }
+  if(strcmp(type_tmp,"CHAR") == 0){
+    return CHAR;
+  }
+
+  //*******
+  snprintf(type_tmp,4,"%s",type);
+  if(strcmp(type_tmp,"DEC") == 0){
+    return DEC;
+  }
+  if(strcmp(type_tmp,"INT") == 0){
+    return INT;
+  }
+  if(strcmp(type_tmp,"BIT") == 0){
+    return BIT;
+  }
+
+
+
+
+
+  printf("---- Size of type_tmp-> %s\n",type_tmp);
+
+  return UNDEFINED;
+}
+
+int CallbackInsertColumnsDataType(void *types_,int num_columns, char **data, char **colum_name){
+  //Entra una vez por cada columna
+  
+  int *types = (int*) types_;
+
+  int col_offset = 0;
+  for (int i = 0; i < num_columns; i++){
+    int type;
+    //printf("ColumName->%s Data->%s\n",colum_name[i],data[i]);
+    if(strcmp(colum_name[i],"type") == 0){
+      type = GetDataType(data[i]);
+      printf("Type->%d\n",type);
+      types[col_offset] = type;
+      col_offset++;
+    }
+
+  }
+
+  
+  return 0;
+}
+
 
 bool DataBaseController::OpenDB(char *name){
 
@@ -251,7 +408,7 @@ void DataBaseController::QueryWindow(){
   flags |= ImGuiInputTextFlags_AllowTabInput;
 
   static bool bol_aux = false;
-  if(!bol_aux)strcat(query_,"SELECT * FROM albums");
+  if(!bol_aux)strcat(query_,"PRAGMA table_info('albums')");
   bol_aux = true;
   
   char query_aux[500];
@@ -274,11 +431,11 @@ void DataBaseController::QueryWindow(){
     snprintf(check_select,7,"%s",query_);
     strupr(check_select);
 
-    if(strcmp(check_select,"SELECT") == 0 && !error_message_){
+    if((strcmp(check_select,"SELECT") == 0 || strcmp(check_select,"PRAGMA") == 0) && !error_message_){
+      printf("CREATE\n");
       CreateTable(&query_table_, *numcols_tmp,120);
       sqlite3_exec(db_,query_,CallbackInsertRows,&query_table_,&error_message_);
     }
-
 
 
     strncpy(query_aux_,query_,501);
@@ -346,7 +503,9 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
       if(ImGui::IsItemClicked()){
         db_controller.edit_popup_open_ = true;
         db_controller.row_data_ = data;
+        
 
+        //Copy of data
         int cols_num = GetColumnsNumber(db_controller.actual_table_);
         for(int i = 0; i < cols_num; i++){
           snprintf(db_controller.row_data_copy_[i],120,"%s",data[i]);
@@ -357,6 +516,24 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
 
   return 0;
 } 
+
+int GetTypeToInput(int type){
+  printf("Type recived-> %d\n",type);
+  // TODO Revisar esto
+  if(type <0){
+    return -1; // Its undefined
+  }else if(type >=1 && type <= 19){
+    return 1;  // Its a number
+  }else{
+    return 2;  // Its a text
+  }
+}
+
+int CallbackGetDataType(void *_cols,int num_columns, char **data, char **colum_name){
+
+
+  return UNDEFINED;
+}
 
 void DataBaseController::PreviewWindow(){
 
@@ -408,8 +585,8 @@ void DataBaseController::PreviewWindow(){
 
       // Edit Row popup
       if (edit_popup_open_ == true) {
-        printf("edit_popup_open_ == true\n");
         ImGui::OpenPopup("Edit Row");
+        
         edit_popup_open_ = false;
       }
       ImVec2 center;
@@ -431,12 +608,34 @@ void DataBaseController::PreviewWindow(){
           ImGui::TableHeadersRow();
           ImGui::TableNextRow();
           // Set data in columns
+          int *types = GetColumnsType(actual_table_);
+          static int type_tmp = 0;
           for (int i = 0; i < num_columns; i++){
             ImGui::TableSetColumnIndex(i);
             char label[40] = {"##Rowdata"};
             snprintf(label,120,"##%s",colum_names[i]);
 
-            ImGui::InputText(label,row_data_copy_[i],120);
+
+
+            int type = GetTypeToInput(types[i]);
+            //Comprobar el tipo de datos
+            if(type == 1){
+              //Numero
+              type_tmp = atoi(row_data_copy_[i]);
+              ImGui::InputInt(label,&type_tmp);
+              snprintf(row_data_copy_[i],120,"%d",type_tmp);
+
+            }else if(type == 2){
+              // Texto
+              ImGui::InputText(label,row_data_copy_[i],120);
+
+            }else{
+              //Undefined
+              printf("undefineeeeeeeeed");
+            }
+            
+
+
           }
           ImGui::TableNextRow();
           ImGui::TableSetColumnIndex(0);
@@ -465,7 +664,7 @@ void DataBaseController::PreviewWindow(){
               if(i<num_columns-1)strncat(query, " AND ", 300);
             }
 
-            //printf("%s\n",query);
+            printf("%s\n",query);
             sqlite3_exec(db_,query,nullptr,nullptr,&err_msg_);
             ImGui::CloseCurrentPopup();
             SetTableCreated(false);
@@ -551,6 +750,13 @@ void DataBaseController::ShowTable(){
     char query_data[50] = "SELECT * FROM ";
     strcat(query_data,current_table_);
     sqlite3_exec(db_,query_data,CallbackInsertRows,&actual_table_, &err_msg);
+
+    // Insert col data type
+    char query_data_columns[50];
+    int colum_types[40];
+    snprintf(query_data_columns,50,"%s%s%s","PRAGMA table_info('",current_table_,"')");
+    sqlite3_exec(db_,query_data_columns,CallbackInsertColumnsDataType,colum_types, &err_msg);
+    InsertColTypes(actual_table_,colum_types);
 
     table_created_ = true;
 

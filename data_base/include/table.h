@@ -10,6 +10,42 @@
 
 typedef struct Table Table;
 
+enum DataType{
+  UNDEFINED = -1,          //9??
+  BIT = 1,                 //3
+  INT = 2,                 //3
+  DEC = 3,                 //3
+  BLOB = 4,                //4
+  BOOL = 5,                //4
+  FLOAT = 6,               //5
+  BIGINT = 7,              //6
+  BINARY = 8,              //6
+  DOUBLE = 9,              //6
+  DECIMAL = 10,            //7
+  TINYINT = 11,            //7
+  BOOLEAN = 12,            //7
+  INTEGER = 13,            //7
+  TINYBLOB = 14,           //8
+  SMALLINT = 15,           //8
+  LONGBLOB = 16,           //8
+  MEDIUMINT = 17,          //9
+  MEDIUMBLOB = 18,         //10
+  DOUBLE_PRECISION = 19,   //16
+  DATE = 20,               //4---
+  CHAR = 21,               //4--
+  TEXT = 22,               //4--
+  TIME = 23,               //4--
+  YEAR = 24,               //4--
+  VARCHAR = 25,            //7--
+  NVARCHAR = 26,           //8--
+  DATETIME = 27,           //8--
+  TINYTEXT = 28,           //8--
+  LONGTEXT = 29,           //8--
+  VARBINARY = 30,          //9--
+  TIMESTAMP = 31,          //9--
+  MEDIUMTEXT = 32,         //10--
+};
+
 /**
  * @brief Create a Teable object
  * 
@@ -27,6 +63,8 @@ int  CreateTable(Table **table, int col_num, int reg_max_size);
  * @param col_names Pointer to the column names.
  */
 void InsertColNames(Table *table, char **col_names);
+
+void InsertColTypes(Table *table, int *col_types);
 
 /**
  * @brief Insert a data row into the Table in the current position.
@@ -78,6 +116,8 @@ int  RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char 
  * @return char** Pointer to the name of the columns
  */
 char** GetColumnsNames(Table *table);
+
+int* GetColumnsType(Table *table);
 
 /**
  * @brief Get the columns number of the Table

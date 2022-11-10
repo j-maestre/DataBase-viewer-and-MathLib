@@ -11,6 +11,7 @@ struct Table {
   int data_max_size;
   std::vector<char **> data_table;
   char **col_names;
+  int *col_types;
   char *name_;
 };
 
@@ -18,6 +19,7 @@ int CreateTable(Table **table, int col_num, int data_size) {
   *table = new Table;
   (*table)->cols = col_num;
   (*table)->col_names = nullptr;
+  (*table)->col_types = nullptr;
   (*table)->data_max_size = data_size;
   (*table)->name_ = nullptr;
   return 0;
@@ -41,6 +43,26 @@ void InsertColNames(Table *table, char **col_names) {
     *(aux[i] + table->data_max_size) = '\0';
   }
   table->col_names = aux;
+}
+
+void InsertColTypes(Table *table, int *col_types) {
+  if (nullptr == table) {
+    return;
+  }
+  if (nullptr == col_types) {
+    return;
+  }
+  if (nullptr !=  table->col_types) {
+    return;
+  }
+
+  int *aux = (int *)malloc(sizeof(int) * table->cols);
+
+  for(int i = 0; i < table->cols; i++) {
+    aux[i] = col_types[i];
+  }
+
+  table->col_types = aux;
 }
 
 int InsertRow(Table *table, char** row_data) {
@@ -95,6 +117,13 @@ char** GetColumnsNames(Table *table) {
     return nullptr;
   }
   return table->col_names;
+}
+
+int* GetColumnsType(Table *table) {
+  if (nullptr == table) {
+    return nullptr;
+  }
+  return table->col_types;
 }
 
 int GetColumnsNumber(Table* table) {

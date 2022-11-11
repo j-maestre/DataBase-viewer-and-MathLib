@@ -407,7 +407,7 @@ void DataBaseController::QueryWindow(){
   if(!bol_aux)strcat(query_,"PRAGMA table_info('albums')");
   bol_aux = true;
   
-  char query_aux[500];
+  char query_aux[1024];
 
   
 
@@ -434,7 +434,7 @@ void DataBaseController::QueryWindow(){
     }
 
 
-    strncpy(query_aux_,query_,501);
+    strncpy(query_aux_,query_,1025);
     //memset(query_,'\0',501);
     SetTableCreated(false);
     delete numcols_tmp;
@@ -585,94 +585,84 @@ void DataBaseController::PreviewWindow(){
       ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
       //Pop up data
-      if(ImGui::BeginPopupModal("Edit Row", NULL)){
+      if(ImGui::BeginPopupModal("Edit Row", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+        ImGui::Text("%-15s", "TableName: ");
+        ImGui::SameLine();
         ImGui::Text(GetTableName(actual_table_));
+        ImGui::Separator();
         int num_columns = GetColumnsNumber(actual_table_);
         char **colum_names = GetColumnsNames(actual_table_);
-        if(ImGui::BeginTable(GetTableName(actual_table_),num_columns, ImGuiTableFlags_::ImGuiTableFlags_Resizable)){
 
-          // Set Colum names
-          for(int i = 0; i<num_columns; i++){
-            ImGui::TableSetupColumn(colum_names[i]);
-          }
-          ImGui::TableHeadersRow();
-          ImGui::TableNextRow();
-          // Set data in columns
-          int *types = GetColumnsType(actual_table_);
-          static int type_tmp = 0;
-          static float type_f_tmp = 0;
+        // Set data in columns
+        int *types = GetColumnsType(actual_table_);
+        static int type_tmp = 0;
+        static float type_f_tmp = 0;
 
-          for (int i = 0; i < num_columns; i++){
-            ImGui::TableSetColumnIndex(i);
-            char label[40] = {"##Rowdata"};
-            snprintf(label,120,"##%s",colum_names[i]);
-
-            int type = GetTypeToInput(types[i]);
-            //Comprobar el tipo de datos
-            if(type == 1){
-              //Integer
-              type_tmp = atoi(row_data_copy_[i]);
-              ImGui::InputInt(label,&type_tmp);
-              snprintf(row_data_copy_[i],120,"%d",type_tmp);
-
-            }else if(type == 2){
-              //Float
-              type_f_tmp = std::stof(row_data_copy_[i]);
-              ImGui::InputFloat(label,&type_f_tmp);
-              snprintf(row_data_copy_[i],120,"%f",type_f_tmp);
-
-            }else if(type == 3){
-              // Texto
-              ImGui::InputText(label,row_data_copy_[i],120);              
-            }else{
-              //Undefined
-
-            }
-
-          }
-          ImGui::TableNextRow();
-          ImGui::TableSetColumnIndex(0);
-          ImGui::Separator();
-          if(ImGui::Button("Save")){
-            // Update en la DB
-            char query[300];
-            snprintf(query,120,"%s%s%s","UPDATE ",GetTableName(actual_table_), " SET ");
-            for(int i = 0; i<num_columns;i++){
-              strncat(query,colum_names[i], 300);
-              strncat(query," = ", 300);
-              strncat(query,"'", 300);
-              strncat(query,row_data_copy_[i], 300);
-              strncat(query,"'", 300);
-              if(i<num_columns-1)strncat(query,", ", 300);
-            }
-
-            // Condicion where del update
-            strncat(query," WHERE ", 300);
-            for (int i = 0; i < num_columns; i++){
-              strncat(query,colum_names[i], 300);
-              strncat(query," = ", 300);
-              strncat(query,"'", 300);
-              strncat(query,row_data_[i], 300);
-              strncat(query,"'", 300);
-              if(i<num_columns-1)strncat(query, " AND ", 300);
-            }
-
-            printf("%s\n",query);
-            sqlite3_exec(db_,query,nullptr,nullptr,&err_msg_);
-            ImGui::CloseCurrentPopup();
-            SetTableCreated(false);
-
-            //printf("%s\n",err_msg_);
-          }
-
+        for (int i = 0; i < num_columns; i++){
+          char label[40] = {"##Rowdata"};
+          snprintf(label,120,"##%s",colum_names[i]);
+          int type = GetTypeToInput(types[i]);
+          ImGui::Text("%-15s \t", colum_names[i]);
           ImGui::SameLine();
-          if(ImGui::Button("Close")){
-            ImGui::CloseCurrentPopup();
-          }
-          
+          //Comprobar el tipo de datos
+          if(type == 1){
+            //Integer
+            type_tmp = atoi(row_data_copy_[i]);
+            ImGui::InputInt(label,&type_tmp);
+            snprintf(row_data_copy_[i],120,"%d",type_tmp);
 
-          ImGui::EndTable();
-        }//End table
+          }else if(type == 2){
+            //Float
+            type_f_tmp = std::stof(row_data_copy_[i]);
+            ImGui::InputFloat(label,&type_f_tmp);
+            snprintf(row_data_copy_[i],120,"%f",type_f_tmp);
+
+          }else if(type == 3){
+            // Texto
+            ImGui::InputText(label,row_data_copy_[i],120);              
+          }else{
+            //Undefined
+
+          }
+
+        }
+        ImGui::Separator();
+        if(ImGui::Button("Save")){
+          // Update en la DB
+          char query[2048];
+          snprintf(query,120,"%s%s%s","UPDATE ",GetTableName(actual_table_), " SET ");
+          for(int i = 0; i<num_columns;i++){
+            strncat(query,colum_names[i], 2048);
+            strncat(query," = ", 2048);
+            strncat(query,"'", 2048);
+            strncat(query,row_data_copy_[i], 2048);
+            strncat(query,"'", 2048);
+            if(i<num_columns-1)strncat(query,", ", 2048);
+          }
+
+          // Condicion where del update
+          strncat(query," WHERE ", 2048);
+          for (int i = 0; i < num_columns; i++){
+            strncat(query,colum_names[i], 2048);
+            strncat(query," = ", 2048);
+            strncat(query,"'", 2048);
+            strncat(query,row_data_[i], 2048);
+            strncat(query,"'", 2048);
+            if(i<num_columns-1)strncat(query, " AND ", 2048);
+          }
+
+          printf("%s\n",query);
+          sqlite3_exec(db_,query,nullptr,nullptr,&err_msg_);
+          ImGui::CloseCurrentPopup();
+          SetTableCreated(false);
+
+          //printf("%s\n",err_msg_);
+        }
+
+        ImGui::SameLine();
+        if(ImGui::Button("Close")){
+          ImGui::CloseCurrentPopup();
+        }
 
 
         ImGui::EndPopup();

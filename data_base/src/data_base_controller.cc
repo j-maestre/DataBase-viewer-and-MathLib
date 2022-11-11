@@ -49,6 +49,7 @@ DataBaseController::DataBaseController(){
   edit_popup_open_ = false;
   max_colums = 30;
   row_data_copy_ = (char**) malloc(sizeof(char*)*max_colums);
+  col_offset = 0;
   for(int i = 0; i < max_colums; i++){
     row_data_copy_[i] = (char*) calloc('\0',sizeof(char)*120);  
   }
@@ -223,29 +224,21 @@ int GetDataType(char *type){
     return BIT;
   }
 
-
-
-
-
-  printf("---- Size of type_tmp-> %s\n",type_tmp);
-
   return UNDEFINED;
 }
 
 int CallbackInsertColumnsDataType(void *types_,int num_columns, char **data, char **colum_name){
   //Entra una vez por cada columna
-  
+  DataBaseController& db_controller = DataBaseController::Instance();
   int *types = (int*) types_;
 
-  int col_offset = 0;
   for (int i = 0; i < num_columns; i++){
     int type;
     //printf("ColumName->%s Data->%s\n",colum_name[i],data[i]);
     if(strcmp(colum_name[i],"type") == 0){
       type = GetDataType(data[i]);
-      printf("Type->%d\n",type);
-      types[col_offset] = type;
-      col_offset++;
+      types[db_controller.col_offset] = type;
+      db_controller.col_offset++;
     }
 
   }
@@ -253,7 +246,6 @@ int CallbackInsertColumnsDataType(void *types_,int num_columns, char **data, cha
   
   return 0;
 }
-
 
 bool DataBaseController::OpenDB(char *name){
 
@@ -518,8 +510,6 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
 } 
 
 int GetTypeToInput(int type){
-  printf("Type recived-> %d\n",type);
-  // TODO Revisar esto
   if(type <0){
     return -1; // Its undefined
   }else if(type >=1 && type <= 19){
@@ -527,12 +517,6 @@ int GetTypeToInput(int type){
   }else{
     return 2;  // Its a text
   }
-}
-
-int CallbackGetDataType(void *_cols,int num_columns, char **data, char **colum_name){
-
-
-  return UNDEFINED;
 }
 
 void DataBaseController::PreviewWindow(){
@@ -615,8 +599,6 @@ void DataBaseController::PreviewWindow(){
             char label[40] = {"##Rowdata"};
             snprintf(label,120,"##%s",colum_names[i]);
 
-
-
             int type = GetTypeToInput(types[i]);
             //Comprobar el tipo de datos
             if(type == 1){
@@ -631,10 +613,8 @@ void DataBaseController::PreviewWindow(){
 
             }else{
               //Undefined
-              printf("undefineeeeeeeeed");
+              
             }
-            
-
 
           }
           ImGui::TableNextRow();
@@ -755,6 +735,7 @@ void DataBaseController::ShowTable(){
     char query_data_columns[50];
     int colum_types[40];
     snprintf(query_data_columns,50,"%s%s%s","PRAGMA table_info('",current_table_,"')");
+    col_offset = 0;
     sqlite3_exec(db_,query_data_columns,CallbackInsertColumnsDataType,colum_types, &err_msg);
     InsertColTypes(actual_table_,colum_types);
 

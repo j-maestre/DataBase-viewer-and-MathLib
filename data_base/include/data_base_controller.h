@@ -17,6 +17,7 @@ class DataBaseController{
  public:
   // Public functions
   friend int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **data, char **col_name);
+  friend int CallbackInsertColumnsDataType(void *types_,int num_columns, char **data, char **colum_name);
   static DataBaseController& Instance();
 
   //** Importante **
@@ -69,6 +70,7 @@ class DataBaseController{
   char **row_data_;
   char **row_data_copy_;
   unsigned int max_colums;
+  unsigned int col_offset;
 
   void QueryWindow();
   

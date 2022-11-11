@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 #include <esat_extra/imgui.h>
 #include "data_base_controller.h"
 #include "table.h"
@@ -156,6 +157,9 @@ int GetDataType(char *type){
   snprintf(type_tmp,8,"%s",type);
   if(strcmp(type_tmp,"INTEGER") == 0){
     return INTEGER;
+  }
+  if(strcmp(type_tmp,"NUMERIC") == 0){
+    return NUMERIC;
   }
   if(strcmp(type_tmp,"BOOLEAN") == 0){
     return BOOLEAN;
@@ -512,10 +516,12 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
 int GetTypeToInput(int type){
   if(type <0){
     return -1; // Its undefined
-  }else if(type >=1 && type <= 19){
-    return 1;  // Its a number
+  }else if(type >=1 && type <= 15){
+    return 1;  // Its a integer
+  }else if(type >=16 && type <=20 ){
+    return 2;  // Its a float
   }else{
-    return 2;  // Its a text
+    return 3; // Its a text
   }
 }
 
@@ -583,7 +589,7 @@ void DataBaseController::PreviewWindow(){
         ImGui::Text(GetTableName(actual_table_));
         int num_columns = GetColumnsNumber(actual_table_);
         char **colum_names = GetColumnsNames(actual_table_);
-        if(ImGui::BeginTable(GetTableName(actual_table_),num_columns)){
+        if(ImGui::BeginTable(GetTableName(actual_table_),num_columns, ImGuiTableFlags_::ImGuiTableFlags_Resizable)){
 
           // Set Colum names
           for(int i = 0; i<num_columns; i++){
@@ -594,6 +600,8 @@ void DataBaseController::PreviewWindow(){
           // Set data in columns
           int *types = GetColumnsType(actual_table_);
           static int type_tmp = 0;
+          static float type_f_tmp = 0;
+
           for (int i = 0; i < num_columns; i++){
             ImGui::TableSetColumnIndex(i);
             char label[40] = {"##Rowdata"};
@@ -602,18 +610,23 @@ void DataBaseController::PreviewWindow(){
             int type = GetTypeToInput(types[i]);
             //Comprobar el tipo de datos
             if(type == 1){
-              //Numero
+              //Integer
               type_tmp = atoi(row_data_copy_[i]);
               ImGui::InputInt(label,&type_tmp);
               snprintf(row_data_copy_[i],120,"%d",type_tmp);
 
             }else if(type == 2){
-              // Texto
-              ImGui::InputText(label,row_data_copy_[i],120);
+              //Float
+              type_f_tmp = std::stof(row_data_copy_[i]);
+              ImGui::InputFloat(label,&type_f_tmp);
+              snprintf(row_data_copy_[i],120,"%f",type_f_tmp);
 
+            }else if(type == 3){
+              // Texto
+              ImGui::InputText(label,row_data_copy_[i],120);              
             }else{
               //Undefined
-              
+
             }
 
           }
@@ -659,7 +672,7 @@ void DataBaseController::PreviewWindow(){
           
 
           ImGui::EndTable();
-        }
+        }//End table
 
 
         ImGui::EndPopup();

@@ -22,19 +22,12 @@ void HelpMarker(const char* desc){
 }
 
 int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
-  static int actual_pos = 0;
-  char **tables_name;
-  if(num_colums == 0 && data == nullptr && colum_name == nullptr) {
-    int **aux = (int **)notused;
-    *aux = &actual_pos;
-  } else {
-    tables_name = (char **) notused;
-    for(int i=0; i < num_colums; i++){
-      strcpy(tables_name[actual_pos], data[i]);
-      actual_pos++;
-    }
+  DataBaseController& dc_controller = DataBaseController::Instance();
+  char **tables_name = (char **) notused;
+  for(int i=0; i < num_colums; i++){
+    strcpy(tables_name[dc_controller.actual_pos_], data[i]);
+    dc_controller.actual_pos_++;
   }
-
   return 0;
 }
 
@@ -51,13 +44,14 @@ DataBaseController::DataBaseController(){
   max_colums = 30;
   row_data_copy_ = (char**) malloc(sizeof(char*)*max_colums);
   col_offset = 0;
+  actual_pos_ = 0;
   for(int i = 0; i < max_colums; i++){
     row_data_copy_[i] = (char*) calloc('\0',sizeof(char)*120);  
   }
 
   memset(query_,'\0',501);
   memset(query_aux_,'\0',501);
-  CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
+  //CallbackGetTablesName(&actual_pos_ref_,0,nullptr,nullptr);
 }
 
 DataBaseController::~DataBaseController(){
@@ -69,7 +63,6 @@ DataBaseController::~DataBaseController(){
   DestroyTable(actual_table_);
   DestroyTable(query_table_);
   free(err_msg_);
-  //free(actual_pos_ref_);
 }
 
 DataBaseController& DataBaseController::Instance(){
@@ -791,4 +784,5 @@ void DataBaseController::CloseDB(){
   num_tables_ = 0;
   db_opened_ = false;
   sqlite3_close(db_);
+  actual_pos_ = 0;
 }

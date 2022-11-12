@@ -18,6 +18,7 @@ class DataBaseController{
   // Public functions
   friend int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **data, char **col_name);
   friend int CallbackInsertColumnsDataType(void *types_,int num_columns, char **data, char **colum_name);
+  friend int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name);
   static DataBaseController& Instance();
 
   //** Importante **
@@ -46,7 +47,7 @@ class DataBaseController{
   int num_tables_;
   char **tables_name_;
   char *err_msg_;
-  int* actual_pos_ref_; 
+  int actual_pos_; 
   
   bool db_opened_;
   char db_name_[500];

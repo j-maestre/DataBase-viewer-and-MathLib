@@ -35,11 +35,7 @@ class DataBaseController{
    */
   void MainWindow();
   bool OpenDB(char *name);
-  void GetTablesName();
-  void SetActualTable(Table *);
-  void SetTableCreated(bool state);
   void CloseDB();
-  Table* GetActualTable();
 
  private:
   // Private functions

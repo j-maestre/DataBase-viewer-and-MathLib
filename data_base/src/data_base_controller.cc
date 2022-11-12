@@ -70,9 +70,6 @@ DataBaseController& DataBaseController::Instance(){
   return db_controller;
 };
 
-void DataBaseController::SetActualTable(Table *table){
-  actual_table_ = table;
-}
 
 int GetNumTables(void *notused,int num_colums, char **data, char **colum_name){
   int *num_tables = (int *) notused;
@@ -260,7 +257,6 @@ bool DataBaseController::OpenDB(char *name){
     
     sqlite3_exec(db_,"SELECT name FROM sqlite_master WHERE (type = 'table' AND name != 'sqlite_sequence' AND name != 'sqlite_stat1')",
                                         CallbackGetTablesName, tables_name_,&err_msg_);
-    GetTablesName();
 
     db_opened_ = true;
     table_selected_ = false;
@@ -429,7 +425,7 @@ void DataBaseController::QueryWindow(){
 
     strncpy(query_aux_,query_,1025);
     //memset(query_,'\0',501);
-    SetTableCreated(false);
+    table_created_ = false;
     delete numcols_tmp;
   }
   ImGui::EndChild();
@@ -483,7 +479,7 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
         //IsMouseDoubleClicked
         //Delete row
         DeleteRow(table_name,col_name[0],data[0],db);
-        db_controller.SetTableCreated(false);
+        db_controller.table_created_ = false;
       }
   
 
@@ -647,7 +643,7 @@ void DataBaseController::PreviewWindow(){
           printf("%s\n",query);
           sqlite3_exec(db_,query,nullptr,nullptr,&err_msg_);
           ImGui::CloseCurrentPopup();
-          SetTableCreated(false);
+          table_created_ = false;
 
           //printf("%s\n",err_msg_);
         }
@@ -761,17 +757,6 @@ void DataBaseController::TablesNameWindow(){
   }
 
   ImGui::EndChild();
-}
-
-void DataBaseController::GetTablesName(){
-  printf("----- Nombre de las tablas -----\n");
-  for(int i = 0; i < num_tables_; i++){
-    printf("%d-> %s\n",i,tables_name_[i]);
-  }
-}
-
-void DataBaseController::SetTableCreated(bool state){
-  table_created_ = state;
 }
 
 void DataBaseController::CloseDB(){

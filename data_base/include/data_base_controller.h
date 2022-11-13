@@ -39,9 +39,8 @@ class DataBaseController{
 
  private:
   // Private functions
-  sqlite3* db_;
   int num_tables_;
-  char **tables_name_;
+  char **tables_name_; 
   char *err_msg_;
   int actual_pos_; 
   
@@ -55,19 +54,21 @@ class DataBaseController{
   
   bool table_created_;
   bool cols_name_inserted_;
-
   char *error_message_;
-  char query_[501];
-  char query_aux_[501];
-
-  unsigned int pagination;
   bool edit_popup_open_;
 
-  // edit row data
+  unsigned int pagination;
+
   char **row_data_;
   char **row_data_copy_;
   unsigned int max_colums;
   unsigned int col_offset;
+
+  char query_[501];
+  char query_aux_[501];
+
+  sqlite3* db_;
+
 
   void QueryWindow();
   

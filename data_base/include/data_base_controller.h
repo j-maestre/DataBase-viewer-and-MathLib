@@ -16,17 +16,64 @@
 class DataBaseController{
  public:
   // Public functions
+  /**
+   * @brief Create ImGui Row in table for every row in the table selected
+   * 
+   * @param table Table selected
+   * @param data_base sqlite3 database instance
+   * @param num_colums Number of columns of the table
+   * @param data Data of every column
+   * @param col_name Name of the colum
+   * @return int 
+   */
   friend int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **data, char **col_name);
+
+  /**
+   * @brief Callback to set the type of the data of every column in the tabe selected
+   * 
+   * @param types_ Pointer to save the types
+   * @param num_columns Number of columns
+   * @param data Type of the data
+   * @param colum_name Name of the column
+   * @return int 
+   */
   friend int CallbackInsertColumnsDataType(void *types_,int num_columns, char **data, char **colum_name);
-  friend int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name);
+
+  /**
+   * @brief Callabck to save the names of all tables in database
+   * 
+   * @param names Double pointer to save the names 
+   * @param num_colums Number of columns
+   * @param data Data who contains the names of the columns
+   * @param colum_name Name of colum
+   * @return int 
+   */
+  friend int CallbackGetTablesName(void *names,int num_colums, char **data, char **colum_name);
+
+  /**
+   * @brief Static instance of the class 
+   * 
+   * @return DataBaseController& 
+   */
   static DataBaseController& Instance();
 
-  //** Importante **
   // Constructor de copia
+  /**
+   * @brief Construct a new Data Base Controller object
+   * 
+   */
   DataBaseController(const DataBaseController&) = delete; // Palabra clave, para decirle que no exista ese constructor. Tambien se puede poner default en vez de delete para que lo haga el compilador por defecto
 
+  /**
+   * @brief Destroy the Data Base Controller object
+   * 
+   */
   ~DataBaseController(); // Destructor
 
+  /**
+   * @brief 
+   * 
+   */
   void operator = (const DataBaseController&) = delete; // Sobre carga de operador para la clase
 
     /**
@@ -34,7 +81,20 @@ class DataBaseController{
    * 
    */
   void MainWindow();
+
+  /**
+   * @brief This function opens the database, save the number of tables in database and the names
+   * 
+   * @param name Name of database file
+   * @return true if can open the db
+   * @return false if can't open the db
+   */
   bool OpenDB(char *name);
+  
+  /**
+   * @brief Close the database and resets all the variables used
+   * 
+   */
   void CloseDB();
 
  private:
@@ -69,7 +129,10 @@ class DataBaseController{
 
   sqlite3* db_;
 
-
+  /**
+   * @brief View of the user's query and execute it
+   * 
+   */
   void QueryWindow();
   
 
@@ -79,20 +142,11 @@ class DataBaseController{
    */
   DataBaseController();
 
+  /**
+   * @brief When select a table, this function get the number of columns, the name of the columns, the type of data columns and set the necesaries values to show it 
+   * 
+   */
   void ShowTable();
-  /**
-   * @brief Execute Select query
-   * 
-   * @param query Select query
-   */
-  void ExecuteSelect(char *query); // Devolverá una tabla
-
-  /**
-   * @brief Execute any type of Query
-   * 
-   * @param query SQL query
-   */
-  void ExecuteQuery(char *query);
 
 
   /**
@@ -101,18 +155,10 @@ class DataBaseController{
    */
   void TablesNameWindow();
   /**
-   * @brief Shows content of table
+   * @brief Shows content of table or the result of user's query
    * 
    */
   void PreviewWindow();
-
-  /**
-   * @brief execute user's query
-   * 
-   */
-  void SQLWindow();
-
-
 
 };
 

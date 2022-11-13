@@ -21,9 +21,9 @@ void HelpMarker(const char* desc){
     }
 }
 
-int CallbackGetTablesName(void *notused,int num_colums, char **data, char **colum_name){
+int CallbackGetTablesName(void *names,int num_colums, char **data, char **colum_name){
   DataBaseController& dc_controller = DataBaseController::Instance();
-  char **tables_name = (char **) notused;
+  char **tables_name = (char **) names;
   for(int i=0; i < num_colums; i++){
     strcpy(tables_name[dc_controller.actual_pos_], data[i]);
     dc_controller.actual_pos_++;
@@ -69,7 +69,6 @@ DataBaseController& DataBaseController::Instance(){
   static DataBaseController db_controller;
   return db_controller;
 };
-
 
 int GetNumTables(void *notused,int num_colums, char **data, char **colum_name){
   int *num_tables = (int *) notused;
@@ -420,13 +419,15 @@ void DataBaseController::QueryWindow(){
       printf("CREATE\n");
       CreateTable(&query_table_, *numcols_tmp,120);
       sqlite3_exec(db_,query_,CallbackInsertRows,&query_table_,&error_message_);
+      printf("Executed");
     }
 
 
-    strncpy(query_aux_,query_,1025);
+    strncpy(query_aux_,query_,1024);
     //memset(query_,'\0',501);
     table_created_ = false;
     delete numcols_tmp;
+    //printf("\nyea");
   }
   ImGui::EndChild();
 }
@@ -660,6 +661,7 @@ void DataBaseController::PreviewWindow(){
     }
     if (ImGui::BeginTabItem("SQL")) {
       //Preview of SQL Query window
+      printf("ola");
       if(error_message_){
         ImGui::TextColored(ImVec4(255,0,0,255),"[ERROR]");
         ImGui::SameLine();
@@ -677,15 +679,19 @@ void DataBaseController::PreviewWindow(){
 
         ImGui::Separator();
         //Show query table
+        printf("view\n");
         int num_query_columns = GetColumnsNumber(query_table_);
 
         if(ImGui::BeginTable("##QueryContent", num_query_columns, table_flags,ImVec2((1.175494351e-38F),0))){
+          printf("view2\n");
           char **col_names = GetColumnsNames(query_table_);
           for (int i = 0; i < num_query_columns; i++){
             ImGui::TableSetupColumn(col_names[i]);
           }
           ImGui::TableHeadersRow();
+          printf("view3\n");
           RunTable(query_table_,CallbackPreviewTable, db_);
+          printf("view4\n");
           
           ImGui::EndTable();
         }

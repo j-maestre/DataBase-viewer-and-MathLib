@@ -99,34 +99,114 @@ class DataBaseController{
 
  private:
   // Private functions
+  /**
+   * @brief Number of tables on DataBase
+   */
   int num_tables_;
+  /**
+   * @brief  Names of tables on DataBase
+   */
   char **tables_name_; 
+
+  /**
+   * @brief Error message returned of sqlite3_exec
+   */
   char *err_msg_;
+
+  /**
+   * @brief Offset to save tables names
+   */
   int actual_pos_; 
   
+  /**
+   * @brief Bool to save if db is opened or not
+   */
   bool db_opened_;
+
+  /**
+   * @brief Name of DataBase
+   */
   char db_name_[500];
+
+  /**
+   * @brief Name of table selected to view
+   */
   char current_table_[20];
+
+  /**
+   * @brief Bool to say if a table is selected
+   */
   bool table_selected_;
 
+  /**
+   * @brief Table var who contains all the data of the table selected
+   */
   Table *actual_table_; // 20 bytes
+
+  /**
+   * @brief Table var who contains all the data of the table returned by user's query
+   */
   Table *query_table_;
   
+  /**
+   * @brief Bool to say if Table *actual_table_ is correctly created
+   */
   bool table_created_;
+
+  /**
+   * @brief Bool to say if names of columns are correctly inserted on Table *actual_table_
+   */
   bool cols_name_inserted_;
+
+  /**
+   * @brief Error message returned by user's query on sqlite3_exec
+   * 
+   */
   char *error_message_;
+
+  /**
+   * @brief Bool to say if the edit pop up is opened or not
+   */
   bool edit_popup_open_;
 
+  /**
+   * @brief Offset of pagination
+   */
   unsigned int pagination;
 
+  /**
+   * @brief Data of table's row
+   */
   char **row_data_;
+
+  /**
+   * @brief Copy of Data table's row for edit
+   */
   char **row_data_copy_;
+
+  /**
+   * @brief The maxium columns permited
+   */
   unsigned int max_colums;
+
+  /**
+   * @brief Offset for insert type of data of a table
+   */
   unsigned int col_offset;
 
+  /**
+   * @brief Array to save the user's query
+   */
   char query_[1024];
+
+  /**
+   * @brief Copy of user's query
+   */
   char query_aux_[1024];
 
+  /**
+   * @brief Sqlite3 var who contains the DataBase
+   */
   sqlite3* db_;
 
   /**

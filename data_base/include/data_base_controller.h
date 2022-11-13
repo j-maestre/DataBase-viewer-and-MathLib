@@ -124,8 +124,8 @@ class DataBaseController{
   unsigned int max_colums;
   unsigned int col_offset;
 
-  char query_[501];
-  char query_aux_[501];
+  char query_[1024];
+  char query_aux_[1024];
 
   sqlite3* db_;
 

@@ -65,6 +65,12 @@ int  CreateTable(Table **table, int col_num, int reg_max_size);
  */
 void InsertColNames(Table *table, char **col_names);
 
+/**
+ * @brief Insert the types of the columns
+ * 
+ * @param table Pointer to the Table where is gonna be inserted the column types
+ * @param col_types Pointer with the code of the type
+ */
 void InsertColTypes(Table *table, int *col_types);
 
 /**
@@ -118,6 +124,12 @@ int  RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char 
  */
 char** GetColumnsNames(Table *table);
 
+/**
+ * @brief Get the Columns Type from the Table
+ * 
+ * @param table The Table we gonna be get the columns types
+ * @return int* 
+ */
 int* GetColumnsType(Table *table);
 
 /**
@@ -142,8 +154,20 @@ int GetRowsNumber(Table *table);
  */
 void DestroyTable(Table *table);
 
+/**
+ * @brief Set the Table Name object
+ * 
+ * @param table 
+ * @param name 
+ */
 void SetTableName(Table *table, char *name);
 
+/**
+ * @brief Get the Table Name object
+ * 
+ * @param table 
+ * @return char* 
+ */
 char* GetTableName(Table *table);
 
 #endif

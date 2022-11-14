@@ -385,16 +385,12 @@ void DataBaseController::QueryWindow(){
     ImGui::EndChild();
     return;
   }
-  HelpMarker("SQL Sentence");
   //ImGui::Text("SQL Sentence");
   ImGuiInputTextFlags flags = ImGuiInputTextFlags_::ImGuiInputTextFlags_None;
   //flags |= ImGuiInputTextFlags_EnterReturnsTrue;
   flags |= ImGuiInputTextFlags_AllowTabInput;
 
-  static bool bol_aux = false;
-  if(!bol_aux)strcat(query_,"PRAGMA table_info('albums')");
-  bol_aux = true;
-  
+
   char query_aux[1024];
 
   
@@ -428,6 +424,20 @@ void DataBaseController::QueryWindow(){
     table_created_ = false;
     delete numcols_tmp;
     //printf("\nyea");
+    for(int i = 0; i < num_tables_; i++){
+      free(tables_name_[i]);
+    }
+    free(tables_name_);
+    num_tables_ = 0;
+    sqlite3_exec(db_, "SELECT COUNT(name) FROM sqlite_master WHERE (type = 'table' AND name != 'sqlite_sequence' AND name != 'sqlite_stat1')",
+                                              GetNumTables, &num_tables_, &err_msg_);
+    tables_name_ = (char**) malloc(sizeof(char*) * (num_tables_));
+    for(int i = 0; i < num_tables_; i++){
+        tables_name_[i] = (char*) malloc(sizeof(char) * 50);
+    }
+    actual_pos_ = 0;
+    sqlite3_exec(db_,"SELECT name FROM sqlite_master WHERE (type = 'table' AND name != 'sqlite_sequence' AND name != 'sqlite_stat1')",
+                                        CallbackGetTablesName, tables_name_,&err_msg_);
   }
   ImGui::EndChild();
 }

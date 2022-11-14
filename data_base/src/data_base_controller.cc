@@ -72,7 +72,6 @@ DataBaseController& DataBaseController::Instance(){
 
 int GetNumTables(void *notused,int num_colums, char **data, char **colum_name){
   int *num_tables = (int *) notused;
-  printf("Total de tablas-> %s\n",data[0]);
   *num_tables = atoi(data[0]);
   return 0;
 }
@@ -227,7 +226,6 @@ int CallbackInsertColumnsDataType(void *types_,int num_columns, char **data, cha
 
   for (int i = 0; i < num_columns; i++){
     int type;
-    //printf("ColumName->%s Data->%s\n",colum_name[i],data[i]);
     if(strcmp(colum_name[i],"type") == 0){
       type = GetDataType(data[i]);
       types[db_controller.col_offset] = type;
@@ -412,10 +410,8 @@ void DataBaseController::QueryWindow(){
     strupr(check_select);
 
     if((strcmp(check_select,"SELECT") == 0 || strcmp(check_select,"PRAGMA") == 0) && !error_message_){
-      printf("CREATE\n");
       CreateTable(&query_table_, *numcols_tmp,120);
       sqlite3_exec(db_,query_,CallbackInsertRows,&query_table_,&error_message_);
-      printf("Executed");
     }
 
 
@@ -423,7 +419,7 @@ void DataBaseController::QueryWindow(){
     //memset(query_,'\0',501);
     table_created_ = false;
     delete numcols_tmp;
-    //printf("\nyea");
+
     for(int i = 0; i < num_tables_; i++){
       free(tables_name_[i]);
     }
@@ -449,7 +445,7 @@ void DeleteRow(char *table_name,char *colum_name, char *id, sqlite3* db){
   strcat(query,colum_name);
   strcat(query," = ");
   strcat(query,id);
-  printf("Query-> %s\n",query);
+  //printf("Query-> %s\n",query);
   sqlite3_exec(db,query,nullptr,nullptr,nullptr);
 
 }
@@ -469,8 +465,6 @@ int CallbackPreviewTable(Table *table,void *data_base, int num_colums, char **da
     snprintf(tmp,120,"##%d",rand()%200);
     strcat(tmp,col_name[i]);
     strcat(tmp,data[i]);
-
-    //printf("---- %s -----\n",tmp);
     //if(ImGui::InputText(tmp,data[i],70,ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue)){
     ImGui::Text(data[i]);
       // Update de la row
@@ -651,12 +645,10 @@ void DataBaseController::PreviewWindow(){
             if(i<num_columns-1)strncat(query, " AND ", 2048);
           }
 
-          printf("%s\n",query);
+          //printf("%s\n",query);
           sqlite3_exec(db_,query,nullptr,nullptr,&err_msg_);
           ImGui::CloseCurrentPopup();
           table_created_ = false;
-
-          //printf("%s\n",err_msg_);
         }
 
         ImGui::SameLine();
@@ -671,7 +663,6 @@ void DataBaseController::PreviewWindow(){
     }
     if (ImGui::BeginTabItem("SQL")) {
       //Preview of SQL Query window
-      printf("ola");
       if(error_message_){
         ImGui::TextColored(ImVec4(255,0,0,255),"[ERROR]");
         ImGui::SameLine();
@@ -689,20 +680,15 @@ void DataBaseController::PreviewWindow(){
 
         ImGui::Separator();
         //Show query table
-        printf("view\n");
         int num_query_columns = GetColumnsNumber(query_table_);
 
         if(ImGui::BeginTable("##QueryContent", num_query_columns, table_flags,ImVec2((1.175494351e-38F),0))){
-          printf("view2\n");
           char **col_names = GetColumnsNames(query_table_);
           for (int i = 0; i < num_query_columns; i++){
             ImGui::TableSetupColumn(col_names[i]);
           }
           ImGui::TableHeadersRow();
-          printf("view3\n");
           RunTable(query_table_,CallbackPreviewTable, db_);
-          printf("view4\n");
-          
           ImGui::EndTable();
         }
       }

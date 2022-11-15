@@ -2,8 +2,8 @@
 
 ## Hector Ochando && Xema Maestre
 
-![BroCode](./doc/logo_esat.png)
+![BroCode](./data/logo_esat.png)
 
 ## Grafical User Interface made with `[Dear ImGui](https://github.com/ocornut/imgui)`
 
-![DataBase](./doc/database.png)
+![DataBase](./data/database.png)

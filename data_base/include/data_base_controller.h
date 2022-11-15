@@ -195,6 +195,12 @@ class DataBaseController{
   unsigned int col_offset;
 
   /**
+   * @brief Error of the edit row query.
+   * 
+   */
+  char *edit_row_err_;
+
+  /**
    * @brief Array to save the user's query
    */
   char query_[1024];

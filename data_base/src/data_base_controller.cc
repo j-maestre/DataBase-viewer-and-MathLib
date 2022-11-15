@@ -45,6 +45,7 @@ DataBaseController::DataBaseController(){
   row_data_copy_ = (char**) malloc(sizeof(char*)*max_colums);
   col_offset = 0;
   actual_pos_ = 0;
+  edit_row_err_ = nullptr;
   for(unsigned int i = 0; i < max_colums; i++){
     row_data_copy_[i] = (char*) calloc('\0',sizeof(char)*120);  
   }
@@ -566,11 +567,11 @@ void DataBaseController::PreviewWindow(){
           }
         }
       }
-
+      static bool error_on_edit = false;
       // Edit Row popup
       if (edit_popup_open_ == true) {
         ImGui::OpenPopup("Edit Row");
-        
+        error_on_edit = false;
         edit_popup_open_ = false;
       }
       ImVec2 center;
@@ -586,7 +587,7 @@ void DataBaseController::PreviewWindow(){
         ImGui::Separator();
         int num_columns = GetColumnsNumber(actual_table_);
         char **colum_names = GetColumnsNames(actual_table_);
-
+  
         // Set data in columns
         int *types = GetColumnsType(actual_table_);
         static int type_tmp = 0;
@@ -646,16 +647,25 @@ void DataBaseController::PreviewWindow(){
           }
 
           //printf("%s\n",query);
-          sqlite3_exec(db_,query,nullptr,nullptr,&err_msg_);
-          ImGui::CloseCurrentPopup();
-          table_created_ = false;
+          sqlite3_exec(db_,query,nullptr,nullptr,&edit_row_err_);
+          if (edit_row_err_) {
+            error_on_edit = true;
+          } else {
+            ImGui::CloseCurrentPopup();
+            table_created_ = false;
+            error_on_edit = false;
+          }
         }
-
         ImGui::SameLine();
         if(ImGui::Button("Close")){
+          error_on_edit = false;
           ImGui::CloseCurrentPopup();
         }
-
+        if (error_on_edit) {
+          ImGui::TextColored(ImVec4(1, 0, 0, 1), "[ERROR]");
+          ImGui::SameLine();
+          ImGui::Text(edit_row_err_);
+        }
 
         ImGui::EndPopup();
       }

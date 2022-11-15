@@ -42,7 +42,7 @@ int esat::main(int argc, char **argv) {
   unsigned int fps=400;
   double current_time,last_time;
   esat::WindowInit(1400, 810);
-  esat::DrawSetTextFont("test.ttf");
+  esat::DrawSetTextFont("../data/test.ttf");
   esat::DrawSetTextSize(25);
   esat::WindowSetMouseVisibility(true);
 

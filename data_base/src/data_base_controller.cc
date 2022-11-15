@@ -45,7 +45,7 @@ DataBaseController::DataBaseController(){
   row_data_copy_ = (char**) malloc(sizeof(char*)*max_colums);
   col_offset = 0;
   actual_pos_ = 0;
-  for(int i = 0; i < max_colums; i++){
+  for(unsigned int i = 0; i < max_colums; i++){
     row_data_copy_[i] = (char*) calloc('\0',sizeof(char)*120);  
   }
 
@@ -407,7 +407,7 @@ void DataBaseController::QueryWindow(){
     //Check is is a SELECT query
     char *check_select = (char*) malloc(sizeof(char)*7);
     snprintf(check_select,7,"%s",query_);
-    strupr(check_select);
+    _strupr(check_select);
 
     if((strcmp(check_select,"SELECT") == 0 || strcmp(check_select,"PRAGMA") == 0) && !error_message_){
       CreateTable(&query_table_, *numcols_tmp,120);

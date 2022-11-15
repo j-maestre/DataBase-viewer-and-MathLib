@@ -113,7 +113,7 @@ int  RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char 
  * @param to The index of the row where the callback finish
  * @return int Error: 0 == OK
  */
-int  RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char **), void *user_data, int from, int to);
+int  RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char **), void *user_data, unsigned int from, unsigned int to);
 
 
 /**

@@ -39,7 +39,7 @@ void RenderFPS(double current_time, double last_time) {
 
 int esat::main(int argc, char **argv) {
   srand(NULL);
-  unsigned char fps=400;
+  unsigned int fps=400;
   double current_time,last_time;
   esat::WindowInit(1400, 810);
   esat::DrawSetTextFont("test.ttf");

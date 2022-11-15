@@ -89,23 +89,23 @@ int RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char *
   }
   int state = 0;
 
-  for (int i = 0; i < table->data_table.size() && 0 == state; i++) {
+  for (unsigned int i = 0; i < table->data_table.size() && 0 == state; i++) {
     state = callback(table, user_data, table->cols, table->data_table[i], table->col_names);
   }
 
   return state;
 }
 
-int RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char **), void *user_data, int from, int to) {
+int RunTable(Table *table, int (*callback)(Table *, void *, int, char **, char **), void *user_data, unsigned int from, unsigned int to) {
   if (nullptr == table) {
     return -1;
   }
   int state = 0;
-  int r_to = (to > table->data_table.size()) ? table->data_table.size() : to;
+  unsigned int r_to = (to > table->data_table.size()) ? table->data_table.size() : to;
   if (from > r_to){
     return -1;
   }
-  for (int i = from; i < r_to && 0 == state; i++) {
+  for (unsigned int i = from; i < r_to && 0 == state; i++) {
     state = callback(table, user_data, table->cols, table->data_table[i], table->col_names);
   }
 
@@ -147,7 +147,7 @@ void DestroyTable(Table *table) {
     return;
   }
   
-  for (int i = 0; i < table->data_table.size(); i++) {
+  for (unsigned int i = 0; i < table->data_table.size(); i++) {
     for (int j = 0; j < table->cols; j++) {
       free(*((table->data_table[i]) + j));
     }

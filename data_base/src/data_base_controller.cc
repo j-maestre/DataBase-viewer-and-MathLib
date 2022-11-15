@@ -770,6 +770,9 @@ void DataBaseController::CloseDB(){
   free(tables_name_);
   num_tables_ = 0;
   db_opened_ = false;
+  table_selected_ = false;
+  table_created_ = false;
+  cols_name_inserted_ = false;
   sqlite3_close(db_);
   actual_pos_ = 0;
 }

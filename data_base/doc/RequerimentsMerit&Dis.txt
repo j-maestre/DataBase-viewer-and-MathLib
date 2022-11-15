@@ -2,5 +2,6 @@ M1-> Pagina 5 cuando abres un archivo .db, tienes un listado de todas las tablas
 M2-> Pagina 7-8 cuando el usuario ejecuta una query, se muestra un mensaje de error en caso de que no se haya ejecutado correctamente
 M3-> 
 M4->
+M5-> Pagina 9-10
 D1-> Pagina 11 Post-Morten 2º parrafo
 D2-> Pagina 11 Post-Morten 3º parrafo

@@ -1,0 +1,8 @@
+M1-> Pagina 7 cuando abres un archivo .db, tienes un listado de todas las tablas, independientemente de la base de datos. Pagina 6 validamos los tipos de datos para que concuerden con los de la tabla a la hora de editar una fila
+M2-> Pagina 10-11 cuando el usuario ejecuta una query, se muestra un mensaje de error en caso de que no se haya ejecutado correctamente
+M3-> Pagina 13 Post-Morten parrafo 4º
+M4-> Pagina 5 Punto 2
+M5-> Pagina 3-4
+D1-> Pagina 13 Post-Morten 2º parrafo
+D2-> Pagina 13 Post-Morten 3º parrafo
+D3-> Pagina 13 Post-Morten

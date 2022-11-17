@@ -1,4 +1,4 @@
-#include "entity.h"
+#include <xemath/entity.h>
 #include <stdio.h>
 
 

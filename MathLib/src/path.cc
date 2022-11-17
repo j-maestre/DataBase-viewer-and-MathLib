@@ -5,8 +5,8 @@ Path::Path(){
     position_.x = 0.0f;
     position_.y = 0.0f;
     rotation_ = 0.0f;
-    scale_.x = 0.0f;
-    scale_.y = 0.0f;
+    scale_.x = 1.0f;
+    scale_.y = 1.0f;
 
     stroke_color_[0] = 255;
     stroke_color_[1] = 255;
@@ -23,6 +23,7 @@ Path::Path(){
     vertices_ = (float*) malloc(sizeof(float)*6); //3 vertices como minimo
     n_vertex_ = 3;
 }
+
 Path::Path(float *vertices, int n_vertex){
     position_.x = 0.0f;
     position_.y = 0.0f;

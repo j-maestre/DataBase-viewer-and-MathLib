@@ -8,8 +8,19 @@ struct Vec2{
 struct Vec3{
   float x,y,z;
 };
-
+struct Vec4{
+  float x,y,z,w;
+};
+struct Mat2{
+  float m[4];
+};
+struct Mat31{
+  float m[3];
+};
 struct Mat3{
+  float x,y,z;
+};
+struct Mat3x3{
   float p[9];
 };
 
@@ -29,9 +40,57 @@ struct Mat3{
     return aux;
   }
 
+  //Sumar dos vectores3
+  Vec3 SumVec3(Vec3 vec1, Vec3 vec2){
+    Vec3 aux={
+      (vec1.x+vec2.x),
+      (vec1.y+vec2.y),
+      (vec1.z+vec2.z)
+    };
+    return aux;
+  }
+
+  //Sumar dos vectores4
+  Vec4 SumVec4(Vec4 vec1, Vec4 vec2){
+    Vec4 aux={
+      (vec1.x+vec2.x),
+      (vec1.y+vec2.y),
+      (vec1.z+vec2.z),
+      (vec1.w+vec2.w)
+    };
+    return aux;
+  }
+
+  //Sumar dos Mat2
+  Mat2 SumMat2(Mat2 mat1, Mat2 mat2){
+    Mat2 aux;
+    aux.m[0] = mat1.m[0]+mat2.m[0];
+    aux.m[1] = mat1.m[1]+mat2.m[1];
+    aux.m[2] = mat1.m[2]+mat2.m[2];
+    aux.m[3] = mat1.m[3]+mat2.m[3];
+    return aux;
+  }
+
+  //Sumar dos Mat31
+  Mat31 SumMat31(Mat31 mat1, Mat31 mat2){
+    Mat31 aux;
+    aux.m[0] = mat1.m[0]+mat2.m[0];
+    aux.m[1] = mat1.m[1]+mat2.m[1];
+    aux.m[2] = mat1.m[2]+mat2.m[2];
+    return aux;
+  }
+
+  //Normalizar Mat31
   
-  
-  
+  //Multiplicar Mat2 * Vector2
+  Vec2 Vec2MultMatVec2(Mat2 mat, Vec2 vec){
+    Vec2 aux={
+      mat.m[0] * vec.x + mat.m[2] * vec.y,
+      mat.m[1] * vec.x + mat.m[3] * vec.y
+    };
+    return aux;
+  }
+
   //Multiplicar Vec2 * Vec2
   Vec2 MultVec2(Vec2 vec1, Vec2 vec2){
     Vec2 aux = {vec1.x * vec2.x, vec1.y * vec2.y};
@@ -66,7 +125,17 @@ struct Mat3{
     float aux = (float)sqrt(((vec.x*vec.x)+(vec.y*vec.y)));
     return aux;
   }
-  
+  //Normalizar Vector3
+  Vec3 Vec3Normalize(Vec3 vec){
+    float hipotenusa=(vec.x*vec.x)+(vec.y*vec.y)+(vec.z*vec.z);
+    hipotenusa = (float)sqrt(hipotenusa);
+    Vec3 aux = {
+      vec.x/hipotenusa,
+      vec.y/hipotenusa,
+      vec.z/hipotenusa
+    };
+    return aux;
+  }
 
   Vec2 RotateVec2(Vec2 vec, float angle){
     angle = ToRadianes(angle);
@@ -80,7 +149,25 @@ struct Mat3{
   void DebugVec2(Vec2 vector){
     printf("X:[%f] Y:[%f]\n",vector.x,vector.y);
   }
+  //Debug Vector3
+  void DebugVector3(Vec3 vector){
+    printf("X:[%f] Y:[%f] Z:[%f]\n",vector.x,vector.y,vector.z);
+  }
+  //Debug Vector4
+  void DebugVector4(Vec4 vector){
+    printf("X:[%f] Y:[%f] Z:[%f] W:[%f]\n",vector.x,vector.y,vector.z,vector.w);
+  }
+  //Debug Mat2
+  void DebugMat2(Mat2 mat){
+    printf("0:[%f] 1:[%f] 2:[%f] 3:[%f]\n",mat.m[0],mat.m[1],mat.m[2],mat.m[3]);
+  }
+
   Vec2 ScalateVec2(Vec2 vec, float size){
+    // float modulo = sqrt((vec.x * vec.x) + (vec.y * vec.y));
+    // Vector2 aux = {(vec.x/modulo) * size, (vec.y/modulo) * size};
+    // return aux;
+    // printf("Original:\n");
+    // DebugVector2(vec);
     
     Vec2 aux = Vec2Normalize(vec);
     aux.x = aux.x * size;
@@ -88,92 +175,7 @@ struct Mat3{
     return aux;
   }
 
-  
-  Mat3 Mat3Identity(){
-    Mat3 mat ={1,0,0,
-               0,1,0,
-               0,0,1};
-               
-    return mat;
-  }
-
-  inline Mat3 Mat3Scale(Vec2 v){
-    Mat3 identity = Mat3Identity();
-    identity.p[0] = v.x;
-    identity.p[4] = v.y;
-    return identity;
-  }
-
-  inline Mat3 Mat3Rotate(float v){
-    Mat3 identity = Mat3Identity();
-    identity.p[0] = cosf(v);
-    identity.p[1] = sinf(v);
-    identity.p[3] = sin(v) * -1.0f;
-    identity.p[4] = cosf(v);
-  }
-
-  inline Mat3 Mat3Translate(Vec2 v){
-    Mat3 identity = Mat3Identity();
-    identity.p[2] = v.x;
-    identity.p[5] = v.y;
-
-    return identity;
-  }
-
-  float Vec3Dotproduct(Vec3 v1, Vec3 v2){
-    return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
-  }
-
-  Mat3 Mat3MultMat3(Mat3 m1, Mat3 m2){
-    //Filas * Columnas
-    Mat3 result;
-    Vec3 fila,columna;
-
-    // Primera posicion
-    fila.x = m1.p[0]; fila.y = m1.p[1]; fila.z = m1.p[2];
-    columna.x = m1.p[0];columna.x = m1.p[3]; columna.x = m1.p[6];
-    result.p[0] = Vec3Dotproduct(fila,columna);
-    
-    //Segunda posicion
-    columna.x = m1.p[1];columna.x = m1.p[4]; columna.x = m1.p[7];
-    result.p[1] = Vec3Dotproduct(fila,columna);
-    
-    //Tercera posicion
-    columna.x = m1.p[2];columna.x = m1.p[5]; columna.x = m1.p[8];
-    result.p[2] = Vec3Dotproduct(fila,columna);
-
-    //Cuarta posicion
-    fila.x = m1.p[3]; fila.y = m1.p[4]; fila.z = m1.p[5];
-    columna.x = m1.p[0];columna.x = m1.p[3]; columna.x = m1.p[6];
-    result.p[0] = Vec3Dotproduct(fila,columna);
-    
-    //Quinta posicion
-    columna.x = m1.p[1];columna.x = m1.p[4]; columna.x = m1.p[7];
-    result.p[1] = Vec3Dotproduct(fila,columna);
-    
-    //Sexta posicion
-    columna.x = m1.p[2];columna.x = m1.p[5]; columna.x = m1.p[8];
-    result.p[2] = Vec3Dotproduct(fila,columna);
-
-    //Septima posicion
-    fila.x = m1.p[6]; fila.y = m1.p[7]; fila.z = m1.p[8];
-    columna.x = m1.p[0];columna.x = m1.p[3]; columna.x = m1.p[6];
-    result.p[0] = Vec3Dotproduct(fila,columna);
-    
-    //Octava posicion
-    columna.x = m1.p[1];columna.x = m1.p[4]; columna.x = m1.p[7];
-    result.p[1] = Vec3Dotproduct(fila,columna);
-    
-    //Novena posicion
-    columna.x = m1.p[2];columna.x = m1.p[5]; columna.x = m1.p[8];
-    result.p[2] = Vec3Dotproduct(fila,columna);
-
-    return result;
-  }
-
-
-
-  /*Mat3 Mat32x2Solver(Mat3 mat1,Mat3 mat2){
+  Mat3 Mat32x2Solver(Mat3 mat1,Mat3 mat2){
     bool incompatible = false;
     float x,y,z;
 
@@ -238,6 +240,12 @@ struct Mat3{
     Mat3 resolved = {x,y,0};
     return resolved;
     
-  }*/
+  }
 
 
+  Mat3x3 Mat3Identity(){
+    Mat3x3 mat ={1,0,0,
+                 0,1,0,
+                 0,0,1};
+    return mat;
+  }

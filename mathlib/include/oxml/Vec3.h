@@ -2,6 +2,7 @@
 #define __VEC3_H__ 1
 
 #include <oxml/Mathf.h>
+#include <oxml/Vec2.h>
 
 namespace oxml {
 
@@ -10,7 +11,8 @@ namespace oxml {
     Vec3();
     Vec3(float value);
     Vec3(float x, float y, float z);
-    Vec3(float* values_array);
+    Vec3(const Vec2& v, float z);
+    Vec3(float *values);
     Vec3(const Vec3& other);
     ~Vec3();
 
@@ -39,11 +41,12 @@ namespace oxml {
 
     static Vec3 Lerp(const Vec3& a, const Vec3& b, float t);
     static Vec3 LerpUnclamped(const Vec3& a, const Vec3& b, float t);
-    static float DotProduct(const Vec3& a, const Vec3& b);
+    static float Dot(const Vec3& a, const Vec3& b);
     static float Angle(const Vec3& a, const Vec3& b);
-    static Vec3 CrossProduct(const Vec3& a,const Vec3& b);	
+    static Vec3 Cross(const Vec3& a,const Vec3& b);	
     static float Distance(const Vec3& a, const Vec3& b);
     static Vec3 Reflect(const Vec3& direction, const Vec3& normal);
+    static bool Approximately(const Vec3& a, const Vec3& b, float tolerance);
 
     static const Vec3 up;
     static const Vec3 down;
@@ -73,7 +76,7 @@ namespace oxml {
     return Vec3();
   }
 
-  inline float Vec3::DotProduct(const Vec3& a, const Vec3& other)  {
+  inline float Vec3::Dot(const Vec3& a, const Vec3& other)  {
     return 0.0f;
   }
 
@@ -81,7 +84,7 @@ namespace oxml {
     return 0.0f;
   }
 
-  inline Vec3 Vec3::CrossProduct(const Vec3& a, const Vec3& other)  {
+  inline Vec3 Vec3::Cross(const Vec3& a, const Vec3& other)  {
     return Vec3();
   }
 

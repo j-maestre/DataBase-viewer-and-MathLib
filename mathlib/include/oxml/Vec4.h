@@ -11,9 +11,9 @@ namespace oxml {
 
     Vec4();
     Vec4(float x, float y, float z, float w);
-    Vec4(Vec3 a, float w);
+    Vec4(const Vec3& v, float w);
     Vec4(float a);
-    Vec4(float* values_array);
+    Vec4(float *values);
     Vec4(const Vec4& other);
     ~Vec4();
     
@@ -41,8 +41,9 @@ namespace oxml {
     float SqrMagnitude() const;
 
     static float Distance(const Vec4& a, const Vec4& b);
-    static float DotProduct(Vec4 a, Vec4 b);
+    static float Dot(const Vec4& a, const Vec4& b);
     static Vec4 Lerp(const Vec4& a, const Vec4& b, float index);	
+    static bool Approximately(const Vec4& a, const Vec4& b, float tolerance);
 
     static const Vec4 one;
     static const Vec4 zero;
@@ -77,7 +78,7 @@ namespace oxml {
     return 0.0f;
   }
 
-  inline float Vec4::DotProduct(Vec4 a, Vec4 b) {
+  inline float Vec4::Dot(const Vec4& a, const Vec4& b) {
     return 0.0f;
   }
 

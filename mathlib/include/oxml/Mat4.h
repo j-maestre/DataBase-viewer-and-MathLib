@@ -10,7 +10,7 @@ namespace oxml {
    public:
 
     Mat4();
-    Mat4(float a[16]);
+    Mat4(float *values);
     Mat4(float value);
     Mat4(const Mat4& copy);
     ~Mat4();
@@ -20,7 +20,7 @@ namespace oxml {
 
     float Determinant() const;
     Mat4 Adjoint() const;
-    bool GetInverse(Mat4* out) const;
+    bool GetInverse(Mat4& out) const;
     bool Inverse();
 
     Mat4 Transpose() const;
@@ -35,8 +35,7 @@ namespace oxml {
     static Mat4 RotateY(float radians);
     static Mat4 RotateZ(float radians);
 
-    static Mat4 GetTransform(const Vec3& translate, const Vec3& scale,
-                        float rotateX, float rotateY, float rotateZ);
+    static Mat4 GetTransform(const Vec3& translate, const Vec3& scale, const Vec3& rotation);
 
     static Mat4 GetTransform(float trans_x, float trans_y, float trans_z,
                         float scale_x, float scale_y, float scale_Z,
@@ -92,7 +91,7 @@ namespace oxml {
     return true;
   }
 
-  inline bool Mat4::GetInverse(Mat4* out) const {
+  inline bool Mat4::GetInverse(Mat4& out) const {
     return true;
   }
 
@@ -129,9 +128,7 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::GetTransform(const Vec3& translate,
-                  const Vec3& scale,
-                  float rotateX, float rotateY,
-                  float rotateZ)   {
+                  const Vec3& scale, const Vec3& rotation)   {
     return Mat4();
   }
 

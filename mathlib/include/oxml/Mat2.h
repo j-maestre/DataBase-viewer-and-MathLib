@@ -19,12 +19,14 @@ namespace oxml {
   public:
 
     Mat2();
-    Mat2(float a[4]);
+    Mat2(float *values);
     Mat2(float value);
     Mat2(const Vec2& a, const Vec2& b); 
     Mat2(const Mat2& copy);
     ~Mat2();
+
     static Mat2 Identity();
+    
     Mat2 Multiply(const Mat2& other) const;
     float Determinant() const;
     Mat2 Adjoint() const;

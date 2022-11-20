@@ -487,11 +487,11 @@ namespace UnitTest {
 
 		// Check GetLine		
 		test = oxml::Mat3(fv);
-		worked = test.GetLine(0) == oxml::Vec3(1.0f, 2.0f, 3.0f);
+		worked = test.GetRow(0) == oxml::Vec3(1.0f, 2.0f, 3.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
-		worked = test.GetLine(1) == oxml::Vec3(4.0f, 5.0f, 6.0f);
+		worked = test.GetRow(1) == oxml::Vec3(4.0f, 5.0f, 6.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
-		worked = test.GetLine(2) == oxml::Vec3(7.0f, 8.0f, 9.0f);
+		worked = test.GetRow(2) == oxml::Vec3(7.0f, 8.0f, 9.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
 
 		Test::End();

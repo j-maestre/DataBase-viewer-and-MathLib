@@ -20,7 +20,7 @@ namespace oxml {
    public:
 
     Mat3();
-    Mat3(float *values_array);
+    Mat3(float *values);
     Mat3(float value);
     Mat3(const Vec3& a, const Vec3& b, const Vec3& c);
 
@@ -43,7 +43,7 @@ namespace oxml {
     static Mat3 Translate(float x, float y);
 
     Vec3 GetColum(int colum) const;
-    Vec3 GetLine(int line) const;
+    Vec3 GetRow(int row) const;
 
     inline Mat3 operator+(const Mat3& other) const;
     inline Mat3& operator+=(const Mat3& other);
@@ -164,7 +164,7 @@ namespace oxml {
     return Vec3();
   }
 
-  inline Vec3 Mat3::GetLine(int line) const {
+  inline Vec3 Mat3::GetRow(int row) const {
     return Vec3();
   }
 

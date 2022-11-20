@@ -181,7 +181,7 @@ namespace UnitTest {
     //Check Dot Product function.
     test = oxml::Vec2(1.5f, 2.5f);
     another_test = oxml::Vec2(3.0f, 4.0f);
-    Assert::AreEqual(14.5f, oxml::Vec2::DotProduct(test, another_test), "Dot Product Failed", __FILE__, __LINE__);
+    Assert::AreEqual(14.5f, oxml::Vec2::Dot(test, another_test), "Dot Product Failed", __FILE__, __LINE__);
 
 	  Test::End();
   }
@@ -343,13 +343,13 @@ namespace UnitTest {
     //Check Dot Product function.
     test = oxml::Vec3(0.5f, 1.5f, 2.5f);
     another_test = oxml::Vec3(1.0f, 2.0f, 3.0f);
-    Assert::AreEqual(11.0f, oxml::Vec3::DotProduct(test, another_test), "Dot Product Failed", __FILE__, __LINE__);
+    Assert::AreEqual(11.0f, oxml::Vec3::Dot(test, another_test), "Dot Product Failed", __FILE__, __LINE__);
 
     //Check Angle function
     Assert::AreEqual(2.6714f, oxml::Vec3::Angle(oxml::Vec3(2, -4, -1), oxml::Vec3(0, 5, 2)), 0.0001f, "Angle Failed", __FILE__, __LINE__);
 
     //Check Cross Product function
-    another_test = oxml::Vec3::CrossProduct(oxml::Vec3(1, 2, 3), oxml::Vec3(1, 5, 7));
+    another_test = oxml::Vec3::Cross(oxml::Vec3(1, 2, 3), oxml::Vec3(1, 5, 7));
     Assert::AreEqual(-1.0f, another_test.x, 0.1f, "CrossProduct X Failed", __FILE__, __LINE__);
     Assert::AreEqual(-4.0f, another_test.y, 0.1f, "CrossProduct Y Failed", __FILE__, __LINE__);
     Assert::AreEqual(3.0f, another_test.z, 0.1f, "CrossProduct Z Failed", __FILE__, __LINE__);
@@ -531,7 +531,7 @@ namespace UnitTest {
     Assert::AreEqual(2.645751f, oxml::Vec4::Distance(a, b), 0.000001f, "Distance Failed", __FILE__, __LINE__);
 
     // Check Dot Product function.
-    Assert::AreEqual(23.0f, oxml::Vec4::DotProduct(a, b), "Dot Product Failed", __FILE__, __LINE__);
+    Assert::AreEqual(23.0f, oxml::Vec4::Dot(a, b), "Dot Product Failed", __FILE__, __LINE__);
 
     //Check Lerp function.
     test = oxml::Vec4::Lerp(oxml::Vec4(0.0f), oxml::Vec4(1), 0.5);

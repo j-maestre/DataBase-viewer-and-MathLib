@@ -1,5 +1,5 @@
-#ifndef __MATHUTILS_H__
-#define __MATHUTILS_H__ 1
+#ifndef __MATHF_H__
+#define __MATHF_H__ 1
 
 namespace oxml {
 
@@ -10,8 +10,6 @@ namespace oxml {
     
     static const float PI;
     static const float Epsilon;
-    static const float Infinity;
-    static const float NegativeInfinity;
     static const float Rad2Deg;
     static const float Deg2Rad;
 

@@ -57,12 +57,12 @@ namespace oxml {
     return Mat4();
   }
 
-  inline Mat4 Mat4::GetTransform(const Vec3& translate,
+  inline Mat4 Mat4::TRS(const Vec3& translate,
     const Vec3& scale, const Vec3& rotation) {
     return Mat4();
   }
 
-  inline Mat4 Mat4::GetTransform(float trans_x, float trans_y, float trans_z,
+  inline Mat4 Mat4::TRS(float trans_x, float trans_y, float trans_z,
     float scale_x, float scale_y, float scale_Z,
     float rotateX, float rotateY, float rotateZ) {
 
@@ -77,14 +77,14 @@ namespace oxml {
     return Vec4();
   }
 
-  inline Mat4 Mat4::PerspectiveMatrix(float fov, float aspect,
-    float near, float far) const {
+  inline Mat4 Mat4::Perspective(float fov, float aspect,
+    float near, float far) {
 
     return Mat4();
   }
 
-  inline Mat4 Mat4::OrthoMatrix(float right, float left, float top, float valueottom,
-    float near, float far) const {
+  inline Mat4 Mat4::Ortho(float right, float left, float top, float valueottom,
+    float near, float far) {
 
     return Mat4();
   }

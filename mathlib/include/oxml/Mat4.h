@@ -22,6 +22,7 @@ namespace oxml {
     Mat4 Adjoint() const;
     bool GetInverse(Mat4& out) const;
     bool Inverse();
+    void SetTRS(const Vec3& translate, const Vec3& scale, const Vec3& rotation);
 
     Mat4 Transpose() const;
 
@@ -35,17 +36,19 @@ namespace oxml {
     static Mat4 RotateY(float radians);
     static Mat4 RotateZ(float radians);
 
-    static Mat4 GetTransform(const Vec3& translate, const Vec3& scale, const Vec3& rotation);
+    static Mat4 TRS(const Vec3& translate, const Vec3& scale, const Vec3& rotation);
 
-    static Mat4 GetTransform(float trans_x, float trans_y, float trans_z,
+    static Mat4 TRS(float trans_x, float trans_y, float trans_z,
                         float scale_x, float scale_y, float scale_Z,
                         float rotateX, float rotateY, float rotateZ);
 
-    Mat4 PerspectiveMatrix(float fov, float aspect,
-      float near, float far) const;
+    static Mat4 Perspective(float fov, float aspect,
+      float near, float far);
 
-    Mat4 OrthoMatrix(float right, float left, float top, float valueottom,
-      float near, float far) const;
+    static Mat4 Ortho(float right, float left, float top, float valueottom,
+      float near, float far);
+
+    Mat4 LookAt(const Vec3& from, const Vec3& to, const Vec3& up);
 
     Vec4 GetColum(int colum) const;
     Vec4 GetLine(int line) const;

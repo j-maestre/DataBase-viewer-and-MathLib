@@ -1,6 +1,8 @@
 #ifndef __VEC2_H__
 #define __VEC2_H__ 1
 
+#include <math.h>
+
 namespace oxml {
   
   class Vec2 {
@@ -107,7 +109,7 @@ namespace oxml {
     return this->x == other.x && this->y == other.y;
   }
 
-  inline bool Vec2::operator!=(const Vec2& value) const {
+  inline bool Vec2::operator!=(const Vec2& other) const {
 
     return this->x != other.x && this->y != other.y;
   }
@@ -115,15 +117,12 @@ namespace oxml {
   inline void Vec2::operator=(const Vec2& other) {
     this->x = other.x;
     this->y = other.y;
-
-    return *this;
   }
 
   inline void Vec2::operator=(float value) {
     this->x = value;
     this->y = value;
 
-    return *this;
   }
 
   inline Vec2 Vec2::operator*(float value) const {
@@ -148,19 +147,18 @@ namespace oxml {
   }
 
   inline float Vec2::Magnitude() const {
-    return sqrt((this->x*this->x)+(this->y*this->y));
+    return sqrtf((this->x*this->x)+(this->y*this->y));
   }
 
   inline void Vec2::Normalize() {  
     float hipotenusa=sqrtf((this->x*this->x)+(this->y*this->y));
     this->x /= hipotenusa;
     this->y /= hipotenusa;
-
   }
 
   inline Vec2 Vec2::Normalized() const {
-    float hipotenusa=sqrtf((this.x*this.x)+(this.y*this.y));
-    return Vec2(this->x/hipotenusa,this->y/hipotenusa);
+    float hipotenusa=sqrtf((this->x*this->x)+(this->y*this->y));
+    return Vec2((float)this->x/hipotenusa,(float)this->y/hipotenusa);
   }
 
   inline void Vec2::Scale(const Vec2& scale){
@@ -192,7 +190,7 @@ namespace oxml {
   }
 
   inline float Vec2::Dot(const Vec2& a, const Vec2& b) {
-    return (float) ((a.x*b.x) + (a.y+b.y))
+      return (float)((a.x * b.x) + (a.y + b.y));
   }
 
   inline bool Approximately(const Vec2& a, const Vec2& b, float tolerance){

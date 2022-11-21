@@ -27,10 +27,8 @@ namespace oxml {
 
   };
 
-  inline float Mathf::Clamp(float value, float minVal, float maxVal) {
-    return 0.0f;
-  }
-
 }
+
+#include "inl/Mathf.inl"
 
 #endif

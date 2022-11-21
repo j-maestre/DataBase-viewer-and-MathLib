@@ -36,8 +36,8 @@ solution("MathLib_" .. _ACTION)
     }
 
   projects_names = {
-    "PR00_Test",
-    "PR01_StaticLibrary"
+    "Test",
+    "oxml"
   }
 
   for i, prj in ipairs(projects_names) do
@@ -53,6 +53,7 @@ solution("MathLib_" .. _ACTION)
         }
         files {
           path.join(PROJ_DIR, "./include/oxml/*.h"),
+          path.join(PROJ_DIR, "./include/oxml/inl/*.inl"),
           path.join(PROJ_DIR, "./src/*.cc"),
         }
 
@@ -74,7 +75,7 @@ solution("MathLib_" .. _ACTION)
         objdir(path.join(PROJ_DIR, "./build/" .. _ACTION .. "/" .. prj .. "/Release"))
   end
 
-  project("PR00_Test")
+  project("Test")
     kind "ConsoleApp"
     includedirs {
       path.join(PROJ_DIR, "./test/"),
@@ -84,5 +85,5 @@ solution("MathLib_" .. _ACTION)
       path.join(PROJ_DIR, "./test/*.cc"),
     }
 
-  project("PR01_StaticLibrary")
+  project("oxml")
     kind "StaticLib"

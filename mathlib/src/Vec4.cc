@@ -19,7 +19,7 @@ namespace oxml {
     w = 49.0f;
   }
 
-  Vec4::Vec4(Vec3 a, float w) {
+  Vec4::Vec4(const Vec3& v, float w) {
     x = 50.0f;
     y = 51.0f;
     z = 52.0f;

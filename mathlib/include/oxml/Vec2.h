@@ -6,43 +6,43 @@ namespace oxml {
   class Vec2 {
    public:
 
-    Vec2();
-    Vec2(float x, float y);
-    Vec2(const Vec2& copy);
-    ~Vec2();
+    Vec2(); //done
+    Vec2(float x, float y); //done
+    Vec2(const Vec2& copy); //done
+    ~Vec2(); //done
+ 
+    Vec2 operator+(const Vec2& other) const; //done
+    Vec2 operator+(float value); //done
+    Vec2& operator+=(const Vec2& other); //done
+    Vec2& operator+=(float value); //done
+    Vec2 operator-(const Vec2& other) const; //done
+    Vec2 operator-(float value) const; //done
+    Vec2& operator-(); //done
+    Vec2& operator-=(const Vec2& other); //done
+    Vec2& operator-=(float value); //done
+    bool operator==(const Vec2& other) const; //done
+    bool operator!=(const Vec2& other) const; //done
+    void operator=(const Vec2& other); //done
+    void operator=(float value); //done
+    Vec2 operator*(float value) const; //done
+    Vec2& operator*=(float value); //done
+    Vec2 operator/(float value) const; //done
+    Vec2& operator/=(float value); //done
 
-    Vec2 operator+(const Vec2& other) const;
-    Vec2 operator+(float value);
-    Vec2& operator+=(const Vec2& other);
-    Vec2& operator+=(float value);
-    Vec2 operator-(const Vec2& other) const;
-    Vec2 operator-(float value) const;
-    Vec2& operator-();
-    Vec2& operator-=(const Vec2& other);
-    Vec2& operator-=(float value);
-    bool operator==(const Vec2& other) const;
-    bool operator!=(const Vec2& other) const;
-    void operator=(const Vec2& other);
-    void operator=(float value);
-    Vec2 operator*(float value) const;
-    Vec2& operator*=(float value);
-    Vec2 operator/(float value) const;
-    Vec2& operator/=(float value);
+    float Magnitude() const; //done
+    float SqrMagnitude() const; //done
+    void Normalize(); //done
+    Vec2 Normalized() const; //done
 
-    float Magnitude() const;
-    float SqrMagnitude() const;
-    void Normalize();
-    Vec2 Normalized() const;
+    void Scale(const Vec2& scale); //done
 
-    void Scale(const Vec2& scale);
+    static float Distance(const Vec2& a, const Vec2& b); //done 
 
-    static float Distance(const Vec2& a, const Vec2& b);
+    static float Dot(const Vec2& a,const Vec2& b); //done
 
-    static float Dot(const Vec2& a,const Vec2& b);
-
-    static Vec2 Lerp(const Vec2& a, const Vec2& b, float t);
-    static Vec2 LerpUnclamped(const Vec2& a, const Vec2& b, float t);
-    static bool Approximately(const Vec2& a, const Vec2& b, float tolerance);
+    static Vec2 Lerp(const Vec2& a, const Vec2& b, float t); //done
+    static Vec2 LerpUnclamped(const Vec2& a, const Vec2& b, float t); //done
+    static bool Approximately(const Vec2& a, const Vec2& b, float tolerance); //done
 
     static const Vec2 up;
     static const Vec2 down;
@@ -57,104 +57,146 @@ namespace oxml {
 
 
   inline Vec2 Vec2::operator+(const Vec2& other) const {
-    return Vec2();
+    return Vec2(this->x + other.x,this->y + other.y);
   }
 
   inline Vec2 Vec2::operator+(float value) {
-    return Vec2();
+    return Vec2(this->x + value,this->y + value);
   }
 
   inline Vec2& Vec2::operator+=(const Vec2& other){
+    this->x += other.x;
+    this->y += other.y;
     return *this;
   }
 
   inline Vec2& Vec2::operator+=(float value){
+    this->x += value;
+    this->y += value;
     return *this;
   }
 
   inline Vec2 Vec2::operator-(const Vec2& other) const {
-    return Vec2();
+    return Vec2(this->x-other.x,this->y-other.y);
   }
 
   inline Vec2 Vec2::operator-(float value) const {
-    return Vec2();
+    return Vec2(this->x-value,this->y-value);
   }
 
   inline Vec2& Vec2::operator-() {
+    this->x *=-1.0f;
+    this->y *=-1.0f;
     return *this;
   }
 
   inline Vec2& Vec2::operator-=(const Vec2& other) {
+    this->x -= other.x;
+    this->y -= other.y;
     return *this;
   }
 
   inline Vec2& Vec2::operator-=(float value){
+    this->x -= value;
+    this->y -= value;
     return *this;
   }
 
-  inline bool Vec2::operator==(const Vec2& value) const {
-    return false;
+  inline bool Vec2::operator==(const Vec2& other) const {
+  
+    return this->x == other.x && this->y == other.y;
   }
 
   inline bool Vec2::operator!=(const Vec2& value) const {
-    return true;
+
+    return this->x != other.x && this->y != other.y;
   }
 
   inline void Vec2::operator=(const Vec2& other) {
+    this->x = other.x;
+    this->y = other.y;
+
+    return *this;
   }
 
   inline void Vec2::operator=(float value) {
+    this->x = value;
+    this->y = value;
+
+    return *this;
   }
 
   inline Vec2 Vec2::operator*(float value) const {
-    return Vec2();
+    return Vec2(this->x * value, this->y * value);
   }
 
-  inline Vec2& Vec2::operator*=(float value) {  
+  inline Vec2& Vec2::operator*=(float value) {
+    this->x *= value;
+    this->y *= value;
     return *this;
   }
 
   inline Vec2 Vec2::operator/(float value) const {
-    return Vec2();
+
+    return Vec2(this->x / value, this->y / value);
   }
 
   inline Vec2& Vec2::operator/=(float value) {
+    this->x /= value;
+    this->y /= value;
     return *this;
   }
 
   inline float Vec2::Magnitude() const {
-    return 0.0f;
+    return sqrt((this->x*this->x)+(this->y*this->y));
   }
 
   inline void Vec2::Normalize() {  
+    float hipotenusa=sqrtf((this->x*this->x)+(this->y*this->y));
+    this->x /= hipotenusa;
+    this->y /= hipotenusa;
+
   }
 
   inline Vec2 Vec2::Normalized() const {
-    return Vec2();
+    float hipotenusa=sqrtf((this.x*this.x)+(this.y*this.y));
+    return Vec2(this->x/hipotenusa,this->y/hipotenusa);
   }
 
   inline void Vec2::Scale(const Vec2& scale){
-
+    this->Normalize();
+    this->x *= scale.x;
+    this->y *= scale.y;
   }
 
   inline float Vec2::SqrMagnitude() const {
-    return 0.0f;
+    return (this->x*this->x)+(this->y*this->y);
   }
 
   inline float Vec2::Distance(const Vec2& a, const Vec2& b) {
-    return 0.0f;
+    return sqrtf(((a.x-b.x)*(a.x-b.x)) + ((a.y-b.y)*(a.y-b.y)));
   }
 
   inline Vec2 Vec2::Lerp(const Vec2& a, const Vec2& b, float t) {
-    return Vec2();
+    if(t > 1){
+      t = 1;
+    }else if(t < 0){
+      t = 0;
+    }
+
+    return Vec2(a + (b-a) * t);
   }
 
   inline Vec2 Vec2::LerpUnclamped(const Vec2& a, const Vec2& b, float t) {
-    return Vec2();
+    return Vec2(a + (b-a) * t);
   }
 
   inline float Vec2::Dot(const Vec2& a, const Vec2& b) {
-    return 0.0f;
+    return (float) ((a.x*b.x) + (a.y+b.y))
+  }
+
+  inline bool Approximately(const Vec2& a, const Vec2& b, float tolerance){
+    return (b.x-a.x) <= tolerance && (b.y-a.y) <= tolerance; 
   }
 
 }

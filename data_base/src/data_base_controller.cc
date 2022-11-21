@@ -49,7 +49,7 @@ DataBaseController::DataBaseController(){
   for(unsigned int i = 0; i < max_colums; i++){
     // GUSTAVO: The calloc() call is wrong! The first argument
     // should be an integer. It is allocating zero bytes!
-    row_data_copy_[i] = (char*) calloc('\0',sizeof(char)*120);  
+    row_data_copy_[i] = (char*) calloc(120,sizeof(char));
   }
 
   memset(query_,'\0',501);
@@ -596,11 +596,11 @@ void DataBaseController::PreviewWindow(){
         static float type_f_tmp = 0;
 
         for (int i = 0; i < num_columns; i++){
-          char label[40] = {"##Rowdata"};
+          char label[256] = {"##Rowdata"};
           // GUSTAVO: Buffer overflow! Don't hardcode buffer sizes.
           // The buffer is 40 bytes long, but the snprintf call maxes at 120.
           // Please use something like sizeof(label) .
-          snprintf(label,120,"##%s",colum_names[i]);
+          snprintf(label,sizeof(label),"##%s",colum_names[i]);
           int type = GetTypeToInput(types[i]);
           ImGui::Text("%-15s \t", colum_names[i]);
           ImGui::SameLine();

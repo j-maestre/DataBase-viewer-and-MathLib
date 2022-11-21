@@ -3,7 +3,6 @@
 // GUSTAVO: Do NOT state two authors on the same file. The should only be one
 // responsible author for each file.
  * @author Xema Maestre <maestrequi@esat-alumni.com>
- * @author Hector Ochando <ochandoca@esat-alumni.com>
  * @brief 
  * 
  */

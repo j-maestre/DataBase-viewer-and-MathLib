@@ -6,11 +6,13 @@
 namespace oxml {
 
   inline Vec2 Vec2::operator+(const Vec2& other) const {
-    return Vec2(this->x + other.x, this->y + other.y);
+    Vec2 v(this->x + other.x, this->y + other.y);
+    return v;
   }
 
   inline Vec2 Vec2::operator+(float value) const{
-    return Vec2(this->x + value, this->y + value);
+    Vec2 v(this->x + value, this->y + value);
+    return v;
   }
 
   inline Vec2& Vec2::operator+=(const Vec2& other) {
@@ -26,15 +28,18 @@ namespace oxml {
   }
 
   inline Vec2 Vec2::operator-(const Vec2& other) const {
-    return Vec2(this->x - other.x, this->y - other.y);
+    Vec2 v(this->x - other.x, this->y - other.y);
+    return v;
   }
 
   inline Vec2 Vec2::operator-(float value) const {
-    return Vec2(this->x - value, this->y - value);
+    Vec2 v(this->x - value, this->y - value);
+    return v;
   }
 
   inline Vec2& Vec2::operator-() {
-    return Vec2(this->x*(-1.0f),this->y*(-1.0f));
+    Vec2 v(this->x * (-1.0f), this->y * (-1.0f));
+    return v;
   }
 
   inline Vec2& Vec2::operator-=(const Vec2& other) {
@@ -68,7 +73,8 @@ namespace oxml {
   }
 
   inline Vec2 Vec2::operator*(float value) const {
-    return Vec2(this->x * value, this->y * value);
+    Vec2 v(this->x * value, this->y * value);
+    return v;
   }
 
   inline Vec2& Vec2::operator*=(float value) {
@@ -78,7 +84,8 @@ namespace oxml {
   }
 
   inline Vec2 Vec2::operator/(float value) const {
-    return Vec2(this->x / value, this->y / value);
+    Vec2 v(this->x / value, this->y / value);
+    return v;
   }
 
   inline Vec2& Vec2::operator/=(float value) {
@@ -90,6 +97,7 @@ namespace oxml {
   inline float& Vec2::operator[](int index) {
     assert(index <= 1 && index > 0, "Index out of range");
     switch(index){
+     default:
      case 0:
       return x;
      case 1:
@@ -100,6 +108,7 @@ namespace oxml {
   inline const float& Vec2::operator[](int index) const {
     assert(index <= 1 && index > 0, "Index out of range");
     switch(index){
+     default:
      case 0:
       return x;
      case 1:
@@ -119,7 +128,8 @@ namespace oxml {
 
   inline Vec2 Vec2::Normalized() const {
     float hipotenusa = sqrtf((this->x * this->x) + (this->y * this->y));
-    return Vec2((float)this->x / hipotenusa, (float)this->y / hipotenusa);
+    Vec2 v(this->x / hipotenusa, this->y / hipotenusa);
+    return v;
   }
 
   inline void Vec2::Scale(const Vec2& scale) {
@@ -128,7 +138,7 @@ namespace oxml {
   }
 
   inline float Vec2::SqrMagnitude() const {
-    return (this->x * this->x) + (this->y * this->y);
+    return ((this->x * this->x) + (this->y * this->y));
   }
 
   inline float Vec2::Distance(const Vec2& a, const Vec2& b) {
@@ -137,19 +147,21 @@ namespace oxml {
 
   inline Vec2 Vec2::Lerp(const Vec2& a, const Vec2& b, float t) {
     t = Mathf::Clamp01(t);
-    return Vec2(a + (b - a) * t);
+    Vec2 v(a + (b - a) * t);
+    return v;
   }
 
   inline Vec2 Vec2::LerpUnclamped(const Vec2& a, const Vec2& b, float t) {
-    return Vec2(a + (b - a) * t);
+    Vec2 v(a + (b - a) * t);
+    return v;
   }
 
   inline float Vec2::Dot(const Vec2& a, const Vec2& b) {
-    return (float)((a.x * b.x) + (a.y * b.y));
+    return ((a.x * b.x) + (a.y * b.y));
   }
 
   inline bool Approximately(const Vec2& a, const Vec2& b, float tolerance) {
-    return Mathf::Abs(b.x - a.x) <= tolerance && Mathf::Abs(b.y - a.y) <= tolerance;
+    return (Mathf::Abs(b.x - a.x) <= tolerance && Mathf::Abs(b.y - a.y) <= tolerance);
   }
 
 }

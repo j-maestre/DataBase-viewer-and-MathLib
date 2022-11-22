@@ -1,7 +1,6 @@
-#ifndef __VEC3_H__
-#define __VEC3_H__ 1
+#ifndef __OXML_VEC3_H__
+#define __OXML_VEC3_H__ 1
 
-#include <oxml/Mathf.h>
 #include <oxml/Vec2.h>
 
 namespace oxml {

@@ -167,11 +167,12 @@ namespace oxml {
   inline float& Vec3::operator[](int index) {
     assert(index<=2 && index>0, "Index out of range");
     switch(index){
-      case 0:
+     default:
+     case 0:
       return this->x;
-      case 1:
+     case 1:
       return this->y;
-      case 2:
+     case 2:
       return this->z;
     }
   }
@@ -179,11 +180,12 @@ namespace oxml {
   inline const float& Vec3::operator[](int index) const {
     assert(index<=2 && index>0, "Index out of range");
     switch(index){
-      case 0:
+     default:
+     case 0:
       return this->x;
-      case 1:
+     case 1:
       return this->y;
-      case 2:
+     case 2:
       return this->z;
     }
   }

@@ -35,6 +35,18 @@ namespace oxml {
     z = copy.z;
   }
 
+  Vec3::Vec3(const Vec2& v, float z) {
+   this->x = v.x;
+   this->y = v.y;
+   this->z = z;
+  }
+
+  Vec3::Vec3(float* values) {
+    this->x = values[0];
+    this->y = values[1];
+    this->z = values[2];
+  }
+
   Vec3::~Vec3() {}
 
 }

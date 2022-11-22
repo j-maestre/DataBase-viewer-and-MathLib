@@ -1,5 +1,5 @@
-#ifndef __VEC2_H__
-#define __VEC2_H__ 1
+#ifndef __OXML_VEC2_H__
+#define __OXML_VEC2_H__ 1
 
 namespace oxml {
   
@@ -7,7 +7,9 @@ namespace oxml {
    public:
 
     Vec2(); //done
+    Vec2(float value);
     Vec2(float x, float y); //done
+    Vec2(float *values);
     Vec2(const Vec2& copy); //done
     ~Vec2(); //done
  
@@ -28,6 +30,8 @@ namespace oxml {
     Vec2& operator*=(float value); //done
     Vec2 operator/(float value) const; //done
     Vec2& operator/=(float value); //done
+    float& operator[](int index);
+    const float& operator[](int index) const;
 
     float Magnitude() const; //done
     float SqrMagnitude() const; //done
@@ -59,4 +63,4 @@ namespace oxml {
 
 #include "inl/Vec2.inl"
 
-#endif 
+#endif // !__OXML_VEC2_H__

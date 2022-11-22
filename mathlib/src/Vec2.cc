@@ -31,9 +31,19 @@ namespace oxml {
     y = 0.0f;
   }
 
+  Vec2::Vec2(float value) {
+    this->x = value;
+    this->y = value;
+  }
+
   Vec2::Vec2(float x, float y) {
     this->x = x;
     this->y = y;
+  }
+
+  Vec2::Vec2(float *values) {
+    this->x = values[0];
+    this->y = values[1];
   }
 
   Vec2::Vec2(const Vec2& other) {

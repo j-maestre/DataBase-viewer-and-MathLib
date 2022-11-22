@@ -1,5 +1,7 @@
-#include <oxml/Mathf.h>
 #include <math.h>
+
+#include <oxml/assert.h>
+#include <oxml/Mathf.h>
 
 namespace oxml {
 
@@ -85,6 +87,26 @@ namespace oxml {
     this->x /= value;
     this->y /= value;
     return *this;
+  }
+
+  inline float& Vec2::operator[](int index) {
+    assert(index < 1 && index > 0, "Index out of range");
+    switch(index){
+     case 0:
+      return x;
+     case 1:
+      return y;
+    }
+  }
+
+  inline const float& Vec2::operator[](int index) const {
+    assert(index < 1 && index > 0, "Index out of range");
+    switch(index){
+     case 0:
+      return x;
+     case 1:
+      return y;
+    }
   }
 
   inline float Vec2::Magnitude() const {

@@ -15,13 +15,9 @@ namespace oxml {
 
     static float Abs(float value);
     static bool Approximately(float a, float b, float tolerance);
-    static float Celi(float value);
     static float Clamp(float value, float max, float min);
     static float Clamp01(float value);
-    static float Floor(float value);
-    static bool IsPowerOfTwo(int value);
-    float Pow(float value, float p);
-    static int NextPowerOftwo(int value);
+    static float Pow(float value, float p);
     static float FloatModule(float a, float b);
     static float Round(float value);
 

@@ -37,7 +37,7 @@ namespace oxml {
     return v;
   }
 
-  inline Vec2& Vec2::operator-() {
+  inline Vec2 Vec2::operator-() const {
     Vec2 v(this->x * (-1.0f), this->y * (-1.0f));
     return v;
   }

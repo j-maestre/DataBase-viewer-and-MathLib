@@ -19,7 +19,7 @@ namespace oxml {
     Vec2& operator+=(float value);
     Vec2 operator-(const Vec2& other) const;
     Vec2 operator-(float value) const;
-    Vec2& operator-();
+    Vec2 operator-() const;
     Vec2& operator-=(const Vec2& other);
     Vec2& operator-=(float value);
     bool operator==(const Vec2& other) const;

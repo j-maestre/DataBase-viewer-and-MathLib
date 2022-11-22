@@ -32,6 +32,8 @@ namespace oxml {
     Vec3& operator*=(float value);
     Vec3 operator/(float value) const;
     Vec3& operator/=(float value);
+    float& operator[](int index);
+    const float& operator[](int index);
 
     float Magnitude() const;
     Vec3 Normalized() const;

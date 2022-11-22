@@ -6,47 +6,45 @@ namespace oxml {
   class Vec2 {
    public:
 
-    Vec2(); //done
+    Vec2();
     Vec2(float value);
-    Vec2(float x, float y); //done
+    Vec2(float x, float y);
     Vec2(float *values);
-    Vec2(const Vec2& copy); //done
-    ~Vec2(); //done
+    Vec2(const Vec2& copy);
+    ~Vec2();
  
-    Vec2 operator+(const Vec2& other) const; //done
-    Vec2 operator+(float value) const; //done
-    Vec2& operator+=(const Vec2& other); //done
-    Vec2& operator+=(float value); //done
-    Vec2 operator-(const Vec2& other) const; //done
-    Vec2 operator-(float value) const; //done
-    Vec2& operator-(); //done
-    Vec2& operator-=(const Vec2& other); //done
-    Vec2& operator-=(float value); //done
-    bool operator==(const Vec2& other) const; //done
-    bool operator!=(const Vec2& other) const; //done
-    void operator=(const Vec2& other); //done
-    void operator=(float value); //done
-    Vec2 operator*(float value) const; //done
-    Vec2& operator*=(float value); //done
-    Vec2 operator/(float value) const; //done
-    Vec2& operator/=(float value); //done
+    Vec2 operator+(const Vec2& other) const;
+    Vec2 operator+(float value) const;
+    Vec2& operator+=(const Vec2& other);
+    Vec2& operator+=(float value);
+    Vec2 operator-(const Vec2& other) const;
+    Vec2 operator-(float value) const;
+    Vec2& operator-();
+    Vec2& operator-=(const Vec2& other);
+    Vec2& operator-=(float value);
+    bool operator==(const Vec2& other) const;
+    bool operator!=(const Vec2& other) const;
+    void operator=(const Vec2& other);
+    void operator=(float value);
+    Vec2 operator*(float value) const;
+    Vec2& operator*=(float value);
+    Vec2 operator/(float value) const;
+    Vec2& operator/=(float value);
     float& operator[](int index);
     const float& operator[](int index) const;
 
-    float Magnitude() const; //done
-    float SqrMagnitude() const; //done
-    void Normalize(); //done
-    Vec2 Normalized() const; //done
+    float Magnitude() const;
+    float SqrMagnitude() const;
+    void Normalize(); 
+    Vec2 Normalized() const; 
+    void Scale(const Vec2& scale); 
 
-    void Scale(const Vec2& scale); //done
+    static float Distance(const Vec2& a, const Vec2& b); 
 
-    static float Distance(const Vec2& a, const Vec2& b); //done 
-
-    static float Dot(const Vec2& a,const Vec2& b); //done
-
-    static Vec2 Lerp(const Vec2& a, const Vec2& b, float t); //done
-    static Vec2 LerpUnclamped(const Vec2& a, const Vec2& b, float t); //done
-    static bool Approximately(const Vec2& a, const Vec2& b, float tolerance); //done
+    static float Dot(const Vec2& a,const Vec2& b);
+    static Vec2 Lerp(const Vec2& a, const Vec2& b, float t);
+    static Vec2 LerpUnclamped(const Vec2& a, const Vec2& b, float t);
+    static bool Approximately(const Vec2& a, const Vec2& b, float tolerance);
 
     static const Vec2 up;
     static const Vec2 down;

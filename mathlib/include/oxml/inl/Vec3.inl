@@ -1,114 +1,175 @@
+#include <oxml/assert.h>
+
 namespace oxml {
 
   inline float Vec3::Magnitude() const {
-    return 0.0f;
+    return sqrtf((this->x * this->x) + (this->y * this->y) + (this->z * this->z));
   }
 
   inline void Vec3::Normalize() {
 
-    float inverseMagnitude = 1.0f / Magnitude();
-    *this *= inverseMagnitude;
+    /*float inverseMagnitude = 1.0f / Magnitude();
+    *this *= inverseMagnitude;*/
+    float hipotenusa = sqrtf((this->x * this->x) + (this->y * this->y) + (this->z * this->z));
+    this->x /= hipotenusa;
+    this->y /= hipotenusa;
+    this->z /= hipotenusa;
   }
 
   inline Vec3 Vec3::Normalized() const {
-    return Vec3();
+    float hipotenusa = sqrtf((this->x * this->x) + (this->y * this->y) + (this->z * this->z));
+    return Vec3(this->x / hipotenusa, this->y / hipotenusa, this->z / hipotenusa);
   }
 
   inline float Vec3::Dot(const Vec3& a, const Vec3& other) {
-    return 0.0f;
+
+    return (a.x * other.x) + (a.y * other.y) + (a.z * other.z);
   }
 
-  inline float Vec3::Angle(const Vec3& a, const Vec3& other) {
-    return 0.0f;
+  inline float Vec3::Angle(const Vec3& a, const Vec3& b){
+
+    return acosf((Dot(a,b)/(a.Magnitude() * b.Magnitude())));
   }
 
-  inline Vec3 Vec3::Cross(const Vec3& a, const Vec3& other) {
-    return Vec3();
+  inline Vec3 Vec3::Cross(const Vec3& a, const Vec3& b){
+
+    return Vec3((a.y * b.z) - (a.z*b.y), (a.z*b.x) - (a.x*b.z), (a.x * b.y) - (a.y*b.x));
   }
 
   inline float Vec3::SqrMagnitude() const {
-    return 0.0f;
+
+    return (this->x * this->x) + (this->y * this->y) + (this->z * this->z);
   }
 
-  inline void Vec3::Scale(const Vec3& other) {
+  inline void Vec3::Scale(const Vec3& other){
+    this->x *= other.x;
+    this->y *= other.y;
+    this->z *= other.z;
   }
 
   inline Vec3 Vec3::Lerp(const Vec3& a, const Vec3& b, float t) {
-    return Vec3();
+    t = Mathf::Clamp01(t);
+    return Vec3(a + (b - a) * t);
   }
 
   inline Vec3 Vec3::LerpUnclamped(const Vec3& a, const Vec3& b, float t) {
-    return Vec3();
+    return Vec3(a + (b - a) * t);
   }
 
   inline float Vec3::Distance(const Vec3& a, const Vec3& b) {
-    return 0.0f;
+    //Vec3 aux(b-a);
+    //return aux.Magnitude();
+    return Vec3(b - a).Magnitude();
   }
 
   inline Vec3 Vec3::Reflect(const Vec3& direction, const Vec3& normal) {
-    return Vec3();
+    normal.Normalize();
+    return ((direction - 2.0f) * (normal * Dot(direction,normal)));
+  }
+
+  inline bool Approximately(const Vec3& a, const Vec3& b, float tolerance){
+    return Mathf::Abs(b.x - a.x) <= tolerance && Mathf::Abs(b.y - a.y) <= tolerance && Mathf::Abs(b.z - a.z) <= tolerance;
   }
 
   inline Vec3 Vec3::operator+(const Vec3& other) const {
-    return Vec3();
+    return Vec3(this->x + other.x, this->y + other.y, this->z + other.z);
   }
 
   inline Vec3 Vec3::operator+(float value) const {
-    return Vec3();
+    return Vec3(this->x+value, this->y+value, this->z+value);
   }
 
   inline Vec3& Vec3::operator+=(const Vec3& other) {
+    this->x += other.x;
+    this->y += other.y;
+    this->z += other.z;
     return *this;
   }
 
   inline Vec3& Vec3::operator+=(float value) {
+    this->x += value;
+    this->y += value;
+    this->z += value;
     return *this;
   }
 
   inline Vec3 Vec3::operator-(const Vec3& other) const {
-    return Vec3();
+    return Vec3(this->x - other.x, this->y - other.y, this->z - other.z);
   }
 
   inline Vec3 Vec3::operator-(float value) const {
-    return Vec3();
+    return Vec3(this->x - value, this->y - value, this->z - value);
   }
 
   inline Vec3& Vec3::operator-=(const Vec3& other) {
+    this->x -= other.x;
+    this->y -= other.y;
+    this->z -= other.z;
     return *this;
   }
 
   inline Vec3& Vec3::operator-=(float value) {
+    this->x -= value;
+    this->y -= value;
+    this->z -= value;
     return *this;
   }
 
   inline bool Vec3::operator==(const Vec3& other) const {
-    return true;
+    return this->x == other.x && this->y == other.y && this->z == other.x;
   }
 
   inline bool Vec3::operator!=(const Vec3& other) const {
-    return true;
+    return this->x != other.x && this->y != other.y && this->z != other.x;
   }
 
   inline void Vec3::operator=(const Vec3& other) {
+    this->x = other.x;
+    this->y = other.y;
+    this->z = other.z;
   }
 
   inline void Vec3::operator=(float value) {
+    this->x = value;
+    this->y = value;
+    this->z = value;
   }
 
   inline Vec3 Vec3::operator*(float value) const {
-    return Vec3();
+    
+    return Vec3(this->x * value,this->y * value,this->z * value);
   }
 
   inline Vec3& Vec3::operator*=(float value) {
+    this->x *= value;
+    this->y *= value;
+    this->z *= value;
     return *this;
   }
 
   inline Vec3 Vec3::operator/(float value) const {
-    return Vec3();
+    return Vec3(this->x / value,this->y / value,this->z / value);
   }
 
   inline Vec3& Vec3::operator/=(float value) {
+    this->x /= value;
+    this->y /= value;
+    this->z /= value;
     return *this;
   }
 
+  inline const float& Vec3::operator[](int index) const{
+    assert(index<=2 && index>0, "Index out of range");
+    switch(index){
+      case 0:
+      return this->x;
+      case 1:
+      return this->y;
+      case 2:
+      return this->z;
+    }
+
+  }
+
+  
 }

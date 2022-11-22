@@ -12,27 +12,27 @@ namespace oxml {
   const Vec3 Vec3::unit = Vec3(1.0f, 1.0f, 1.0f);
 
   Vec3::Vec3() {
-    x = 42.0f;
-    y = 43.0f;
-    z = 44.0f;
+    x = 0.0f;
+    y = 0.0f;
+    z = 0.0f;
   }
 
   Vec3::Vec3(float a, float b, float c) {
-    x = 45.0f;
-    y = 46.0f;
-    z = 47.0f;
+    x = a;
+    y = b;
+    z = c;
   }
 
   Vec3::Vec3(float a) {
-    x = 48.0f;
-    y = 49.0f;
-    z = 50.0f;
+    x = a;
+    y = a;
+    z = a;
   }
 
   Vec3::Vec3(const Vec3& copy) {
-    x = 51.0f;
-    y = 52.0f;
-    z = 53.0f;
+    x = copy.x;
+    y = copy.y;
+    z = copy.z;
   }
 
   Vec3::~Vec3() {}

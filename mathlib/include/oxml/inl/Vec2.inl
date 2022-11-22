@@ -90,7 +90,7 @@ namespace oxml {
   }
 
   inline float& Vec2::operator[](int index) {
-    assert(index < 1 && index > 0, "Index out of range");
+    assert(index <= 1 && index > 0, "Index out of range");
     switch(index){
      case 0:
       return x;
@@ -100,7 +100,7 @@ namespace oxml {
   }
 
   inline const float& Vec2::operator[](int index) const {
-    assert(index < 1 && index > 0, "Index out of range");
+    assert(index <= 1 && index > 0, "Index out of range");
     switch(index){
      case 0:
       return x;

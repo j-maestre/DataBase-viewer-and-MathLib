@@ -1,8 +1,6 @@
 #ifndef __VEC2_H__
 #define __VEC2_H__ 1
 
-#include <math.h>
-
 namespace oxml {
   
   class Vec2 {
@@ -14,7 +12,7 @@ namespace oxml {
     ~Vec2(); //done
  
     Vec2 operator+(const Vec2& other) const; //done
-    Vec2 operator+(float value); //done
+    Vec2 operator+(float value) const; //done
     Vec2& operator+=(const Vec2& other); //done
     Vec2& operator+=(float value); //done
     Vec2 operator-(const Vec2& other) const; //done

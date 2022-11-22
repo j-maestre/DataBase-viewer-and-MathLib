@@ -1,10 +1,13 @@
+#include <oxml/Mathf.h>
+#include <math.h>
+
 namespace oxml {
 
   inline Vec2 Vec2::operator+(const Vec2& other) const {
     return Vec2(this->x + other.x, this->y + other.y);
   }
 
-  inline Vec2 Vec2::operator+(float value) {
+  inline Vec2 Vec2::operator+(float value) const{
     return Vec2(this->x + value, this->y + value);
   }
 
@@ -47,13 +50,11 @@ namespace oxml {
   }
 
   inline bool Vec2::operator==(const Vec2& other) const {
-
-    return this->x == other.x && this->y == other.y;
+    return (this->x == other.x && this->y == other.y);
   }
 
   inline bool Vec2::operator!=(const Vec2& other) const {
-
-    return this->x != other.x && this->y != other.y;
+    return (this->x != other.x && this->y != other.y);
   }
 
   inline void Vec2::operator=(const Vec2& other) {
@@ -64,7 +65,6 @@ namespace oxml {
   inline void Vec2::operator=(float value) {
     this->x = value;
     this->y = value;
-
   }
 
   inline Vec2 Vec2::operator*(float value) const {
@@ -78,7 +78,6 @@ namespace oxml {
   }
 
   inline Vec2 Vec2::operator/(float value) const {
-
     return Vec2(this->x / value, this->y / value);
   }
 
@@ -104,7 +103,6 @@ namespace oxml {
   }
 
   inline void Vec2::Scale(const Vec2& scale) {
-    this->Normalize();
     this->x *= scale.x;
     this->y *= scale.y;
   }
@@ -118,13 +116,7 @@ namespace oxml {
   }
 
   inline Vec2 Vec2::Lerp(const Vec2& a, const Vec2& b, float t) {
-    if (t > 1) {
-      t = 1;
-    }
-    else if (t < 0) {
-      t = 0;
-    }
-
+    t = Mathf::Clamp01(t);
     return Vec2(a + (b - a) * t);
   }
 
@@ -133,11 +125,11 @@ namespace oxml {
   }
 
   inline float Vec2::Dot(const Vec2& a, const Vec2& b) {
-    return (float)((a.x * b.x) + (a.y + b.y));
+    return (float)((a.x * b.x) + (a.y * b.y));
   }
 
   inline bool Approximately(const Vec2& a, const Vec2& b, float tolerance) {
-    return (b.x - a.x) <= tolerance && (b.y - a.y) <= tolerance;
+    return Mathf::Abs(b.x - a.x) <= tolerance && Mathf::Abs(b.y - a.y) <= tolerance;
   }
 
 }

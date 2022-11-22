@@ -63,8 +63,10 @@ namespace oxml {
   }
 
   inline Vec3 Vec3::Reflect(const Vec3& direction, const Vec3& normal) {
-    normal.Normalize();
-    return ((direction - 2.0f) * (normal * Dot(direction,normal)));
+    Vec3 rslt;
+    Vec3 aux = normal.Normalized() * (-2.0f * Dot(direction, normal.Normalized()));
+    rslt = direction + aux;
+    return rslt;
   }
 
   inline bool Approximately(const Vec3& a, const Vec3& b, float tolerance){
@@ -91,6 +93,10 @@ namespace oxml {
     this->y += value;
     this->z += value;
     return *this;
+  }
+
+  inline Vec3& Vec3::operator-() {
+    return Vec3(this->x*(-1.0f),this->y*(-1.0f),this->z*(-1.0f));
   }
 
   inline Vec3 Vec3::operator-(const Vec3& other) const {
@@ -158,7 +164,7 @@ namespace oxml {
     return *this;
   }
 
-  inline const float& Vec3::operator[](int index) const{
+  inline float& Vec3::operator[](int index) {
     assert(index<=2 && index>0, "Index out of range");
     switch(index){
       case 0:
@@ -168,8 +174,18 @@ namespace oxml {
       case 2:
       return this->z;
     }
-
   }
 
+  inline const float& Vec3::operator[](int index) const {
+    assert(index<=2 && index>0, "Index out of range");
+    switch(index){
+      case 0:
+      return this->x;
+      case 1:
+      return this->y;
+      case 2:
+      return this->z;
+    }
+  }
   
 }

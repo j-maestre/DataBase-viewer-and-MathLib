@@ -34,9 +34,7 @@ namespace oxml {
   }
 
   inline Vec2& Vec2::operator-() {
-    this->x *= -1.0f;
-    this->y *= -1.0f;
-    return *this;
+    return Vec2(this->x*(-1.0f),this->y*(-1.0f));
   }
 
   inline Vec2& Vec2::operator-=(const Vec2& other) {

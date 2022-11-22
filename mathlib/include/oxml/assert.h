@@ -31,7 +31,7 @@ namespace oxml {
 
 #define assert(expression, message) (void)(                                         \
 				(!!(expression)) ||                                                         \
-				(oxml::_assert(#expression, #message, __FILE__, __FUNCTION__, __LINE__), 0) \
+				(oxml::_assert(#expression, message, __FILE__, __FUNCTION__, __LINE__), 0) \
 )
 
 #endif // NDEBUG

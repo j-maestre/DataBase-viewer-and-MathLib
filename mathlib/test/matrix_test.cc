@@ -1210,7 +1210,7 @@ namespace UnitTest {
 										9.0f, -9.0f, 9.0f, 1.0f };
 		another_test = oxml::Mat4(transformation_temp);
 
-		test = test.GetTransform(3.0f, 3.0f, 3.0f,
+		test = test.TRS(3.0f, 3.0f, 3.0f,
 			3.0f, 3.0f, 3.0f,
 			1.570796f, 1.570796f, 1.570796f);
 

@@ -153,14 +153,14 @@ namespace oxml {
     return Mat2(points);
   }
 
-  inline Vec2 Mat2::GetLine(int index) const {
-    //_oxml_assert(index<2 && index>0, "Index out of range");
-    return Vec2(m[index*2],m[index*2+1]);
+  inline Vec2 Mat2::GetLine(int line) const {
+    oxml_assert(line <2 && line>0, "Index out of range");
+    return Vec2(m[line*2],m[line*2+1]);
   }
 
-  inline Vec2 Mat2::GetColum(int index) const{
-    //_oxml_assert(index<2 && index>0, "Index out of range");
-    return Vec2(m[index],m[index+2]);
+  inline Vec2 Mat2::GetColum(int line) const{
+    oxml_assert(line <2 && line>0, "Index out of range");
+    return Vec2(m[line],m[line+2]);
   }
 
 }

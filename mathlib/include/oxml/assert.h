@@ -1,17 +1,15 @@
 #ifndef __OXML_ASSERT_H__
 #define __OXML_ASSERT_H__ 1
 
-#undef assert
+#undef oxml_assert
 
 #ifdef NDEBUG
 
-#define assert(expression) ((void)0)
+#define oxml_assert(expression) ((void)0)
 
 #else
 
-namespace oxml {
-
-  void _assert(
+  void _oxml_assert(
     const char *expression,
     const char *message, 
     const char *file, 
@@ -19,7 +17,7 @@ namespace oxml {
     unsigned int line
   );
 
-  void s_assert(
+  void _oxml_static_assert(
     bool expression, 
     const char *message, 
     const char *file, 
@@ -27,12 +25,12 @@ namespace oxml {
     unsigned int line
   );
 
-}
-
-#define assert(expression, message) (void)(                                         \
-				(!!(expression)) ||                                                         \
-				(oxml::_assert(#expression, message, __FILE__, __FUNCTION__, __LINE__), 0) \
+#define oxml_assert(expression, message) (void)(                                  \
+				(!!(expression)) ||                                                       \
+				(_oxml_assert(#expression, message, __FILE__, __FUNCTION__, __LINE__), 0) \
 )
+
+#define oxml_static_assert(expression, message) (_oxml_static_assert(expression, message, __FILE__, __FUNCTION__, __LINE__))
 
 #endif // NDEBUG
 

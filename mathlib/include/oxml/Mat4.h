@@ -1,5 +1,5 @@
-#ifndef __MAT4_H__
-#define __MAT4_H__ 1
+#ifndef __OXML_MAT4_H__
+#define __OXML_MAT4_H__ 1
 
 #include <oxml/Vec3.h>
 #include <oxml/Vec4.h>
@@ -12,7 +12,7 @@ namespace oxml {
     Mat4();
     Mat4(float *values);
     Mat4(float value);
-    Mat4(const Mat4& copy);
+    Mat4(const Mat4& other);
     ~Mat4();
 
     static Mat4 Identity();
@@ -26,7 +26,7 @@ namespace oxml {
 
     Mat4 Transpose() const;
 
-    static Mat4 Translate(const Vec3& distance);
+    static Mat4 Translate(const Vec3& position);
     static Mat4 Translate(float x, float y, float z);
 
     static Mat4 Scale(const Vec3& scale);
@@ -48,10 +48,10 @@ namespace oxml {
     static Mat4 Ortho(float right, float left, float top, float valueottom,
       float near, float far);
 
-    Mat4 LookAt(const Vec3& from, const Vec3& to, const Vec3& up);
+    static Mat4 LookAt(const Vec3& from, const Vec3& to, const Vec3& up);
 
     Vec4 GetColum(int colum) const;
-    Vec4 GetLine(int line) const;
+    Vec4 GetRow(int line) const;
 
     Mat4 operator+(const Mat4& other) const;
     Mat4& operator+=(const Mat4& other);
@@ -65,9 +65,9 @@ namespace oxml {
     Mat4 operator*(float value) const;
     Mat4& operator/=(float value);
     Mat4 operator/(float value) const;
-    bool operator==(const Mat4& other);
-    bool operator!=(const Mat4& other);
-    void operator=(const Mat4& other);
+    bool operator==(const Mat4& other) const ;
+    bool operator!=(const Mat4& other) const ;
+    Mat4& operator=(const Mat4& other);
 
     float m[16];
   };

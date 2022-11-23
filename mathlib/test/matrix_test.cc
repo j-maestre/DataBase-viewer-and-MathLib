@@ -1,4 +1,4 @@
-#include <oxml/Mat3.h>
+#include <oxml/Mat3.h>value
 #include <oxml/Mat4.h>
 #include "unit_test_helpers.h"
 
@@ -1262,26 +1262,26 @@ namespace UnitTest {
 
 		// Check GetLine
 		test = test.Identity();
-		worked = test.GetLine(0) == oxml::Vec4(1.0f, 0.0f, 0.0f, 0.0f);
+		worked = test.GetRow(0) == oxml::Vec4(1.0f, 0.0f, 0.0f, 0.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
-		worked = test.GetLine(1) == oxml::Vec4(0.0f, 1.0f, 0.0f, 0.0f);
+		worked = test.GetRow(1) == oxml::Vec4(0.0f, 1.0f, 0.0f, 0.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
-		worked = test.GetLine(2) == oxml::Vec4(0.0f, 0.0f, 1.0f, 0.0f);
+		worked = test.GetRow(2) == oxml::Vec4(0.0f, 0.0f, 1.0f, 0.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
-		worked = test.GetLine(3) == oxml::Vec4(0.0f, 0.0f, 0.0f, 1.0f);
+		worked = test.GetRow(3) == oxml::Vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
 		// fv --> op0
 		op0.m[0] = fv[0];  op0.m[1] = fv[1];  op0.m[2] = fv[2];  op0.m[3] = fv[3];
 		op0.m[4] = fv[4];  op0.m[5] = fv[5];  op0.m[6] = fv[6];  op0.m[7] = fv[7];
 		op0.m[8] = fv[8];  op0.m[9] = fv[9];  op0.m[10] = fv[10]; op0.m[11] = fv[11];
 		op0.m[12] = fv[12]; op0.m[13] = fv[13]; op0.m[14] = fv[14]; op0.m[15] = fv[15];
-		worked = op0.GetLine(0) == oxml::Vec4(1.0f, 2.0f, 3.0f, 4.0f);
+		worked = op0.GetRow(0) == oxml::Vec4(1.0f, 2.0f, 3.0f, 4.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
-		worked = op0.GetLine(1) == oxml::Vec4(5.0f, 6.0f, 7.0f, 8.0f);
+		worked = op0.GetRow(1) == oxml::Vec4(5.0f, 6.0f, 7.0f, 8.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
-		worked = op0.GetLine(2) == oxml::Vec4(9.0f, 10.0f, 11.0f, 12.0f);
+		worked = op0.GetRow(2) == oxml::Vec4(9.0f, 10.0f, 11.0f, 12.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
-		worked = op0.GetLine(3) == oxml::Vec4(13.0f, 14.0f, 15.0f, 16.0f);
+		worked = op0.GetRow(3) == oxml::Vec4(13.0f, 14.0f, 15.0f, 16.0f);
 		Assert::AreEqual(true, worked, "GetLine() Failed", __FILE__, __LINE__);
 
 		Test::End();

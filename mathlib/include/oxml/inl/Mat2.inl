@@ -132,9 +132,9 @@ namespace oxml {
   inline Mat2 Mat2::Multiply(const Mat2& other) const {
     float points[4];
     points[0] = m[0] * other.m[0] + m[1] * other.m[2];
-    points[1] = m[0] * other.m[1] + m[1] * other[3];
-    points[2] = m[2] * other.m[0] + m[3] * other[2];
-    points[3] = m[2] * other.m[1] + m[3] * other[3];
+    points[1] = m[0] * other.m[1] + m[1] * other.m[3];
+    points[2] = m[2] * other.m[0] + m[3] * other.m[2];
+    points[3] = m[2] * other.m[1] + m[3] * other.m[3];
   
     return Mat2(points);
   }
@@ -153,14 +153,14 @@ namespace oxml {
     return Mat2(points);
   }
 
-  inline Vec2 Mat2::GetLine(int line) const {
-    _oxml_assert(index<2 && index>0, "Index out of range");
-    return Vec2(m[line*2],m[line*2+1]);
+  inline Vec2 Mat2::GetLine(int index) const {
+    //_oxml_assert(index<2 && index>0, "Index out of range");
+    return Vec2(m[index*2],m[index*2+1]);
   }
 
-  inline Vec2 Mat2::GetColum(int line) const{
-    _oxml_assert(index<2 && index>0, "Index out of range");
-    return Vec2(m[line],m[line+2]);
+  inline Vec2 Mat2::GetColum(int index) const{
+    //_oxml_assert(index<2 && index>0, "Index out of range");
+    return Vec2(m[index],m[index+2]);
   }
 
 }

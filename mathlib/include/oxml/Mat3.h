@@ -28,20 +28,15 @@ namespace oxml {
     ~Mat3();
 
     static Mat3 Identity();
-
     Mat3 Multiply(const Mat3& other) const;
-
     float Determinant() const;
-
     Mat3 Adjoint() const;
     bool GetInverse(Mat3& out) const;
     bool Inverse();
-
     Mat3 Transpose() const;
-
     static Mat3 Translate(const Vec2& position);
     static Mat3 Translate(float x, float y);
-
+    static Mat3 Rotate(const float rotation);
     Vec3 GetColum(int colum) const;
     Vec3 GetRow(int row) const;
 

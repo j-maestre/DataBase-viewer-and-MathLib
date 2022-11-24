@@ -37,7 +37,8 @@ solution("MathLib_" .. _ACTION)
 
   projects_names = {
     "Test",
-    "oxml"
+    "oxml",
+    "RayTracing"
   }
 
   for i, prj in ipairs(projects_names) do
@@ -53,8 +54,7 @@ solution("MathLib_" .. _ACTION)
         }
         files {
           path.join(PROJ_DIR, "./include/oxml/*.h"),
-          path.join(PROJ_DIR, "./include/oxml/inl/*.inl"),
-          path.join(PROJ_DIR, "./src/*.cc"),
+          path.join(PROJ_DIR, "./src/oxml/*.cc"),
         }
 
         --libdirs{}
@@ -83,7 +83,17 @@ solution("MathLib_" .. _ACTION)
     files {
       path.join(PROJ_DIR, "./test/*.h"),
       path.join(PROJ_DIR, "./test/*.cc"),
+      path.join(PROJ_DIR, "./include/oxml/inl/*.inl"),
     }
 
   project("oxml")
     kind "StaticLib"
+    files {
+      path.join(PROJ_DIR, "./include/oxml/inl/*.inl"),
+    }
+
+  project("RayTracing")
+    kind "ConsoleApp"
+    files {
+      path.join(PROJ_DIR, "./src/*.cc");
+    }

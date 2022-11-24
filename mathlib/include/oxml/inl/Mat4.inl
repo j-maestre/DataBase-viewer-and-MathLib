@@ -46,23 +46,24 @@ namespace oxml {
   }
 
   inline float Mat4::Determinant() const {
-    const int n = 4;
-		float aux = 0, piv = 0, piv1 = 0, det = 1;
-		Mat4 m_aux = *this;
-		for (int i = 0; i < n; ++i) {
-			piv = m_aux.m[i * n + i];
-			for (int j = i + 1; j < n; ++j) {
-				piv1 = m_aux.m[i * n + j];
-				aux = piv1 / piv;
-				for (int k = 0; k < n; ++k) {
-					m_aux.m[k * n + j] -= aux * m_aux.m[k * n + i];
-				}
-			}
-		}
-		for (int i = 0; i < n; ++i) {
-			det *= m_aux.m[i * n + i];
-		}
-		return det;
+    float det_0[9] = { this->m[5], this->m[9], this->m[13],
+                     this->m[6], this->m[10], this->m[14],
+                     this->m[7], this->m[11], this->m[15] };
+
+    float det_1[9] = { this->m[4], this->m[8], this->m[12],
+                       this->m[6], this->m[10], this->m[14],
+                       this->m[7], this->m[11], this->m[15] };
+
+    float det_2[9] = { this->m[4], this->m[8], this->m[12],
+                       this->m[5], this->m[9], this->m[13],
+                       this->m[7], this->m[11], this->m[15] };
+
+    float det_3[9] = { this->m[4], this->m[8], this->m[12],
+                       this->m[5], this->m[9], this->m[13],
+                       this->m[6], this->m[10], this->m[14] };
+
+    return (this->m[0] * Mat3(det_0).Determinant() - this->m[1] * Mat3(det_1).Determinant()
+            + this->m[2] * Mat3(det_2).Determinant() - this->m[3] * Mat3(det_3).Determinant());
   }
 
   inline Mat4 Mat4::Adjoint() const {

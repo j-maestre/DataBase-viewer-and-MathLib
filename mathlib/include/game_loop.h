@@ -3,7 +3,7 @@
 
 #include <SDL/SDL.h>
 
-#include "texture.h"
+#include "ray_tracer.h"
 
 class GameLoop final {
  public:
@@ -18,14 +18,15 @@ class GameLoop final {
 
  private:
 
-  SDL_Renderer *renderer_;
-  SDL_Window *window_;
-
-
   GameLoop();
   GameLoop(const GameLoop& other) = delete;
 
   GameLoop& operator =(const GameLoop& other) = delete;
+
+  SDL_Renderer *renderer_;
+  SDL_Window *window_;
+  
+  RayTracer rt_;
 
 };
 

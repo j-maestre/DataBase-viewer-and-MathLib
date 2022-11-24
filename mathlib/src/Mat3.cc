@@ -1,5 +1,6 @@
 
 #include <oxml/Mat3.h>
+#include <oxml/Mat2.h>
 
 namespace oxml {
 

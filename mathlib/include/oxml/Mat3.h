@@ -13,6 +13,7 @@
 
 #include <oxml/Vec2.h>
 #include <oxml/Vec3.h>
+#include <oxml/Mat2.h>
 
 namespace oxml {
 
@@ -33,6 +34,7 @@ namespace oxml {
     Mat3 Adjoint() const;
     bool GetInverse(Mat3& out) const;
     bool Inverse();
+    inline float Mat2Determinant(Mat2 m);
     Mat3 Transpose() const;
     static Mat3 Translate(const Vec2& position);
     static Mat3 Translate(float x, float y);
@@ -55,6 +57,7 @@ namespace oxml {
     bool operator==(const Mat3& other) const;
     bool operator!=(const Mat3& other) const;
     inline void operator=(const Mat3& other);
+
 
     float m[9];
   };

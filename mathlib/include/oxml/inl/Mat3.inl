@@ -129,13 +129,8 @@ namespace oxml {
   }
 
   inline bool Mat3::GetInverse(Mat3& out) const {
-    //Adjunta de la transpuesta partido el determinante de la primera
-    Mat3 aux;
-    aux = this->Transpose();
-    aux = aux.Adjoint();
-    float determinant = this->Determinant();
-    if(determinant != 0){
-      out = aux / determinant;
+    if(this->Determinant() != 0){
+      out = this->Adjoint().Transpose() / this->Determinant();
       return true;
     }
 
@@ -143,7 +138,13 @@ namespace oxml {
   }
 
   inline bool Mat3::Inverse() {
-    return this->Determinant() != 0;
+    if(this->Determinant() != 0){
+      (*this) = this->Adjoint().Transpose() / this->Determinant();
+      return true;
+    }
+
+    return false;
+
   }
 
   inline Mat3 Mat3::Translate(const Vec2& mov_vector) {
@@ -227,7 +228,7 @@ namespace oxml {
     mcof.m[0] = (m[4]*m[8])-(m[5]*m[7]);
 
     //Segunda posicion
-    mcof.m[1] = -((m[0]*m[8])-(m[6]*m[2]));
+    mcof.m[1] = -((m[3]*m[8])-(m[6]*m[5])); //Falla aqui
 
     //Tercera posicion
     mcof.m[2] = (m[3]*m[7])-(m[6]*m[4]);

@@ -122,7 +122,7 @@ namespace oxml {
   }
 
   inline bool Vec3::operator==(const Vec3& other) const {
-    return this->x == other.x && this->y == other.y && this->z == other.x;
+    return this->x == other.x && this->y == other.y && this->z == other.z;
   }
 
   inline bool Vec3::operator!=(const Vec3& other) const {

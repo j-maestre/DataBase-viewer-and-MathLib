@@ -94,6 +94,12 @@ namespace oxml {
       return false;
     }
 
+    float det = Determinant();
+    if (det == 0.0f || det == -0.0f) {
+      return false;
+    }
+
+    (*this) = ((this->Adjoint().Transpose()) / det);
 
     return true;
   }
@@ -131,6 +137,7 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::Translate(const Vec3& position) {
+
     return Mat4();
   }
 
@@ -139,7 +146,11 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::Scale(const Vec3& scale) {
-    return Mat4();
+    Mat4 identity = Identity();
+    identity.m[0] = scale.x;
+    identity.m[5] = scale.y;
+    identity.m[10] = scale.z;
+    return identity;
   }
 
   inline Mat4 Mat4::Scale(float x, float y, float z) {
@@ -147,15 +158,36 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::RotateX(float radians) {
-    return Mat4();
+    Mat4 identity = Identity();
+    identity.m[5] = cosf(radians);
+    identity.m[6] = -sinf(radians);
+    identity.m[9] = sinf(radians);
+    identity.m[10] = cos(radians);
+
+    return identity;
   }
 
   inline Mat4 Mat4::RotateY(float radians) {
-    return Mat4();
+    Mat4 identity = Identity();
+
+    identity.m[0] = cosf(radians);
+    identity.m[2] = sinf(radians);
+    
+    identity.m[8] = -sinf(radians);
+    identity.m[10] = -cosf(radians);
+
+    return identity;
   }
 
   inline Mat4 Mat4::RotateZ(float radians) {
-    return Mat4();
+    Mat4 identity = Identity();
+
+    identity.m[0] = cosf(radians);
+    identity.m[1] = -sinf(radians);
+    identity.m[4] = sinf(radians);
+    identity.m[5] = cosf(radians);
+
+    return identity;
   }
 
   inline Mat4 Mat4::TRS(const Vec3& translate,
@@ -163,9 +195,7 @@ namespace oxml {
     return Mat4();
   }
 
-  inline Mat4 Mat4::TRS(float trans_x, float trans_y, float trans_z,
-    float scale_x, float scale_y, float scale_Z,
-    float rotateX, float rotateY, float rotateZ) {
+  inline Mat4 Mat4::TRS(float trans_x, float trans_y, float trans_z, float scale_x, float scale_y, float scale_Z, float rotateX, float rotateY, float rotateZ) {
 
     return Mat4();
   }
@@ -178,14 +208,12 @@ namespace oxml {
     return Vec4(m[row * 4 + 0], m[row * 4 + 1], m[row * 4 + 2], m[row * 4 + 3]);
   }
 
-  inline Mat4 Mat4::Perspective(float fov, float aspect,
-    float near, float far) {
+  inline Mat4 Mat4::Perspective(float fov, float aspect, float near, float far) {
 
     return Mat4();
   }
 
-  inline Mat4 Mat4::Ortho(float right, float left, float top, float valueottom,
-    float near, float far) {
+  inline Mat4 Mat4::Ortho(float right, float left, float top, float valueottom, float near, float far) {
 
     return Mat4();
   }

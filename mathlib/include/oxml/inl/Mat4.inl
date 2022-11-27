@@ -94,7 +94,6 @@ namespace oxml {
       return false;
     }
 
-    float det = Determinant();
     if (det == 0.0f || det == -0.0f) {
       return false;
     }
@@ -109,9 +108,7 @@ namespace oxml {
     if (det == 0.0f || det == -0.0f) {
       return false;
     }
-
     out = ((this->Adjoint().Transpose()) / det);
-
     return true;
   }
 
@@ -137,12 +134,19 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::Translate(const Vec3& position) {
-
-    return Mat4();
+    Mat4 identity = Identity();
+    identity.m[12] = position.x;
+    identity.m[13] = position.y;
+    identity.m[14] = position.z;
+    return identity;
   }
 
   inline Mat4 Mat4::Translate(float x, float y, float z) {
-    return Mat4();
+    Mat4 identity = Identity();
+    identity.m[12] = x;
+    identity.m[13] = y;
+    identity.m[14] = z;
+    return identity;
   }
 
   inline Mat4 Mat4::Scale(const Vec3& scale) {
@@ -154,7 +158,11 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::Scale(float x, float y, float z) {
-    return Mat4();
+    Mat4 identity = Identity();
+    identity.m[0] = x;
+    identity.m[5] = y;
+    identity.m[10] = z;
+    return identity;
   }
 
   inline Mat4 Mat4::RotateX(float radians) {
@@ -181,7 +189,6 @@ namespace oxml {
 
   inline Mat4 Mat4::RotateZ(float radians) {
     Mat4 identity = Identity();
-
     identity.m[0] = cosf(radians);
     identity.m[1] = -sinf(radians);
     identity.m[4] = sinf(radians);
@@ -190,18 +197,29 @@ namespace oxml {
     return identity;
   }
 
-  inline Mat4 Mat4::TRS(const Vec3& translate,
-    const Vec3& scale, const Vec3& rotation) {
-    return Mat4();
+  inline Mat4 Mat4::TRS(const Vec3& translate, const Vec3& scale, const Vec3& rotation){
+    Mat4 identity = Identity();
+    identity = identity.Multiply(Translate(translate));
+    identity = identity.Multiply(Scale(scale));
+    identity = identity.Multiply(RotateX(rotation.x));
+    identity = identity.Multiply(RotateY(rotation.y));
+    identity = identity.Multiply(RotateZ(rotation.z));
+    return identity;
   }
 
-  inline Mat4 Mat4::TRS(float trans_x, float trans_y, float trans_z, float scale_x, float scale_y, float scale_Z, float rotateX, float rotateY, float rotateZ) {
-
-    return Mat4();
+  inline Mat4 Mat4::TRS(float trans_x, float trans_y, float trans_z, float scale_x, float scale_y, float scale_z, float rotateX, float rotateY, float rotateZ) {
+    Mat4 identity = Identity();
+    identity = identity.Multiply(Translate(trans_x,trans_y,trans_z));
+    identity = identity.Multiply(Scale(scale_x,scale_y,scale_z));
+    identity = identity.Multiply(RotateX(rotateX));
+    identity = identity.Multiply(RotateY(rotateY));
+    identity = identity.Multiply(RotateZ(rotateZ));
+    return identity;
   }
 
   inline Vec4 Mat4::GetColum(int colum) const {
-    return Vec4((m[0 * 4 + colum], m[1 * 4 + colum], m[2 * 4 + colum], m[3 * 4 + colum]));
+
+    return Vec4(m[colum], m[colum +4], m[colum + 8], m[colum + 12]);
   }
 
   inline Vec4 Mat4::GetRow(int row) const {
@@ -473,11 +491,12 @@ namespace oxml {
   }
 
   inline bool Mat4::operator!=(const Mat4& other) const {
-    bool rslt = true;
-    for (int i = 0; i < 16 && rslt; i++) {
-      rslt = (this->m[i] != other.m[i]);
+    for (int i = 0; i < 16; i++) {
+       if(this->m[i] != other.m[i]){
+        return true;
+       }
     }
-    return rslt;
+    return false;
   }
 
   inline Mat4& Mat4::operator=(const Mat4& other) {

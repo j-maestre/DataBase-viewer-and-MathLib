@@ -1,0 +1,172 @@
+#include <math.h>
+
+#include <oxml/Vec3.h>
+#include <oxml/Vec4.h>
+
+#include "ray_tracer.h"
+#include <stdio.h>
+
+RayTracer::RayTracer() {
+  pixels_ = nullptr;
+  window_ = nullptr;
+  renderer_ = nullptr;
+}
+
+RayTracer::~RayTracer() {}
+
+bool RayTracer::init(SDL_Renderer *renderer, SDL_Window *window) {
+  if (pixels_ == nullptr && window_ == nullptr && renderer_ == nullptr) {
+    if(renderer != nullptr && window != nullptr) {
+      renderer_ = renderer;
+      window_ = window;
+      SDL_GetWindowSize(window, &width_, &height_);
+      if (!texture_.alloc(width_, height_, renderer)) {
+        return false;
+      }
+      pixels_ = new Uint32[width_ * height_];
+      return true;
+    }
+  }
+  return false;
+}
+
+void RayTracer::onResize() {
+  int w, h;
+  SDL_GetWindowSize(window_, &w, &h);
+  if (width_ != w || height_ != h) {
+    width_ = w;
+    height_ = h;
+    delete[] pixels_;
+    pixels_ = new Uint32[width_ * height_];
+    texture_.resize(width_, height_);
+  }
+}
+
+Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
+  oxml::Vec3 ray_origin(0.0f, 0.0f, -2.0f);
+  oxml::Vec3 ray_direction(coord, -1.0f);
+  int mouseX;
+  int mouseY;
+  SDL_GetMouseState(&mouseX, &mouseY);
+  //printf("x[%d] x[%d]\n",mouseX,mouseY);
+  oxml::Vec2 position(mouseX,mouseY);
+  position.Normalize();
+  //oxml::Vec3 light_Dir(-1.0f, -1.0f, -0.9f);
+  oxml::Vec3 light_Dir(-position.x, -position.y, -0.5f);
+  //SDL get mouse status
+  light_Dir.Normalize();
+  oxml::Vec4 sphereColor(1.5f, 1.5f, 0.0f,1.0f);
+  oxml::Vec3 sphereOrigin(oxml::Vec3::zero);
+  float radius = 0.5f;
+
+
+  
+  // t es "la distacia desde la camara hasta el hit_point"
+  // Entre comillas porque no esta normalizado ray_direction
+  // Primero averiguamos a,b y c
+  // Segundo averiguamos el discriminante
+  // Tercero averiguamos t con la ecuacion de segundo grado
+
+  //* ray formula
+  //ray_origin + ray_dirrection * t = hit_point
+  //ray_origin.x + ray_direction.x * t = hit_point.x
+  //ray_origin.y + ray_direction.y * t = hit_point.y
+  //ray_origin.z + ray_direction.z * t = hit_point.z
+
+
+  //* sphere formula
+  //(x - sphereOrigin.x)^2 + (y - sphereOrigin.y)^2 + (z - sphereOrigin.z)^2 = r^2
+  //alg*t^2 + ago * t + algo
+  //-b +- sqrt(b *b -4.0f * a * c) / 2.0f * a = t
+  float a = ray_direction.SqrMagnitude();
+  float b = 2.0f * oxml::Vec3::Dot(ray_origin, ray_direction);
+  float c = ray_origin.SqrMagnitude() - (radius * radius);
+  float discriminant = (b*b) - (4.0f * a * c); //discrmininart = b *b -4.0f * a * c
+
+
+
+
+  if(discriminant >= 0.0f){ //tiene solucion (esta colisionando)
+    //Averiguar t0
+    float t0 = (-b -sqrtf(discriminant) / (2.0f * a)); //distancia entre la camara y el hit point (falta normalizar pero no hace falta)
+    //float t1 = (-b +sqrtf(discriminant) / (2.0f * a));
+
+    //Averiguar el hit point
+    //ray_origin + ray_dirrection * t = hit_point
+    oxml::Vec3 hit_point = ray_origin + ray_direction * t0;
+    //Averiguar la normal
+    //normal = hitpoint - sphereorigin
+    oxml::Vec3 normal = hit_point - sphereOrigin;
+    normal.Normalize();
+    float light = fmaxf(oxml::Vec3::Dot(normal, -light_Dir), 0.0f); 
+    /* maximo entre 2 valores. Dot representa el angulo entre esos dos vectores.
+       Si el dot es 0, los dos angulos son 90º, entonces no le esta dando
+    */ 
+    sphereColor *= light;
+    sphereColor.w = 1.0f; //Para no modificar el alpha
+
+    
+    return sphereColor.ToRGBA();
+  }
+
+  return 0xff000000; //negro (va al reves)
+
+  // una tangente es una recta que solo tiene un punto de contacto
+
+  //todas las ecuaciones de segundo grado tiene dos soluciones o ninguna
+  //si discriminant == 0 -> las dos soluciones son el mismo valor, significa que esta chocando en el borde, por lo que los dos puntos son el mismo (tangente)
+  //si discriminant > 0 -> existen dos soluciones distintas, una esta chocando mas cerca y la otra mas lejos. t0 es el que esta mas cerca porque es menor, lo contrario para t1
+  //si discriminant < 0 -> no existen soluciones -> no esta colisionando, por lo que no hay que pintar nada
+
+
+  /*
+
+  float a = ray_direction.SqrMagnitude();
+  float b = 2.0f * oxml::Vec3::Dot(ray_origin, ray_direction);
+  float c = ray_origin.SqrMagnitude() - (radius * radius);
+
+  float discriminant = b * b - 4.0f * a * c;
+
+  if (discriminant >= 0) {
+    float t0 = (-b - sqrtf(discriminant)) / (2.0f * a);
+    //float t1 = (-b + sqrtf(discriminant)) / (2.0f * a);
+    oxml::Vec3 hit_point = ray_origin + ray_direction * t0;
+    oxml::Vec3 normal = hit_point - sphereOrigin;
+    normal.Normalize();
+    float light = fmaxf(oxml::Vec3::Dot(normal, -lightDir), 0.0f);
+    sphereColor *= light;
+    sphereColor.w = 1.0f;
+    return sphereColor.ToRGBA();
+  }
+  return 0xff000000;*/
+  return 0;
+}
+
+void RayTracer::update() {
+  if (pixels_ != nullptr) {
+    onResize();
+    //TODO: pixel treatment
+    for (int y = 0; y < height_; y++) {
+      for (int x = 0; x < width_; x++) {
+        oxml::Vec2 coord(x / (float)width_, y / (float)height_);
+        coord = (coord * 2.0f) - 1.0f;
+        pixels_[((width_-1) - x) + y * width_] = perPixel(coord);
+      }
+    }
+    texture_.update(pixels_);
+  }
+}
+
+void RayTracer::draw() {
+  texture_.draw();
+}
+
+void RayTracer::end() {
+  if (pixels_ != nullptr) {
+    delete[] pixels_;
+    pixels_ = nullptr;
+  }
+  window_ = nullptr;
+  renderer_ = nullptr;
+  texture_.free();
+}

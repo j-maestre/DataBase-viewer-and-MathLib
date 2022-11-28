@@ -1,7 +1,7 @@
 #ifndef __ENTITY_H__
 #define __ENTITY_H__ 1
 
-#include <Vec2.h>
+#include <oxml/Vec2.h>
 
 class Entity{
   public:

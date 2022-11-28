@@ -32,6 +32,15 @@ namespace oxml {
     return (x * x) + (y * y) + (z * z) + (w * w);
   }
 
+  inline u32 Vec4::ToRGBA() const {
+    u8 r = (u8)(Mathf::Clamp01(x) * 255.0f);
+    u8 g = (u8)(Mathf::Clamp01(y) * 255.0f);
+    u8 b = (u8)(Mathf::Clamp01(z) * 255.0f);
+    u8 a = (u8)(Mathf::Clamp01(w) * 255.0f);
+    u32 color = (a << 24) | (b << 16) | (g << 8) | r;
+    return color;
+  }
+
   inline float Vec4::Distance(const Vec4& a, const Vec4& b) {
     return (a - b).Magnitude();
   }

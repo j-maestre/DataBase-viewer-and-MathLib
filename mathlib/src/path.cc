@@ -1,5 +1,4 @@
 #include <path.h>
-#include <esat/draw.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -77,7 +76,7 @@ Path::Path(const Path& p){
 
 void Path::draw(){
 
-    esat::DrawSetStrokeColor(stroke_color_[0],stroke_color_[1],stroke_color_[2]);
+    /*esat::DrawSetStrokeColor(stroke_color_[0],stroke_color_[1],stroke_color_[2]);
     //esat::DrawSetFillColor(fill_color_[0],fill_color_[1], fill_color_[2]);
     esat::DrawSetFillColor(0,0,0);
 
@@ -85,6 +84,6 @@ void Path::draw(){
         esat::DrawSolidPath(vertices_,n_vertex_);
     }else{
         esat::DrawPath(vertices_,n_vertex_);
-    }
+    }*/
 
 }

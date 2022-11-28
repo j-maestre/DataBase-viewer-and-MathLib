@@ -2,8 +2,8 @@
 #ifndef _PATH_H__
 #define _PATH_H__ 1
 
-#include "math.h"
-#include <Vec2.h>
+#include <math.h>
+#include <oxml/Vec2.h>
 #include "entity.h"
 
 class Path : public Entity{

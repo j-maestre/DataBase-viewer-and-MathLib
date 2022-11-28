@@ -95,7 +95,7 @@ namespace oxml {
     return *this;
   }
 
-  inline Vec3& Vec3::operator-() {
+  inline Vec3 Vec3::operator-() {
     return Vec3(this->x*(-1.0f),this->y*(-1.0f),this->z*(-1.0f));
   }
 

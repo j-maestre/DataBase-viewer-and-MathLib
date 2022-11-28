@@ -1,8 +1,8 @@
 #ifndef __OXML_VEC4_H__
 #define __OXML_VEC4_H__ 1
 
+#include <oxml/int.h>
 #include <oxml/Vec3.h>
-#include <oxml/Mat3.h>
 
 namespace oxml {
 
@@ -41,6 +41,7 @@ namespace oxml {
     Vec4 Normalized() const;
     void Scale(const Vec4& scale);
     float SqrMagnitude() const;
+    u32 ToRGBA() const;
 
     static float Distance(const Vec4& a, const Vec4& b);
     static float Dot(const Vec4& a, const Vec4& b);

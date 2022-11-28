@@ -34,7 +34,6 @@ namespace oxml {
     Mat3 Adjoint() const;
     bool GetInverse(Mat3& out) const;
     bool Inverse();
-    inline float Mat2Determinant(Mat2 m);
     Mat3 Transpose() const;
     static Mat3 Translate(const Vec2& position);
     static Mat3 Translate(float x, float y);

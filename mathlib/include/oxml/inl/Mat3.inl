@@ -165,7 +165,7 @@ namespace oxml {
     Mat3 aux(Identity());
     aux.m[0] = cosf(rotation);
     aux.m[1] = sinf(rotation);
-    aux.m[3] = sin(rotation) * -1.0f;
+    aux.m[3] = sinf(rotation) * -1.0f;
     aux.m[4] = cosf(rotation);
   }
 
@@ -215,11 +215,7 @@ namespace oxml {
 
     return result;
   }
-
-  inline float Mat3::Mat2Determinant(Mat2 m){
-    return ((m.m[0]*m.m[3])-(m.m[1]*m.m[2]));
-  } 
-
+  
   inline Mat3 Mat3::Adjoint() const {
     //Primero lo del determinante de quitar filas y columnas
 

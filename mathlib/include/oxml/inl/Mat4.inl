@@ -1,5 +1,8 @@
 #include <math.h>
+
 #include <oxml/assert.h>
+#include <oxml/Mat3.h>
+
 
 namespace oxml {
 
@@ -82,7 +85,7 @@ namespace oxml {
             }
           }
         }
-        result.m[sr * 4 + sc] = powf(-1.0f, sr + sc) * aux.Determinant();
+        result.m[sr * 4 + sc] = powf(-1.0f, (float)(sr + sc)) * aux.Determinant();
       }
     }
     return result;
@@ -170,7 +173,7 @@ namespace oxml {
     identity.m[5] = cosf(radians);
     identity.m[6] = -sinf(radians);
     identity.m[9] = sinf(radians);
-    identity.m[10] = cos(radians);
+    identity.m[10] = cosf(radians);
 
     return identity;
   }
@@ -237,24 +240,24 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::operator+(const Mat4& other) const {
-    Mat4 m;
-    m.m[0] = other.m[0] + this->m[0];
-    m.m[1] = other.m[1] + this->m[1];
-    m.m[2] = other.m[2] + this->m[2];
-    m.m[3] = other.m[3] + this->m[3];
-    m.m[4] = other.m[4] + this->m[4];
-    m.m[5] = other.m[5] + this->m[5];
-    m.m[6] = other.m[6] + this->m[6];
-    m.m[7] = other.m[7] + this->m[7];
-    m.m[8] = other.m[8] + this->m[8];
-    m.m[9] = other.m[9] + this->m[9];
-    m.m[10] = other.m[10] + this->m[10];
-    m.m[11] = other.m[11] + this->m[11];
-    m.m[12] = other.m[12] + this->m[12];
-    m.m[13] = other.m[13] + this->m[13];
-    m.m[14] = other.m[14] + this->m[14];
-    m.m[15] = other.m[15] + this->m[15];
-    return m;
+    Mat4 rslt;
+    rslt.m[0] = other.m[0] + this->m[0];
+    rslt.m[1] = other.m[1] + this->m[1];
+    rslt.m[2] = other.m[2] + this->m[2];
+    rslt.m[3] = other.m[3] + this->m[3];
+    rslt.m[4] = other.m[4] + this->m[4];
+    rslt.m[5] = other.m[5] + this->m[5];
+    rslt.m[6] = other.m[6] + this->m[6];
+    rslt.m[7] = other.m[7] + this->m[7];
+    rslt.m[8] = other.m[8] + this->m[8];
+    rslt.m[9] = other.m[9] + this->m[9];
+    rslt.m[10] = other.m[10] + this->m[10];
+    rslt.m[11] = other.m[11] + this->m[11];
+    rslt.m[12] = other.m[12] + this->m[12];
+    rslt.m[13] = other.m[13] + this->m[13];
+    rslt.m[14] = other.m[14] + this->m[14];
+    rslt.m[15] = other.m[15] + this->m[15];
+    return rslt;
   }
 
   inline Mat4& Mat4::operator+=(const Mat4& other) {
@@ -278,24 +281,24 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::operator+(float value) const {
-    Mat4 m;
-    m.m[0] = value + this->m[0];
-    m.m[1] = value + this->m[1];
-    m.m[2] = value + this->m[2];
-    m.m[3] = value + this->m[3];
-    m.m[4] = value + this->m[4];
-    m.m[5] = value + this->m[5];
-    m.m[6] = value + this->m[6];
-    m.m[7] = value + this->m[7];
-    m.m[8] = value + this->m[8];
-    m.m[9] = value + this->m[9];
-    m.m[10] = value + this->m[10];
-    m.m[11] = value + this->m[11];
-    m.m[12] = value + this->m[12];
-    m.m[13] = value + this->m[13];
-    m.m[14] = value + this->m[14];
-    m.m[15] = value + this->m[15];
-    return m;
+    Mat4 rslt;
+    rslt.m[0] = value + this->m[0];
+    rslt.m[1] = value + this->m[1];
+    rslt.m[2] = value + this->m[2];
+    rslt.m[3] = value + this->m[3];
+    rslt.m[4] = value + this->m[4];
+    rslt.m[5] = value + this->m[5];
+    rslt.m[6] = value + this->m[6];
+    rslt.m[7] = value + this->m[7];
+    rslt.m[8] = value + this->m[8];
+    rslt.m[9] = value + this->m[9];
+    rslt.m[10] = value + this->m[10];
+    rslt.m[11] = value + this->m[11];
+    rslt.m[12] = value + this->m[12];
+    rslt.m[13] = value + this->m[13];
+    rslt.m[14] = value + this->m[14];
+    rslt.m[15] = value + this->m[15];
+    return rslt;
   }
 
   inline Mat4& Mat4::operator+=(float value) {
@@ -319,24 +322,24 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::operator-(const Mat4& other) const {
-    Mat4 m;
-    m.m[0] = this->m[0] - other.m[0];
-    m.m[1] = this->m[1] - other.m[1];
-    m.m[2] = this->m[2] - other.m[2];
-    m.m[3] = this->m[3] - other.m[3];
-    m.m[4] = this->m[4] - other.m[4];
-    m.m[5] = this->m[5] - other.m[5];
-    m.m[6] = this->m[6] - other.m[6];
-    m.m[7] = this->m[7] - other.m[7];
-    m.m[8] = this->m[8] - other.m[8];
-    m.m[9] = this->m[9] - other.m[9];
-    m.m[10] = this->m[10] - other.m[10];
-    m.m[11] = this->m[11] - other.m[11];
-    m.m[12] = this->m[12] - other.m[12];
-    m.m[13] = this->m[13] - other.m[13];
-    m.m[14] = this->m[14] - other.m[14];
-    m.m[15] = this->m[15] - other.m[15];
-    return m;
+    Mat4 rslt;
+    rslt.m[0] = this->m[0] - other.m[0];
+    rslt.m[1] = this->m[1] - other.m[1];
+    rslt.m[2] = this->m[2] - other.m[2];
+    rslt.m[3] = this->m[3] - other.m[3];
+    rslt.m[4] = this->m[4] - other.m[4];
+    rslt.m[5] = this->m[5] - other.m[5];
+    rslt.m[6] = this->m[6] - other.m[6];
+    rslt.m[7] = this->m[7] - other.m[7];
+    rslt.m[8] = this->m[8] - other.m[8];
+    rslt.m[9] = this->m[9] - other.m[9];
+    rslt.m[10] = this->m[10] - other.m[10];
+    rslt.m[11] = this->m[11] - other.m[11];
+    rslt.m[12] = this->m[12] - other.m[12];
+    rslt.m[13] = this->m[13] - other.m[13];
+    rslt.m[14] = this->m[14] - other.m[14];
+    rslt.m[15] = this->m[15] - other.m[15];
+    return rslt;
   }
 
   inline Mat4& Mat4::operator-=(const Mat4& other) {
@@ -360,24 +363,24 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::operator-(float value) const {
-    Mat4 m;
-    m.m[0] = this->m[0] - value;
-    m.m[1] = this->m[1] - value;
-    m.m[2] = this->m[2] - value;
-    m.m[3] = this->m[3] - value;
-    m.m[4] = this->m[4] - value;
-    m.m[5] = this->m[5] - value;
-    m.m[6] = this->m[6] - value;
-    m.m[7] = this->m[7] - value;
-    m.m[8] = this->m[8] - value;
-    m.m[9] = this->m[9] - value;
-    m.m[10] = this->m[10] - value;
-    m.m[11] = this->m[11] - value;
-    m.m[12] = this->m[12] - value;
-    m.m[13] = this->m[13] - value;
-    m.m[14] = this->m[14] - value;
-    m.m[15] = this->m[15] - value;
-    return m;
+    Mat4 rslt;
+    rslt.m[0] = this->m[0] - value;
+    rslt.m[1] = this->m[1] - value;
+    rslt.m[2] = this->m[2] - value;
+    rslt.m[3] = this->m[3] - value;
+    rslt.m[4] = this->m[4] - value;
+    rslt.m[5] = this->m[5] - value;
+    rslt.m[6] = this->m[6] - value;
+    rslt.m[7] = this->m[7] - value;
+    rslt.m[8] = this->m[8] - value;
+    rslt.m[9] = this->m[9] - value;
+    rslt.m[10] = this->m[10] - value;
+    rslt.m[11] = this->m[11] - value;
+    rslt.m[12] = this->m[12] - value;
+    rslt.m[13] = this->m[13] - value;
+    rslt.m[14] = this->m[14] - value;
+    rslt.m[15] = this->m[15] - value;
+    return rslt;
   }
 
   inline Mat4& Mat4::operator-=(float value) {
@@ -421,24 +424,24 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::operator*(float value) const {
-    Mat4 m;
-    m.m[0] = value * this->m[0];
-    m.m[1] = value * this->m[1];
-    m.m[2] = value * this->m[2];
-    m.m[3] = value * this->m[3];
-    m.m[4] = value * this->m[4];
-    m.m[5] = value * this->m[5];
-    m.m[6] = value * this->m[6];
-    m.m[7] = value * this->m[7];
-    m.m[8] = value * this->m[8];
-    m.m[9] = value * this->m[9];
-    m.m[10] = value * this->m[10];
-    m.m[11] = value * this->m[11];
-    m.m[12] = value * this->m[12];
-    m.m[13] = value * this->m[13];
-    m.m[14] = value * this->m[14];
-    m.m[15] = value * this->m[15];
-    return m;
+    Mat4 rslt;
+    rslt.m[0] = value * this->m[0];
+    rslt.m[1] = value * this->m[1];
+    rslt.m[2] = value * this->m[2];
+    rslt.m[3] = value * this->m[3];
+    rslt.m[4] = value * this->m[4];
+    rslt.m[5] = value * this->m[5];
+    rslt.m[6] = value * this->m[6];
+    rslt.m[7] = value * this->m[7];
+    rslt.m[8] = value * this->m[8];
+    rslt.m[9] = value * this->m[9];
+    rslt.m[10] = value * this->m[10];
+    rslt.m[11] = value * this->m[11];
+    rslt.m[12] = value * this->m[12];
+    rslt.m[13] = value * this->m[13];
+    rslt.m[14] = value * this->m[14];
+    rslt.m[15] = value * this->m[15];
+    return rslt;
   }
 
   inline Mat4& Mat4::operator/=(float value) {
@@ -462,24 +465,24 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::operator/(float value) const {
-    Mat4 m;
-    m.m[0] = this->m[0] / value;
-    m.m[1] = this->m[1] / value;
-    m.m[2] = this->m[2] / value;
-    m.m[3] = this->m[3] / value;
-    m.m[4] = this->m[4] / value;
-    m.m[5] = this->m[5] / value;
-    m.m[6] = this->m[6] / value;
-    m.m[7] = this->m[7] / value;
-    m.m[8] = this->m[8] / value;
-    m.m[9] = this->m[9] / value;
-    m.m[10] = this->m[10] / value;
-    m.m[11] = this->m[11] / value;
-    m.m[12] = this->m[12] / value;
-    m.m[13] = this->m[13] / value;
-    m.m[14] = this->m[14] / value;
-    m.m[15] = this->m[15] / value;
-    return m;
+    Mat4 rslt;
+    rslt.m[0] = this->m[0] / value;
+    rslt.m[1] = this->m[1] / value;
+    rslt.m[2] = this->m[2] / value;
+    rslt.m[3] = this->m[3] / value;
+    rslt.m[4] = this->m[4] / value;
+    rslt.m[5] = this->m[5] / value;
+    rslt.m[6] = this->m[6] / value;
+    rslt.m[7] = this->m[7] / value;
+    rslt.m[8] = this->m[8] / value;
+    rslt.m[9] = this->m[9] / value;
+    rslt.m[10] = this->m[10] / value;
+    rslt.m[11] = this->m[11] / value;
+    rslt.m[12] = this->m[12] / value;
+    rslt.m[13] = this->m[13] / value;
+    rslt.m[14] = this->m[14] / value;
+    rslt.m[15] = this->m[15] / value;
+    return rslt;
   }
 
   inline bool Mat4::operator==(const Mat4& other) const {

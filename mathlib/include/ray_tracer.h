@@ -3,6 +3,8 @@
 
 #include <SDL/SDL.h>
 
+#include <oxml/Vec2.h>
+
 #include "texture.h"
 
 class RayTracer {
@@ -22,6 +24,7 @@ class RayTracer {
  protected:
 
   void onResize();
+  Uint32 perPixel(const oxml::Vec2& coord);
 
   Uint32 *pixels_;
   Texture texture_;  

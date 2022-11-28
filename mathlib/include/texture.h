@@ -14,7 +14,7 @@ class Texture {
 
   bool alloc(int width, int height, SDL_Renderer *rdr);
   bool alloc(int width, int height, SDL_Renderer *rdr, Uint32 *pixels);
-  bool onResize(int width, int height);
+  bool resize(int width, int height);
   bool update(Uint32 *pixels);
   void draw();
   void free();

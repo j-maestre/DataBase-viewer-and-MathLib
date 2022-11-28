@@ -30,7 +30,7 @@ bool Texture::alloc(int width, int height, SDL_Renderer *rdr, Uint32 *pixels) {
   return false;
 }
 
-bool Texture::onResize(int width, int height) {
+bool Texture::resize(int width, int height) {
   if (width > 0 && height > 0) {
     if (texture_ != nullptr) {
       if (width_ != width || height_ != height) {

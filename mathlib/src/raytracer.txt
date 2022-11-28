@@ -49,13 +49,16 @@ Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
   int mouseY;
   SDL_GetMouseState(&mouseX, &mouseY);
   //printf("x[%d] x[%d]\n",mouseX,mouseY);
+  //Centro - donde estoy
   oxml::Vec2 position(mouseX,mouseY);
-  position.Normalize();
-  //oxml::Vec3 light_Dir(-1.0f, -1.0f, -0.9f);
-  oxml::Vec3 light_Dir(-position.x, -position.y, -0.5f);
+  oxml::Vec2 centro(width_/2.0f,height_/2.0f);
+  oxml::Vec2 direction = centro-position;
+  direction.Normalize();
+  //oxml::Vec3 light_Dir(-1.0f, -1.0f, -1.0f);
+  oxml::Vec3 light_Dir(direction.x, -direction.y, -0.5f);
   //SDL get mouse status
   light_Dir.Normalize();
-  oxml::Vec4 sphereColor(1.5f, 1.5f, 0.0f,1.0f);
+  oxml::Vec4 sphereColor(1.0f, 0.0f, 1.0f,1.0f);
   oxml::Vec3 sphereOrigin(oxml::Vec3::zero);
   float radius = 0.5f;
 
@@ -88,7 +91,7 @@ Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
 
   if(discriminant >= 0.0f){ //tiene solucion (esta colisionando)
     //Averiguar t0
-    float t0 = (-b -sqrtf(discriminant) / (2.0f * a)); //distancia entre la camara y el hit point (falta normalizar pero no hace falta)
+    float t0 = (-b - sqrtf(discriminant)) / (2.0f * a); //distancia entre la camara y el hit point (falta normalizar pero no hace falta)
     //float t1 = (-b +sqrtf(discriminant) / (2.0f * a));
 
     //Averiguar el hit point
@@ -143,6 +146,7 @@ Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
 }
 
 void RayTracer::update() {
+  //Por cada pixel en pantalla, llamamos a la funcion perpixel para saber de que color pintarlo
   if (pixels_ != nullptr) {
     onResize();
     //TODO: pixel treatment

@@ -2,6 +2,7 @@
 
 #include <oxml/assert.h>
 #include <oxml/Mat3.h>
+#include <oxml/Vec3.h>
 
 
 namespace oxml {
@@ -230,13 +231,47 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::Perspective(float fov, float aspect, float near, float far) {
+    Mat4 prespective(0.0f);
+    float fFovRad = 1.0f/tanf(fov*0.5f);
+    prespective.m[0] = aspect * fFovRad;
+    prespective.m[5] = fFovRad;
+    prespective.m[10] = far / (far-near);
+    prespective.m[11] = 1.0f;
+    prespective.m[14] = (-far * near) / (far - near);
+
+    return prespective;
+  }
+
+  inline Mat4 Mat4::Ortho(float right, float left, float top, float valuebottom, float near, float far) {
 
     return Mat4();
   }
 
-  inline Mat4 Mat4::Ortho(float right, float left, float top, float valueottom, float near, float far) {
+  inline Mat4 Mat4::LookAt(const Vec3& from, const Vec3& to, const Vec3& up){
+    Vec3 forward = from - to;
+    forward.Normalize();
+    Vec3 right = Vec3::Cross(up, forward);
+    right.Normalize();
+    Vec3 newup = Vec3::Cross(forward, right);
 
-    return Mat4();
+    Mat4 lokAt(0.0f);
+    lokAt.m[0] = right.x;
+    lokAt.m[1] = right.y;
+    lokAt.m[2] = right.z;
+    
+    lokAt.m[4] = newup.x;
+    lokAt.m[5] = newup.y;
+    lokAt.m[6] = newup.z;    
+    
+    lokAt.m[8] = forward.x;
+    lokAt.m[9] = forward.y;
+    lokAt.m[10] = forward.z;
+
+    lokAt.m[12] = from.x;
+    lokAt.m[13] = from.y;
+    lokAt.m[14] = from.z;
+
+    return lokAt;
   }
 
   inline Mat4 Mat4::operator+(const Mat4& other) const {

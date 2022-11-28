@@ -45,7 +45,7 @@ namespace oxml {
     static Mat4 Perspective(float fov, float aspect,
       float near, float far);
 
-    static Mat4 Ortho(float right, float left, float top, float valueottom,
+    static Mat4 Ortho(float right, float left, float top, float valuebottom,
       float near, float far);
 
     static Mat4 LookAt(const Vec3& from, const Vec3& to, const Vec3& up);

@@ -29,7 +29,7 @@ bool RayTracer::init(SDL_Renderer *renderer, SDL_Window *window) {
   return false;
 }
 
-void RayTracer::onResize() {
+void RayTracer::onResize(Camera& camera) {
   int w, h;
   SDL_GetWindowSize(window_, &w, &h);
   if (width_ != w || height_ != h) {
@@ -39,11 +39,10 @@ void RayTracer::onResize() {
     pixels_ = new Uint32[width_ * height_];
     texture_.resize(width_, height_);
   }
+  camera.resize(w, h);
 }
 
-Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
-  oxml::Vec3 ray_origin(0.0f, 0.0f, -2.0f);
-  oxml::Vec3 ray_direction(coord, -1.0f);
+Uint32 RayTracer::traceRay(const Ray& ray) {
 
   oxml::Vec3 lightDir(-1.0f, -1.0f, -1.0f);
   lightDir.Normalize();
@@ -52,16 +51,16 @@ Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
   oxml::Vec3 sphereOrigin(oxml::Vec3::zero);
   float radius = 0.5f;
 
-  float a = ray_direction.SqrMagnitude();
-  float b = 2.0f * oxml::Vec3::Dot(ray_origin, ray_direction);
-  float c = ray_origin.SqrMagnitude() - (radius * radius);
+  float a = ray.direction.SqrMagnitude();
+  float b = 2.0f * oxml::Vec3::Dot(ray.origin, ray.direction);
+  float c = ray.origin.SqrMagnitude() - (radius * radius);
 
   float discriminant = b * b - 4.0f * a * c;
 
   if (discriminant >= 0) {
     float t0 = (-b - sqrtf(discriminant)) / (2.0f * a);
     //float t1 = (-b + sqrtf(discriminant)) / (2.0f * a);
-    oxml::Vec3 hit_point = ray_origin + ray_direction * t0;
+    oxml::Vec3 hit_point = ray.origin + ray.direction * t0;
     oxml::Vec3 normal = hit_point - sphereOrigin;
     normal.Normalize();
     float light = fmaxf(oxml::Vec3::Dot(normal, -lightDir), 0.0f);
@@ -72,22 +71,25 @@ Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
   return 0xff000000;
 }
 
-void RayTracer::update() {
+void RayTracer::update(Camera& camera) {
   if (pixels_ != nullptr) {
-    onResize();
-    //TODO: pixel treatment
+    camera.update();
+    onResize(camera);
+    Ray ray;
+    ray.origin = camera.position_;
+
     for (int y = 0; y < height_; y++) {
       for (int x = 0; x < width_; x++) {
-        oxml::Vec2 coord(x / (float)width_, y / (float)height_);
-        coord = (coord * 2.0f) - 1.0f;
-        pixels_[((width_-1) - x) + y * width_] = perPixel(coord);
+        ray.direction = camera.ray_directions()[x + y * width_];
+        pixels_[((width_-1) - x) + y * width_] = traceRay(ray);
       }
     }
     texture_.update(pixels_);
   }
 }
 
-void RayTracer::draw() {
+void RayTracer::draw(Camera& camera) {
+  update(camera);
   texture_.draw();
 }
 

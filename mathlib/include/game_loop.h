@@ -27,6 +27,7 @@ class GameLoop final {
   SDL_Window *window_;
   
   RayTracer rt_;
+  Camera camera_;
 
 };
 

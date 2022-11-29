@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 
 #include "ray_tracer.h"
+#include "performance_window.h"
 
 class GameLoop final {
  public:
@@ -28,6 +29,7 @@ class GameLoop final {
   
   RayTracer rt_;
   Camera camera_;
+  PerformanceWindow pw_;
 
 };
 

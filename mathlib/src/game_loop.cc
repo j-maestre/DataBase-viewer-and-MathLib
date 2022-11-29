@@ -34,10 +34,8 @@ void GameLoop::run() {
   ImGui_ImplSDL2_NewFrame(window_);
   ImGui::NewFrame();
 
-
+  pw_.draw();
   rt_.draw(camera_);
-
-  ImGui::ShowDemoWindow();
 
 
   ImGui::Render();

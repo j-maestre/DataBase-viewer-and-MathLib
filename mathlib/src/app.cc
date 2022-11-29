@@ -1,4 +1,7 @@
+#include <stdio.h>
+
 #include "app.h"
+#include "timer.h"
 
 App::App() {
   window_ = nullptr;
@@ -26,8 +29,9 @@ void App::run() {
   static bool runing = true;
   if (window_ != nullptr) {
     loop_->init(renderer_, window_);
+    SDL_Event event;
     while (runing) {
-      SDL_Event event;
+      Time::last_time_ = (float) SDL_GetTicks64();
       while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT)
           runing = false;
@@ -35,6 +39,9 @@ void App::run() {
           runing = false;
       }
       loop_->run();
+      Time::current_time_ = (float) SDL_GetTicks64();
+      Time::delta_time_ = (Time::current_time_ - Time::last_time_);
+      Time::fps_ = (1.0f / Time::delta_time_) * 1000.0f;
     }
     loop_->end();
   }

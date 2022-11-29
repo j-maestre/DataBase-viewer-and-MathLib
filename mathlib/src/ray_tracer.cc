@@ -1,9 +1,11 @@
 #include <math.h>
+#include <stdio.h>
 
 #include <oxml/Vec3.h>
 #include <oxml/Vec4.h>
 
 #include "ray_tracer.h"
+#include "timer.h"
 
 RayTracer::RayTracer() {
   pixels_ = nullptr;
@@ -77,10 +79,11 @@ void RayTracer::update(Camera& camera) {
     onResize(camera);
     Ray ray;
     ray.origin = camera.position_;
-
+    const oxml::Vec3 *ray_directions = camera.ray_directions();
+    printf("%f\n", Time::fps_);
     for (int y = 0; y < height_; y++) {
       for (int x = 0; x < width_; x++) {
-        ray.direction = camera.ray_directions()[x + y * width_];
+        ray.direction = ray_directions[x + y * width_];
         pixels_[((width_-1) - x) + y * width_] = traceRay(ray);
       }
     }

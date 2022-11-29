@@ -1,6 +1,7 @@
-#include "camera.h"
 #include <stdio.h>
 
+#include "camera.h"
+#include "timer.h"
 
 Camera::Camera(float fov, float near, float far){
   fov_ = fov;
@@ -58,6 +59,8 @@ void Camera::recalculeRayDirections() {
     }
     ray_directions_ = new oxml::Vec3[width_ * height_];
     oxml::Vec2 coord;
+    oxml::Vec4 target;
+    oxml::Vec4 camera_coords;
     for (int y = 0; y < height_; y++) {
       for (int x = 0; x < width_; x++) {
         coord.x = ((float)x / (float)width_);
@@ -65,10 +68,11 @@ void Camera::recalculeRayDirections() {
         coord = ((coord * 2.0f) - 1.0f);
 
         //from negative one to one space back to world space
-        oxml::Vec4 target = inverse_projection_ * oxml::Vec4(coord.x, coord.y, 1.0f, 1.0f);
-        oxml::Vec4 camera_coords = (inverse_view_ * oxml::Vec4((oxml::Vec3(target.x, target.y, target.z) / target.w), 0.0f).Normalized());
-        oxml::Vec3 ray_direction = oxml::Vec3(camera_coords.x, camera_coords.y, camera_coords.z);
-        ray_directions_[x + y * width_] = ray_direction;   
+        target = inverse_projection_ * oxml::Vec4(coord.x, coord.y, 1.0f, 1.0f);
+        camera_coords = (inverse_view_ * oxml::Vec4((oxml::Vec3(target.x, target.y, target.z) / target.w), 0.0f).Normalized());
+        ray_directions_[x + y * width_].x = camera_coords.x;   
+        ray_directions_[x + y * width_].y = camera_coords.y;   
+        ray_directions_[x + y * width_].z = camera_coords.z;   
       }
     }
   }

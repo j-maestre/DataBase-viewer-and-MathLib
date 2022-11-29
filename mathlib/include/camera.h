@@ -2,6 +2,7 @@
 #define __CAMERA_H__ 1
 
 #include <SDL/SDL.h>
+
 #include <oxml/Vec3.h>
 #include <oxml/Vec2.h>
 #include <oxml/Mat4.h>

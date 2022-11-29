@@ -43,6 +43,7 @@ void RayTracer::onResize() {
 }
 
 Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
+
   oxml::Vec3 ray_origin(0.0f, 0.0f, -2.0f);
   oxml::Vec3 ray_direction(coord, -1.0f);
   int mouseX;
@@ -55,7 +56,7 @@ Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
   oxml::Vec2 direction = centro-position;
   direction.Normalize();
   //oxml::Vec3 light_Dir(-1.0f, -1.0f, -1.0f);
-  oxml::Vec3 light_Dir(direction.x, -direction.y, -0.5f);
+  oxml::Vec3 light_Dir(direction.x, -direction.y, -2.0f);
   //SDL get mouse status
   light_Dir.Normalize();
   oxml::Vec4 sphereColor(1.0f, 0.0f, 1.0f,1.0f);
@@ -85,9 +86,6 @@ Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
   float b = 2.0f * oxml::Vec3::Dot(ray_origin, ray_direction);
   float c = ray_origin.SqrMagnitude() - (radius * radius);
   float discriminant = (b*b) - (4.0f * a * c); //discrmininart = b *b -4.0f * a * c
-
-
-
 
   if(discriminant >= 0.0f){ //tiene solucion (esta colisionando)
     //Averiguar t0
@@ -142,7 +140,7 @@ Uint32 RayTracer::perPixel(const oxml::Vec2& coord) {
     return sphereColor.ToRGBA();
   }
   return 0xff000000;*/
-  return 0;
+  //return 0;
 }
 
 void RayTracer::update() {

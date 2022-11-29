@@ -1,5 +1,9 @@
 #include <stdio.h>
 
+#include <ImGui/imgui.h>
+#include <ImGui/imgui_impl_sdl.h>
+#include <ImGui/imgui_impl_sdlrenderer.h>
+
 #include <oxml/Mathf.h>
 
 #include "game_loop.h"
@@ -26,9 +30,18 @@ void GameLoop::init(SDL_Renderer *rdr, SDL_Window *wnd) {
 
 void GameLoop::run() {
   SDL_RenderClear(renderer_);
+  ImGui_ImplSDLRenderer_NewFrame();
+  ImGui_ImplSDL2_NewFrame(window_);
+  ImGui::NewFrame();
+
 
   rt_.draw(camera_);
 
+  ImGui::ShowDemoWindow();
+
+
+  ImGui::Render();
+  ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
   SDL_RenderPresent(renderer_);
 }
 

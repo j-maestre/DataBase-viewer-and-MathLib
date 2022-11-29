@@ -1,5 +1,9 @@
 #include <stdio.h>
 
+#include <ImGui/imgui.h>
+#include <ImGui/imgui_impl_sdl.h>
+#include <ImGui/imgui_impl_sdlrenderer.h>
+
 #include "app.h"
 #include "timer.h"
 
@@ -22,7 +26,9 @@ void App::init(const char *window_title, int width, int height) {
   window_ = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);;
   loop_ = &GameLoop::Instance();
-  //ImgGi::
+  ImGui::CreateContext();
+  ImGui_ImplSDL2_InitForSDLRenderer(window_, renderer_);
+  ImGui_ImplSDLRenderer_Init(renderer_);
 }
 
 void App::run() {
@@ -33,6 +39,7 @@ void App::run() {
     while (runing) {
       Time::last_time_ = (float) SDL_GetTicks64();
       while (SDL_PollEvent(&event)) {
+        ImGui_ImplSDL2_ProcessEvent(&event);
         if (event.type == SDL_QUIT)
           runing = false;
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window_))
@@ -48,6 +55,9 @@ void App::run() {
 }
 
 void App::end() {
+  ImGui_ImplSDLRenderer_Shutdown();
+  ImGui_ImplSDL2_Shutdown();
+  ImGui::DestroyContext();
   if (renderer_ != nullptr) {
     SDL_DestroyRenderer(renderer_);
   }

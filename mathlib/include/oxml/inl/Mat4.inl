@@ -270,7 +270,7 @@ namespace oxml {
     lokAt.m[12] = from.x;
     lokAt.m[13] = from.y;
     lokAt.m[14] = from.z;
-
+    lokAt.m[15] = 1.0f;
     return lokAt;
   }
 
@@ -555,6 +555,15 @@ namespace oxml {
     this->m[14] = other.m[14];
     this->m[15] = other.m[15];
     return *this;
+  }
+
+  inline Vec4 Mat4::operator*(const Vec4& vector) const {
+    Vec4 rslt;
+    rslt.x = (vector.x * m[0]) + (vector.y * m[1]) + (vector.z * m[2]) + (vector.w * m[3]);
+    rslt.y = (vector.x * m[4]) + (vector.y * m[5]) + (vector.z * m[6]) + (vector.w * m[7]);
+    rslt.z = (vector.x * m[8]) + (vector.y * m[9]) + (vector.z * m[10]) + (vector.w * m[11]);
+    rslt.w = (vector.x * m[12]) + (vector.y * m[13]) + (vector.z * m[14]) + (vector.w * m[15]);
+    return rslt;
   }
 
 }

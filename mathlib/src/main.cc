@@ -5,7 +5,7 @@ int main( int, char** )
 {
   App& app = App::Instance();
 
-  app.init("Hola como estas", 920, 920);
+  app.init("Ray Tracing", 520, 520);
   app.run();
   app.end();
 

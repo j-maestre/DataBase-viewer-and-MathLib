@@ -6,6 +6,8 @@
 #include <oxml/Vec2.h>
 
 #include "texture.h"
+#include "camera.h"
+#include "ray.h"
 
 class RayTracer {
  public:
@@ -17,14 +19,14 @@ class RayTracer {
   RayTracer& operator=(const RayTracer& other) = delete;
 
   bool init(SDL_Renderer *renderer, SDL_Window *window);
-  void update();
-  void draw();
+  void draw(Camera& camera);
   void end();
 
  protected:
 
-  void onResize();
-  Uint32 perPixel(const oxml::Vec2& coord);
+  void update(Camera& camera);
+  void onResize(Camera& camera);
+  Uint32 traceRay(const Ray& ray);
 
   Uint32 *pixels_;
   Texture texture_;  

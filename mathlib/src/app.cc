@@ -19,6 +19,7 @@ void App::init(const char *window_title, int width, int height) {
   window_ = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);;
   loop_ = &GameLoop::Instance();
+  //ImgGi::
 }
 
 void App::run() {

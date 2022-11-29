@@ -63,6 +63,7 @@ namespace oxml {
     Mat4& operator-=(float value);
     Mat4& operator*=(float value);
     Mat4 operator*(float value) const;
+    Vec4 operator*(const Vec4& vector) const;
     Mat4& operator/=(float value);
     Mat4 operator/(float value) const;
     bool operator==(const Mat4& other) const ;

@@ -1,7 +1,11 @@
 #include <stdio.h>
 
+#include <oxml/Mathf.h>
+
 #include "camera.h"
 #include "timer.h"
+
+bool Camera::mouse_clicked = false;
 
 Camera::Camera(float fov, float near, float far){
   fov_ = fov;
@@ -15,6 +19,7 @@ Camera::Camera(float fov, float near, float far){
   width_ = 0;
   height_ = 0;
   speed_ = 0.5f;
+  rotation_speed_ = 0.05f;
   mousePosition_.x = 0.0f;
   mousePosition_.y = 0.0f;
   lastMousePosition_.x = 0.0f;
@@ -38,6 +43,7 @@ void Camera::update() {
   movement();
   if(moved_){
     recalculateView();
+    recalculeRayDirections();
     moved_ = false;
   }
 }
@@ -128,11 +134,32 @@ void Camera::movement(){
     moved_ = true;
   }
 
+  printf("x->%f y->%f z->%f\n",forward_.x,forward_.y,forward_.z);
+
+    
+
 
   //Rotation mouse
-  if(delta_ != 0.0f){
-    
-    
+  
+  if(delta_ != 0.0f && mouse_clicked){
+
+    //printf("CLICK & ROTATE\n");
+    float pitchDelta = (delta_.y * rotation_speed_) * oxml::Mathf::Deg2Rad;
+    float yawDelta = (delta_.x * rotation_speed_) * oxml::Mathf::Deg2Rad;
+
+    oxml::Mat4 rotation = oxml::Mat4::Identity();
+
+    rotation = rotation.Multiply(oxml::Mat4::RotateX(pitchDelta));
+    rotation = rotation.Multiply(oxml::Mat4::RotateY(yawDelta)) ;
+
+    oxml::Vec4 rotation_direction(forward_.x,forward_.y,forward_.z,0.0f);
+    rotation_direction = rotation * rotation_direction;
+
+    forward_.x = rotation_direction.x; 
+    forward_.y = rotation_direction.y; 
+    forward_.z = rotation_direction.z; 
+
+    moved_ = true;
   }
 
 

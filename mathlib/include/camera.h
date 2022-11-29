@@ -18,9 +18,11 @@ class Camera {
 
   const oxml::Vec3* ray_directions() const;
 
-  oxml::Vec3 position_;
   const oxml::Vec3 GetPosition() const;
   const oxml::Vec3 GetForward() const;
+
+  oxml::Vec3 position_;
+  static bool mouse_clicked;
 
  protected:
  
@@ -41,6 +43,7 @@ class Camera {
   int width_;
   int height_;
   float speed_;
+  float rotation_speed_;
 
   oxml::Vec2 delta_;
   oxml::Vec2 mousePosition_;
@@ -52,6 +55,7 @@ class Camera {
   void recalculateView();
   void movement();
   bool moved_;
+
 
 
 

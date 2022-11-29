@@ -6,6 +6,7 @@
 
 #include "app.h"
 #include "timer.h"
+#include "camera.h"
 
 App::App() {
   window_ = nullptr;
@@ -44,6 +45,14 @@ void App::run() {
           runing = false;
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window_))
           runing = false;
+
+          if(event.type == SDL_MOUSEBUTTONDOWN){
+            printf("Click\n");
+            Camera::mouse_clicked = true;
+          }
+          if(event.type == SDL_MOUSEBUTTONUP){
+            Camera::mouse_clicked = false;
+          }
       }
       loop_->run();
       Time::current_time_ = (float) SDL_GetTicks64();

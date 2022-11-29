@@ -83,7 +83,7 @@ void RayTracer::update(Camera& camera) {
     Ray ray;
     ray.origin = camera.position_;
     const oxml::Vec3 *ray_directions = camera.ray_directions();
-    printf("%ffps:%fms\n", Time::fps_, Time::delta_time_);
+    //printf("%ffps:%fms\n", Time::fps_, Time::delta_time_);
     for (int y = 0; y < height_; y++) {
       for (int x = 0; x < width_; x++) {
         ray.direction = ray_directions[x + y * width_];

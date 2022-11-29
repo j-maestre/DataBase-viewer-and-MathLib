@@ -71,24 +71,152 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::Adjoint() const {
+    Mat3 aux_m;
     Mat4 result;
-    Mat3 aux;
-    int aux_index;
-    for (int sr = 0; sr < 4; sr++) {
-      for (int sc = 0; sc < 4; sc++) {
-        aux_index = 0;
-        for (int dr = 0; dr < 4; dr++) {
-          for (int dc = 0; dc < 4; dc++) {
-            if (sc != dc && sr != dr) {
-              oxml_assert(aux_index < 9, "Indes out of range");
-              aux.m[aux_index] = m[dr * 4 + dc];
-              aux_index++;
-            }
-          }
-        }
-        result.m[sr * 4 + sc] = powf(-1.0f, (float)(sr + sc)) * aux.Determinant();
-      }
-    }
+    //Adjoint matrix is the matrix formed by cofactors´s determinant
+    //First Line
+    aux_m.m[0] = m[5];
+    aux_m.m[1] = m[6];
+    aux_m.m[2] = m[7];
+
+    aux_m.m[3] = m[9];
+    aux_m.m[4] = m[10];
+    aux_m.m[5] = m[11];
+
+    aux_m.m[6] = m[13];
+    aux_m.m[7] = m[14];
+    aux_m.m[8] = m[15];
+
+    result.m[0] = aux_m.Determinant();
+
+    aux_m.m[0] = m[4];
+    aux_m.m[3] = m[8];
+    aux_m.m[6] = m[12];
+
+    result.m[1] = aux_m.Determinant();
+
+    aux_m.m[1] = m[5];
+    aux_m.m[4] = m[9];
+    aux_m.m[7] = m[13];
+
+    result.m[2] = aux_m.Determinant();
+
+    aux_m.m[2] = m[6];
+    aux_m.m[5] = m[10];
+    aux_m.m[8] = m[14];
+
+    result.m[3] = aux_m.Determinant();
+    //Second Line
+    aux_m.m[0] = m[1];
+    aux_m.m[1] = m[2];
+    aux_m.m[2] = m[3];
+
+    aux_m.m[3] = m[9];
+    aux_m.m[4] = m[10];
+    aux_m.m[5] = m[11];
+
+    aux_m.m[6] = m[13];
+    aux_m.m[7] = m[14];
+    aux_m.m[8] = m[15];
+
+    result.m[4] = aux_m.Determinant();
+
+    aux_m.m[0] = m[0];
+    aux_m.m[3] = m[8];
+    aux_m.m[6] = m[12];
+
+    result.m[5] = aux_m.Determinant();
+
+    aux_m.m[1] = m[1];
+    aux_m.m[4] = m[9];
+    aux_m.m[7] = m[13];
+
+    result.m[6] = aux_m.Determinant();
+
+    aux_m.m[2] = m[2];
+    aux_m.m[5] = m[10];
+    aux_m.m[8] = m[14];
+
+    result.m[7] = aux_m.Determinant();
+       
+    // SIGUE DESPUES
+//Third Line
+    aux_m.m[0] = m[1];
+    aux_m.m[1] = m[2];
+    aux_m.m[2] = m[3];
+
+    aux_m.m[3] = m[5];
+    aux_m.m[4] = m[6];
+    aux_m.m[5] = m[7];
+
+    aux_m.m[6] = m[13];
+    aux_m.m[7] = m[14];
+    aux_m.m[8] = m[15];
+
+    result.m[8] = aux_m.Determinant();
+
+    aux_m.m[0] = m[0];
+    aux_m.m[3] = m[4];
+    aux_m.m[6] = m[12];
+
+    result.m[9] = aux_m.Determinant();
+
+    aux_m.m[1] = m[1];
+    aux_m.m[4] = m[5];
+    aux_m.m[7] = m[13];
+
+    result.m[10] = aux_m.Determinant();
+
+    aux_m.m[2] = m[2];
+    aux_m.m[5] = m[6];
+    aux_m.m[8] = m[14];
+
+    result.m[11] = aux_m.Determinant();
+    //Fourth Line
+    aux_m.m[0] = m[1];
+    aux_m.m[1] = m[2];
+    aux_m.m[2] = m[3];
+
+    aux_m.m[3] = m[5];
+    aux_m.m[4] = m[6];
+    aux_m.m[5] = m[7];
+
+    aux_m.m[6] = m[9];
+    aux_m.m[7] = m[10];
+    aux_m.m[8] = m[11];
+
+    result.m[12] = aux_m.Determinant();
+
+    aux_m.m[0] = m[0];
+    aux_m.m[3] = m[4];
+    aux_m.m[6] = m[8];
+
+    result.m[13] = aux_m.Determinant();
+
+    aux_m.m[1] = m[1];
+    aux_m.m[4] = m[5];
+    aux_m.m[7] = m[9];
+
+    result.m[14] = aux_m.Determinant();
+
+    aux_m.m[2] = m[2];
+    aux_m.m[5] = m[6];
+    aux_m.m[8] = m[10];
+
+    result.m[15] = aux_m.Determinant();
+
+
+    result.m[1] = -result.m[1];
+    result.m[3] = -result.m[3];
+    result.m[4] = -result.m[4];
+    result.m[6] = -result.m[6];
+    result.m[9] = -result.m[9];
+    result.m[11] = -result.m[11];
+    result.m[12] = -result.m[12];
+    result.m[14] = -result.m[14];
+
+    result = result.Transpose();
+
     return result;
   }
 
@@ -102,7 +230,7 @@ namespace oxml {
       return false;
     }
 
-    (*this) = ((this->Adjoint().Transpose()) / det);
+    (*this) = ((this->Adjoint()) / det);
 
     return true;
   }

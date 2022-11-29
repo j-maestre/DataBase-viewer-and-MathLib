@@ -1023,21 +1023,21 @@ namespace UnitTest {
 		test = another_test.Adjoint();
 
 		Assert::AreEqual(340.0f, test.m[0], 0.00001f, "Adjoint() Failed 0", __FILE__, __LINE__);
-		Assert::AreEqual(286.0f, test.m[1], 0.00001f, "Adjoint() Failed 1", __FILE__, __LINE__);
-		Assert::AreEqual(-64.0f, test.m[2], 0.00001f, "Adjoint() Failed 2", __FILE__, __LINE__);
-		Assert::AreEqual(290.0f, test.m[3], 0.00001f, "Adjoint() Failed 3", __FILE__, __LINE__);
-		Assert::AreEqual(-6.0f, test.m[4], 0.00001f, "Adjoint() Failed 4", __FILE__, __LINE__);
-		Assert::AreEqual(60.0f, test.m[5], 0.00001f, "Adjoint() Failed 5", __FILE__, __LINE__);
-		Assert::AreEqual(186.0f, test.m[6], 0.00001f, "Adjoint() Failed 6", __FILE__, __LINE__);
-		Assert::AreEqual(12.0f, test.m[7], 0.00001f, "Adjoint() Failed 7", __FILE__, __LINE__);
-		Assert::AreEqual(264.0f, test.m[8], 0.00001f, "Adjoint() Failed 8", __FILE__, __LINE__);
-		Assert::AreEqual(270.0f, test.m[9], 0.00001f, "Adjoint() Failed 9", __FILE__, __LINE__);
+		Assert::AreEqual(-6.0f,  test.m[1], 0.00001f, "Adjoint() Failed 4", __FILE__, __LINE__);
+		Assert::AreEqual(264.0f, test.m[2], 0.00001f, "Adjoint() Failed 8", __FILE__, __LINE__);
+		Assert::AreEqual(190.0f, test.m[3], 0.00001f, "Adjoint() Failed 12", __FILE__, __LINE__);
+		Assert::AreEqual(286.0f, test.m[4], 0.00001f, "Adjoint() Failed 1", __FILE__, __LINE__);
+		Assert::AreEqual(60.0f,  test.m[5], 0.00001f, "Adjoint() Failed 5", __FILE__, __LINE__);
+		Assert::AreEqual(270.0f, test.m[6], 0.00001f, "Adjoint() Failed 9", __FILE__, __LINE__);
+		Assert::AreEqual(40.0f,  test.m[7], 0.00001f, "Adjoint() Failed 13", __FILE__, __LINE__);
+		Assert::AreEqual(-64.0f, test.m[8], 0.00001f, "Adjoint() Failed 2", __FILE__, __LINE__);
+		Assert::AreEqual(186.0f, test.m[9], 0.00001f, "Adjoint() Failed 6", __FILE__, __LINE__);
 		Assert::AreEqual(-36.0f, test.m[10], 0.00001f, "Adjoint() Failed 10", __FILE__, __LINE__);
-		Assert::AreEqual(54.0f, test.m[11], 0.00001f, "Adjoint() Failed 11", __FILE__, __LINE__);
-		Assert::AreEqual(190.0f, test.m[12], 0.00001f, "Adjoint() Failed 12", __FILE__, __LINE__);
-		Assert::AreEqual(40.0f, test.m[13], 0.00001f, "Adjoint() Failed 13", __FILE__, __LINE__);
-		Assert::AreEqual(-70.0f, test.m[14], 0.00001f, "Adjoint() Failed 14", __FILE__, __LINE__);
-		Assert::AreEqual(8.0f, test.m[15], 0.00001f, "Adjoint() Failed 15", __FILE__, __LINE__);
+		Assert::AreEqual(-70.0f, test.m[11], 0.00001f, "Adjoint() Failed 14", __FILE__, __LINE__);
+		Assert::AreEqual(290.0f, test.m[12], 0.00001f, "Adjoint() Failed 3", __FILE__, __LINE__);
+		Assert::AreEqual(12.0f,  test.m[13], 0.00001f, "Adjoint() Failed 7", __FILE__, __LINE__);	
+		Assert::AreEqual(54.0f,  test.m[14], 0.00001f, "Adjoint() Failed 11", __FILE__, __LINE__);
+		Assert::AreEqual(8.0f,   test.m[15], 0.00001f, "Adjoint() Failed 15", __FILE__, __LINE__);
 
 		// Check Transpose
 		float trans_temp[16]{ 0.0f, -3.0f,  0.0f, 0.0f,
@@ -1058,34 +1058,34 @@ namespace UnitTest {
 
 		// Check Inverse
 		float inv_emp[16]{ 2.0f,  0.0f,  2.0f, 4.0f,
-							 6.0f,  0.0f,  0.0f, 1.0f,
-							 0.0f,  0.0f,  2.0f, 4.0f,
-							 0.0f,  3.0f,  0.0f, 0.0f };
+						   6.0f,  0.0f,  0.0f, 1.0f,
+						   0.0f,  0.0f,  2.0f, 4.0f,
+						   0.0f,  3.0f,  0.0f, 0.0f };
 
 		float inv_tmp[16]{ 0.5f, -0.0f,  -0.5f, 0.0f,
-							 0.0f,   0.0f,  0.0f, 0.333333f,
-							 6.0f,  -2.0f, -5.5f, 0.0f,
-							 -3.0f,  1.0f,  3.0f, 0.0f };
+						   0.0f,   0.0f,  0.0f, 0.333333f,
+						   6.0f,  -2.0f, -5.5f, 0.0f,
+						   -3.0f,  1.0f,  3.0f, 0.0f };
 
 		another_test = oxml::Mat4(inv_tmp);
 		test = oxml::Mat4(inv_emp);
 		oxml::Mat4 more = test.Adjoint().Transpose();
-		Assert::AreEqual(-6, more.m[0], 0.00001f, "Adjoint2 Failed 0 ", __FILE__, __LINE__);
-		Assert::AreEqual(0, more.m[1], 0.00001f, "Adjoint2  Failed 1 ", __FILE__, __LINE__);
-		Assert::AreEqual(6, more.m[2], 0.00001f, "Adjoint2  Failed 2 ", __FILE__, __LINE__);
-		Assert::AreEqual(0, more.m[3], 0.00001f, "Adjoint2  Failed 3 ", __FILE__, __LINE__);
-		Assert::AreEqual(0, more.m[4], 0.00001f, "Adjoint2  Failed 4", __FILE__, __LINE__);
-		Assert::AreEqual(0, more.m[5], 0.00001f, "Adjoint2  Failed 5", __FILE__, __LINE__);
-		Assert::AreEqual(0, more.m[6], 0.00001f, "Adjoint2  Failed 6", __FILE__, __LINE__);
-		Assert::AreEqual(-4, more.m[7], 0.00001f, "Adjoint2  Failed 7", __FILE__, __LINE__);
-		Assert::AreEqual(-72, more.m[8], 0.00001f, "Adjoint2  Failed 8", __FILE__, __LINE__);
-		Assert::AreEqual(24, more.m[9], 0.00001f, "Adjoint2  Failed 9", __FILE__, __LINE__);
-		Assert::AreEqual(66, more.m[10], 0.00001f, "Adjoint2  Failed 10", __FILE__, __LINE__);
-		Assert::AreEqual(0, more.m[11], 0.00001f, "Adjoint2  Failed 11", __FILE__, __LINE__);
-		Assert::AreEqual(36, more.m[12], 0.00001f, "Adjoint2  Failed 12", __FILE__, __LINE__);
-		Assert::AreEqual(-12, more.m[13], 0.00001f, "Adjoint2  Failed 13", __FILE__, __LINE__);
-		Assert::AreEqual(-36, more.m[14], 0.00001f, "Adjoint2  Failed 14", __FILE__, __LINE__);
-		Assert::AreEqual(0, more.m[15], 0.00001f, "Adjoint2  Failed 15", __FILE__, __LINE__);
+		Assert::AreEqual(-6,  more.m[0], 0.00001f, "Adjoint2 Failed 0 ", __FILE__, __LINE__);
+		Assert::AreEqual(0,   more.m[1], 0.00001f, "Adjoint2  Failed 4", __FILE__, __LINE__);
+		Assert::AreEqual(-72, more.m[2], 0.00001f, "Adjoint2  Failed 8", __FILE__, __LINE__);
+		Assert::AreEqual(36,  more.m[3], 0.00001f, "Adjoint2  Failed 12", __FILE__, __LINE__);
+		Assert::AreEqual(0,   more.m[4], 0.00001f, "Adjoint2  Failed 1 ", __FILE__, __LINE__);
+		Assert::AreEqual(0,   more.m[5], 0.00001f, "Adjoint2  Failed 5", __FILE__, __LINE__);
+		Assert::AreEqual(24,  more.m[6], 0.00001f, "Adjoint2  Failed 9", __FILE__, __LINE__);
+		Assert::AreEqual(-12, more.m[7], 0.00001f, "Adjoint2  Failed 13", __FILE__, __LINE__);
+		Assert::AreEqual(6,		more.m[8], 0.00001f, "Adjoint2  Failed 2 ", __FILE__, __LINE__);
+		Assert::AreEqual(0,		more.m[9], 0.00001f, "Adjoint2  Failed 6", __FILE__, __LINE__);
+		Assert::AreEqual(66,	more.m[10], 0.00001f, "Adjoint2  Failed 10", __FILE__, __LINE__);
+		Assert::AreEqual(-36, more.m[11], 0.00001f, "Adjoint2  Failed 14", __FILE__, __LINE__);
+		Assert::AreEqual(0,   more.m[12], 0.00001f, "Adjoint2  Failed 3 ", __FILE__, __LINE__);
+		Assert::AreEqual(-4,  more.m[13], 0.00001f, "Adjoint2  Failed 7", __FILE__, __LINE__);
+		Assert::AreEqual(0,   more.m[14], 0.00001f, "Adjoint2  Failed 11", __FILE__, __LINE__);
+		Assert::AreEqual(0,   more.m[15], 0.00001f, "Adjoint2  Failed 15", __FILE__, __LINE__);
 
 		test.Inverse();
 

@@ -1,7 +1,9 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__ 1
 
+#include <SDL/SDL.h>
 #include <oxml/Vec3.h>
+#include <oxml/Vec2.h>
 #include <oxml/Mat4.h>
 
 class Camera {
@@ -11,11 +13,13 @@ class Camera {
   ~Camera();
 
   void update();
-  void resize(int width, int height);
+  void resize(int width, int height); //OnResize
 
   const oxml::Vec3* ray_directions() const;
 
   oxml::Vec3 position_;
+  const oxml::Vec3 GetPosition() const;
+  const oxml::Vec3 GetForward() const;
 
  protected:
  
@@ -29,15 +33,26 @@ class Camera {
   float far_;
 
   oxml::Vec3 forward_;
+  oxml::Vec3 up_;
+  oxml::Vec3 right_;
   oxml::Vec3 *ray_directions_;
 
   int width_;
   int height_;
+  float speed_;
+
+  oxml::Vec2 delta_;
+  oxml::Vec2 mousePosition_;
+  oxml::Vec2 lastMousePosition_;
 
  private:
   void recalculeProjection();
   void recalculeRayDirections();
   void recalculateView();
+  void movement();
+  bool moved_;
+
+
 
 };
 

@@ -46,7 +46,7 @@ void RayTracer::onResize(Camera& camera) {
 
 Uint32 RayTracer::traceRay(const Ray& ray) {
 
-  oxml::Vec3 lightDir(-1.0f, -1.0f, -1.0f);
+  oxml::Vec3 lightDir(-1.0f, -1.0f, 1.0f);
   lightDir.Normalize();
 
   oxml::Vec4 sphereColor(1.0f, 0.0f, 1.0f, 1.0f);
@@ -61,6 +61,9 @@ Uint32 RayTracer::traceRay(const Ray& ray) {
 
   if (discriminant >= 0) {
     float t0 = (-b - sqrtf(discriminant)) / (2.0f * a);
+    if (t0 < 0.0f) {
+      return 0xff808080;
+    }
     //float t1 = (-b + sqrtf(discriminant)) / (2.0f * a);
     oxml::Vec3 hit_point = ray.origin + ray.direction * t0;
     oxml::Vec3 normal = hit_point - sphereOrigin;
@@ -84,7 +87,7 @@ void RayTracer::update(Camera& camera) {
     for (int y = 0; y < height_; y++) {
       for (int x = 0; x < width_; x++) {
         ray.direction = ray_directions[x + y * width_];
-        pixels_[((width_-1) - x) + y * width_] = traceRay(ray);
+        pixels_[x + ((height_ - 1) - y) * width_] = traceRay(ray);
       }
     }
     texture_.update(pixels_);

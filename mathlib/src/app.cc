@@ -47,8 +47,8 @@ void App::run() {
       }
       loop_->run();
       Time::current_time_ = (float) SDL_GetTicks64();
-      Time::delta_time_ = (Time::current_time_ - Time::last_time_);
-      Time::fps_ = (1.0f / Time::delta_time_) * 1000.0f;
+      Time::delta_time_ = (Time::current_time_ - Time::last_time_) / 1000.0f;
+      Time::fps_ = (1.0f / Time::delta_time_);
     }
     loop_->end();
   }

@@ -8,7 +8,7 @@ void PerformanceWindow::draw() {
     ImGui::End();
     return;
   }
-  ImGui::Text("Delta time -> %fms", Time::delta_time_);
+  ImGui::Text("Delta time -> %fms", Time::delta_time_ * 1000.0f);
   ImGui::Text("Fps -> %f", Time::fps_);
 
   ImGui::End();

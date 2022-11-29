@@ -17,7 +17,7 @@ GameLoop& GameLoop::Instance() {
 GameLoop::GameLoop() : camera_((45.0f * oxml::Mathf::Deg2Rad), 0.1f, 100.0f) {
   renderer_ = nullptr;
   window_ = nullptr;
-  camera_.position_.z = -30.0f;
+  camera_.position_.z = -2.0f;
 }
 
 GameLoop::~GameLoop() {}

@@ -371,7 +371,12 @@ namespace oxml {
   }
 
   inline Mat4 Mat4::Ortho(float right, float left, float top, float valuebottom, float near, float far) {
-
+    right = 0;
+    left = 0;
+    top = 0;
+    valuebottom = 0;
+    near = 0;
+    far = 0;
     return Mat4();
   }
 

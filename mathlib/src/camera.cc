@@ -10,7 +10,7 @@ Camera::Camera(float fov, float near, float far){
   fov_ = fov;
   near_ = near;
   far_ = far;
-  forward_ = oxml::Vec3(0.0f, 0.0f, -1.0f);
+  forward_ = oxml::Vec3(0.0f, 0.0f, 1.0f);
   up_ = oxml::Vec3::up;
   right_ = oxml::Vec3::right;
   position_ = oxml::Vec3::zero;
@@ -53,7 +53,7 @@ void Camera::recalculeProjection() {
 }
 
 void Camera::recalculateView() {
-  view_ = oxml::Mat4::LookAt(position_, (position_ + forward_), oxml::Vec3(0.0f, 1.0f, 0.0f));
+  view_ = oxml::Mat4::LookAt(position_, (position_ + (-forward_)), oxml::Vec3(0.0f, 1.0f, 0.0f));
   if(!view_.GetInverse(inverse_view_)){
     printf("No inverse!\n");
   }
@@ -110,7 +110,9 @@ void Camera::movement(){
   lastMousePosition_ = mousePosition_;
 
   //Set right direction
-  right_ = oxml::Vec3::Cross(forward_,up_);
+  right_ = oxml::Vec3::Cross(forward_.Normalized(),oxml::Vec3::up);
+  up_ = oxml::Vec3::Cross(forward_.Normalized(),right_.Normalized());
+
 
   //Input keyboard
   
@@ -118,22 +120,22 @@ void Camera::movement(){
   //oxml::Vec3(forward_);
   if(keystates[SDL_SCANCODE_W]){
     //Ha pulsado W
-    position_ -= forward_ * speed_;
+    position_ += forward_ * speed_;
     moved_ = true;
   }
   if(keystates[SDL_SCANCODE_S]){
     //Ha pulsado S
-    position_ += forward_ * speed_;
+    position_ -= forward_ * speed_;
     moved_ = true;
   }
   if(keystates[SDL_SCANCODE_A]){
     //Ha pulsado A
-    position_ -= right_ * speed_;
+    position_ += right_ * speed_;
     moved_ = true;
   }
   if(keystates[SDL_SCANCODE_D]){
     //Ha pulsado E
-    position_ += right_ * speed_;
+    position_ -= right_ * speed_;
     moved_ = true;
   }
 
@@ -146,9 +148,10 @@ void Camera::movement(){
   
   if(delta_ != 0.0f && mouse_clicked){
     
+    
     //printf("CLICK & ROTATE\n");
-    /*float pitchDelta = (delta_.y * rotation_speed_) * oxml::Mathf::Deg2Rad;
-    float yawDelta = (delta_.x * rotation_speed_) * oxml::Mathf::Deg2Rad;
+    float pitchDelta = (delta_.x * rotation_speed_) * oxml::Mathf::Deg2Rad; // Eje x
+    float yawDelta = (delta_.y * rotation_speed_) * oxml::Mathf::Deg2Rad; // eje y, roll eje z
 
     oxml::Mat4 rotation = oxml::Mat4::Identity();
 
@@ -162,6 +165,9 @@ void Camera::movement(){
     forward_.y = rotation_direction.y; 
     forward_.z = rotation_direction.z;
 
+    moved_ = true;
+    /*forward_.x += delta_.x;
+    forward_.y += -delta_.y;
     moved_ = true;*/
   }
 
@@ -186,7 +192,13 @@ void Camera::cameraSettings(){
     ImGui::DragFloat("Forward.y",&forward_.y, 0.005f, -1.0f, 1.0f, "%f");
     ImGui::DragFloat("Forward.z",&forward_.z, 0.005f, -1.0f, 1.0f, "%f");
     ImGui::Text("Right");
+    ImGui::DragFloat("Right.z",&right_.x, 0.005f, -1.0f, 1.0f, "%f");
+    ImGui::DragFloat("Right.z",&right_.y, 0.005f, -1.0f, 1.0f, "%f");
+    ImGui::DragFloat("Right.z",&right_.z, 0.005f, -1.0f, 1.0f, "%f");
     ImGui::Text("Up");
+    ImGui::DragFloat("Up.z",&up_.x, 0.005f, -1.0f, 1.0f, "%f");
+    ImGui::DragFloat("Up.z",&up_.y, 0.005f, -1.0f, 1.0f, "%f");
+    ImGui::DragFloat("Up.z",&up_.z, 0.005f, -1.0f, 1.0f, "%f");
     ImGui::Text("Delta");
     ImGui::DragFloat("Delta.x",&delta_.x, 0.005f, 0.0f, 1.0f, "%f");
     ImGui::DragFloat("Delta.y",&delta_.y, 0.005f, 0.0f, 1.0f, "%f");

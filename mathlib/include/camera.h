@@ -13,6 +13,7 @@ class Camera {
 
   ~Camera();
 
+  void cameraSettings();
   void update();
   void resize(int width, int height); //OnResize
 
@@ -35,15 +36,16 @@ class Camera {
   float near_;
   float far_;
 
-  oxml::Vec3 forward_;
-  oxml::Vec3 up_;
-  oxml::Vec3 right_;
   oxml::Vec3 *ray_directions_;
 
   int width_;
   int height_;
   float speed_;
   float rotation_speed_;
+  
+  oxml::Vec3 forward_;
+  oxml::Vec3 up_;
+  oxml::Vec3 right_;
 
   oxml::Vec2 delta_;
   oxml::Vec2 mousePosition_;

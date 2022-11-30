@@ -36,6 +36,7 @@ void GameLoop::run() {
 
   pw_.draw();
   rt_.draw(camera_);
+  camera_.cameraSettings();
 
 
   ImGui::Render();

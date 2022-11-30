@@ -1,9 +1,8 @@
 #include <stdio.h>
-
 #include <oxml/Mathf.h>
-
 #include "camera.h"
 #include "timer.h"
+#include <ImGui/imgui.h>
 
 bool Camera::mouse_clicked = false;
 
@@ -55,7 +54,10 @@ void Camera::recalculeProjection() {
 
 void Camera::recalculateView() {
   view_ = oxml::Mat4::LookAt(position_, (position_ + forward_), oxml::Vec3(0.0f, 1.0f, 0.0f));
-  view_.GetInverse(inverse_view_);
+  if(!view_.GetInverse(inverse_view_)){
+    printf("No inverse!\n");
+  }
+  
 }
 
 void Camera::recalculeRayDirections() {
@@ -92,6 +94,7 @@ void Camera::resize(int width, int height) {
   height_ = height;
 
   recalculeProjection();
+  recalculateView();
   recalculeRayDirections();
 }
 
@@ -110,7 +113,7 @@ void Camera::movement(){
   right_ = oxml::Vec3::Cross(forward_,up_);
 
   //Input keyboard
-  SDL_Event e;
+  
   const Uint8 *keystates = SDL_GetKeyboardState(NULL);
   //oxml::Vec3(forward_);
   if(keystates[SDL_SCANCODE_W]){
@@ -134,7 +137,7 @@ void Camera::movement(){
     moved_ = true;
   }
 
-  printf("x->%f y->%f z->%f\n",forward_.x,forward_.y,forward_.z);
+  //printf("x->%f y->%f z->%f\n",forward_.x,forward_.y,forward_.z);
 
     
 
@@ -142,9 +145,9 @@ void Camera::movement(){
   //Rotation mouse
   
   if(delta_ != 0.0f && mouse_clicked){
-
+    
     //printf("CLICK & ROTATE\n");
-    float pitchDelta = (delta_.y * rotation_speed_) * oxml::Mathf::Deg2Rad;
+    /*float pitchDelta = (delta_.y * rotation_speed_) * oxml::Mathf::Deg2Rad;
     float yawDelta = (delta_.x * rotation_speed_) * oxml::Mathf::Deg2Rad;
 
     oxml::Mat4 rotation = oxml::Mat4::Identity();
@@ -157,10 +160,44 @@ void Camera::movement(){
 
     forward_.x = rotation_direction.x; 
     forward_.y = rotation_direction.y; 
-    forward_.z = rotation_direction.z; 
+    forward_.z = rotation_direction.z;
 
-    moved_ = true;
+    moved_ = true;*/
   }
 
 
 }
+
+void Camera::cameraSettings(){
+ if (!ImGui::Begin("Camera Settings")) {
+    ImGui::End();
+    return;
+  }
+  
+  if (ImGui::CollapsingHeader("Position")){
+   
+    ImGui::Text("Position");
+    ImGui::DragFloat("Position.x",&position_.x, 0.005f, -100.0f, 100.0f, "%f");
+    ImGui::DragFloat("Position.y",&position_.y, 0.005f, -100.0f, 100.0f, "%f");
+    ImGui::DragFloat("Position.z",&position_.z, 0.005f, -100.0f, 100.0f, "%f");
+
+    ImGui::Text("Forward");
+    ImGui::DragFloat("Forward.x",&forward_.x, 0.005f, -1.0f, 1.0f, "%f");
+    ImGui::DragFloat("Forward.y",&forward_.y, 0.005f, -1.0f, 1.0f, "%f");
+    ImGui::DragFloat("Forward.z",&forward_.z, 0.005f, -1.0f, 1.0f, "%f");
+    ImGui::Text("Right");
+    ImGui::Text("Up");
+    ImGui::Text("Delta");
+    ImGui::DragFloat("Delta.x",&delta_.x, 0.005f, 0.0f, 1.0f, "%f");
+    ImGui::DragFloat("Delta.y",&delta_.y, 0.005f, 0.0f, 1.0f, "%f");
+    moved_ = true;
+
+    forward_.Normalize();
+
+    //ImGui::EndMenu();
+  }
+  //ImGui::ShowDemoWindow();
+
+  ImGui::End();
+}
+

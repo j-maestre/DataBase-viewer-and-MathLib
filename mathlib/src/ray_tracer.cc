@@ -47,12 +47,24 @@ void RayTracer::onResize(Camera& camera) {
   camera.resize(w, h);
 }
 
+oxml::Vec4 RayTracer::BlendColors(oxml::Vec4 base,oxml::Vec4 color2){
+ 
+  oxml::Vec4 newColor;
+  newColor.w = 1 - (1 - color2.w) * (1 - base.w);
+  newColor.x = color2.x + base.x;
+  newColor.y = color2.y + base.y;
+  newColor.z = color2.z + base.z;
+
+  return newColor;
+}
+
 Uint32 RayTracer::traceRay(const Ray& ray, const Sphere& sphere, bool &colisioned) {
 
   oxml::Vec3 lightDir = GameLoop::Instance().globalLigt_.light_direction_;
   lightDir.Normalize();
 
-  oxml::Vec4 sphereColor(sphere.sphereColor_);
+  //oxml::Vec4 sphereColor(sphere.sphereColor_);
+  oxml::Vec4 sphereColor = BlendColors(sphere.sphereColor_,GameLoop::Instance().globalLigt_.color_);
   oxml::Vec3 origin = ray.origin - sphere.sphereOrigin_;
   //oxml::Vec3 sphereOrigin(oxml::Vec3::zero);
   //float radius = 0.5f;

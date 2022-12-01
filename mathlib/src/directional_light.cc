@@ -2,7 +2,7 @@
 #include "oxml/Vec4.h"
 #include <ImGui/imgui.h>
 
-DirectionalLight::DirectionalLight() : color_(1.0f,1.0f,1.0f,1.0f), light_direction_(-1.0f, -1.0f, 1.0f){
+DirectionalLight::DirectionalLight() : color_(0.0f,0.0f,0.0f,1.0f), light_direction_(-1.0f, -1.0f, 1.0f){
   /*color_ = oxml::Vec4(1.0f,1.0f,1.0f,1.0f);
   light_direction_ = oxml::Vec3(-1.0f, -1.0f, 1.0f);*/
 
@@ -29,6 +29,20 @@ void DirectionalLight::DirectionalLightSettings(){
     ImGui::DragFloat("Direction.x",&light_direction_.x, 0.005f, -100.0f, 100.0f, "%f");
     ImGui::DragFloat("Direction.y",&light_direction_.y, 0.005f, -100.0f, 100.0f, "%f");
     ImGui::DragFloat("Direction.z",&light_direction_.z, 0.005f, -100.0f, 100.0f, "%f");
+  }
+
+  if (ImGui::CollapsingHeader("Color")){
+    ImGui::DragFloat("Color.r",&color_.x, 0.005f, -100.0f, 100.0f, "%f");
+    ImGui::DragFloat("Color.g",&color_.y, 0.005f, -100.0f, 100.0f, "%f");
+    ImGui::DragFloat("Color.b",&color_.z, 0.005f, -100.0f, 100.0f, "%f");
+    ImGui::DragFloat("Color.a",&color_.w, 0.005f, -100.0f, 100.0f, "%f");
+  }
+
+  if(ImGui::Button("Reset")){
+    color_.x = 0.0f;
+    color_.y = 0.0f;
+    color_.z = 0.0f;
+    color_.w = 1.0f;
   }
 
 

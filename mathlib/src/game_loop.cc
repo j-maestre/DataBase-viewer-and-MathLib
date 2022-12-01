@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_impl_sdl.h>
 #include <ImGui/imgui_impl_sdlrenderer.h>
-
 #include <oxml/Mathf.h>
-
 #include "sphere.h"
+#include "directional_light.h"
 #include "game_loop.h"
+
+
 
 
 GameLoop& GameLoop::Instance() {
@@ -34,7 +34,11 @@ void GameLoop::init(SDL_Renderer *rdr, SDL_Window *wnd) {
   spheres[0].sphereOrigin_ = oxml::Vec3(-0.5f,0.0f,-0.5f);
   spheres[0].tag_ = 0;
   spheres[1].sphereOrigin_ = oxml::Vec3(0.0f,0.0f,0.0f);
+  spheres[1].sphereColor_ = oxml::Vec4(1.0f, 1.0f, 0.0f, 1.0f);
   spheres[1].tag_ = 1;
+
+  
+  
   //spheres[0] = new Sphere();
 }
 
@@ -47,12 +51,15 @@ void GameLoop::run() {
   pw_.draw();
   rt_.draw(camera_);
   camera_.cameraSettings();
+
+  //Sphere settings
   char buff[20];
   itoa(spheres[0].tag_,buff,10);
   spheres[0].sphereSettings(buff);
   itoa(spheres[1].tag_,buff,10);
   spheres[1].sphereSettings(buff);
   orderSpheres();
+  globalLigt_.DirectionalLightSettings();
 
 
   ImGui::Render();

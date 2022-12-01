@@ -20,6 +20,7 @@ namespace oxml {
     static float Pow(float value, float p);
     static float FloatModule(float a, float b);
     static float Round(float value);
+    static float rsqrt(float number);
 
   };
 

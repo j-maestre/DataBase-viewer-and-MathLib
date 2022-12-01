@@ -3,6 +3,7 @@
 
 #include <oxml/Vec3.h>
 #include <oxml/Vec4.h>
+#include <oxml/Mathf.h>>
 
 #include "game_loop.h"
 #include "ray_tracer.h"
@@ -48,7 +49,7 @@ void RayTracer::onResize(Camera& camera) {
 
 Uint32 RayTracer::traceRay(const Ray& ray, const Sphere& sphere, bool &colisioned) {
 
-  oxml::Vec3 lightDir(-1.0f, -1.0f, 1.0f);
+  oxml::Vec3 lightDir = GameLoop::Instance().globalLigt_.light_direction_;
   lightDir.Normalize();
 
   oxml::Vec4 sphereColor(sphere.sphereColor_);

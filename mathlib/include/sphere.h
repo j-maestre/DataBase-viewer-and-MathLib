@@ -16,8 +16,9 @@ class Sphere : public Entity{
         void Sphere::sphereSettings(const char *index);
         
         float radius_;
-        oxml::Vec4 sphereColor_;
         oxml::Vec3 sphereOrigin_;
+        oxml::Vec4 sphereColor_;
+        float color_[3];
     protected:
 
 };

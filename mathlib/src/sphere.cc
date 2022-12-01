@@ -14,6 +14,7 @@ Sphere::Sphere(const Sphere& o){
     radius_ = o.radius_;
     sphereColor_ =  o.sphereColor_;
     sphereOrigin_ = o.sphereOrigin_;
+    tag_ = o.tag_;
 }
 
 Sphere::~Sphere(){}
@@ -35,21 +36,25 @@ void Sphere::sphereSettings(const char *index){
   if (ImGui::CollapsingHeader(name)){
     snprintf(name,20,"%s","Positions");
     strcat(name,index);
-  
-    
-
     ImGui::Text(name);
-    //snprintf(type_tmp,17,"%s",type);
+
     snprintf(name,20,"%s","x");
     strcat(name,index);
-    //snprintf(name,20,"%s",index);
     ImGui::DragFloat(name,&sphereOrigin_.x, 0.005f, -100.0f, 100.0f, "%f");
+
     snprintf(name,20,"%s","y");
     strcat(name,index);
     ImGui::DragFloat(name,&sphereOrigin_.y, 0.005f, -100.0f, 100.0f, "%f");
+    
     snprintf(name,20,"%s","z");
     strcat(name,index);
     ImGui::DragFloat(name,&sphereOrigin_.z, 0.005f, -100.0f, 100.0f, "%f");
+    
+    snprintf(name,20,"%s","Albedo");
+    strcat(name,index);
+    if(ImGui::ColorPicker3(name,color_)){
+      sphereColor_ = oxml::Vec4(color_[2], color_[1], color_[0], 1.0f);
+    }
     
   }
   //ImGui::ShowDemoWindow();

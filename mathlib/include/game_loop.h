@@ -5,6 +5,7 @@
 
 #include "ray_tracer.h"
 #include "sphere.h"
+#include "directional_light.h"
 #include "performance_window.h"
 
 class GameLoop final {
@@ -20,6 +21,7 @@ class GameLoop final {
   void orderSpheres();
   int sphere_size_;
   Sphere *spheres;
+  DirectionalLight globalLigt_;
 
  private:
 

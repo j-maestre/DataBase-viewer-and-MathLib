@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 
 #include "ray_tracer.h"
+#include "sphere.h"
 #include "performance_window.h"
 
 class GameLoop final {
@@ -16,6 +17,8 @@ class GameLoop final {
   void init(SDL_Renderer *rdr, SDL_Window *wnd);
   void run();
   void end();
+  int sphere_size_;
+  Sphere *spheres;
 
  private:
 

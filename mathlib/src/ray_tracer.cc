@@ -4,6 +4,7 @@
 #include <oxml/Vec3.h>
 #include <oxml/Vec4.h>
 
+#include "game_loop.h"
 #include "ray_tracer.h"
 #include "timer.h"
 
@@ -11,6 +12,7 @@ RayTracer::RayTracer() {
   pixels_ = nullptr;
   window_ = nullptr;
   renderer_ = nullptr;
+
 }
 
 RayTracer::~RayTracer() {}
@@ -44,35 +46,41 @@ void RayTracer::onResize(Camera& camera) {
   camera.resize(w, h);
 }
 
-Uint32 RayTracer::traceRay(const Ray& ray) {
+Uint32 RayTracer::traceRay(const Ray& ray, const Sphere& sphere, bool &colisioned) {
 
   oxml::Vec3 lightDir(-1.0f, -1.0f, 1.0f);
   lightDir.Normalize();
 
-  oxml::Vec4 sphereColor(1.0f, 0.0f, 1.0f, 1.0f);
-  oxml::Vec3 sphereOrigin(oxml::Vec3::zero);
-  float radius = 0.5f;
+  oxml::Vec4 sphereColor(sphere.sphereColor_);
+  oxml::Vec3 origin = ray.origin - sphere.sphereOrigin_;
+  //oxml::Vec3 sphereOrigin(oxml::Vec3::zero);
+  //float radius = 0.5f;
+  //printf("Color-> %f %f %f\n",sphere.sphereColor_.x);
+  
 
   float a = ray.direction.SqrMagnitude();
-  float b = 2.0f * oxml::Vec3::Dot(ray.origin, ray.direction);
-  float c = ray.origin.SqrMagnitude() - (radius * radius);
+  float b = 2.0f * oxml::Vec3::Dot(origin, ray.direction);
+  float c = origin.SqrMagnitude() - (sphere.radius_ * sphere.radius_);
 
   float discriminant = b * b - 4.0f * a * c;
 
   if (discriminant >= 0) {
     float t0 = (-b - sqrtf(discriminant)) / (2.0f * a);
     if (t0 < 0.0f) {
+      colisioned = false;
       return 0xff808080;
     }
     //float t1 = (-b + sqrtf(discriminant)) / (2.0f * a);
-    oxml::Vec3 hit_point = ray.origin + ray.direction * t0;
-    oxml::Vec3 normal = hit_point - sphereOrigin;
+    oxml::Vec3 hit_point = origin + ray.direction * t0;
+    oxml::Vec3 normal = hit_point - sphere.sphereOrigin_;
     normal.Normalize();
     float light = fmaxf(oxml::Vec3::Dot(normal, -lightDir), 0.0f);
     sphereColor *= light;
     sphereColor.w = 1.0f;
+    colisioned = true;
     return sphereColor.ToRGBA();
   }
+  colisioned = false;
   return 0xff808080;
 }
 
@@ -83,13 +91,23 @@ void RayTracer::update(Camera& camera) {
     Ray ray;
     ray.origin = camera.position_;
     const oxml::Vec3 *ray_directions = camera.ray_directions();
+    //GameLoop::Instance().spheres[0].sphereOrigin_ = oxml::Vec3(-0.5f,0.0f,0.0f);
     //printf("%ffps:%fms\n", Time::fps_, Time::delta_time_);
-    for (int y = 0; y < height_; y++) {
-      for (int x = 0; x < width_; x++) {
-        ray.direction = ray_directions[x + y * width_];
-        pixels_[x + ((height_ - 1) - y) * width_] = traceRay(ray);
+    
+
+      for (int y = 0; y < height_; y++) {
+        for (int x = 0; x < width_; x++) {
+            ray.direction = ray_directions[x + y * width_];
+            bool colisioned = false;
+            for(int i = 0; i<GameLoop::Instance().sphere_size_ && !colisioned; i++){
+              pixels_[x + ((height_ - 1) - y) * width_] = traceRay(ray, GameLoop::Instance().spheres[i], colisioned);
+            }
+
+        }
       }
-    }
+
+    
+    //Recorrer todas las texturas
     texture_.update(pixels_);
   }
 }

@@ -6,6 +6,7 @@
 
 #include <oxml/Mathf.h>
 
+#include "sphere.h"
 #include "game_loop.h"
 
 
@@ -25,7 +26,13 @@ GameLoop::~GameLoop() {}
 void GameLoop::init(SDL_Renderer *rdr, SDL_Window *wnd) {
   renderer_ = rdr;
   window_ = wnd;
+  sphere_size_ = 2;
   rt_.init(renderer_, window_);
+  //spheres = (Sphere*) malloc(sizeof(Sphere)*sphere_size_);
+  spheres = new Sphere[sphere_size_];
+  spheres[0].sphereOrigin_ = oxml::Vec3(-0.5f,0.0f,0.0f);
+  spheres[1].sphereOrigin_ = oxml::Vec3(0.0f,0.0f,0.0f);
+  //spheres[0] = new Sphere();
 }
 
 void GameLoop::run() {

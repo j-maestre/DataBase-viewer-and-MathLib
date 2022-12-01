@@ -5,6 +5,7 @@
 
 #include <oxml/Vec2.h>
 
+#include "sphere.h"
 #include "texture.h"
 #include "camera.h"
 #include "ray.h"
@@ -26,7 +27,7 @@ class RayTracer {
 
   void update(Camera& camera);
   void onResize(Camera& camera);
-  Uint32 traceRay(const Ray& ray);
+  Uint32 traceRay(const Ray& ray,const Sphere& sphere, bool &colisioned);
 
   Uint32 *pixels_;
   Texture texture_;  

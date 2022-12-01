@@ -95,5 +95,36 @@ solution("MathLib_" .. _ACTION)
   project("RayTracing")
     kind "ConsoleApp"
     files {
-      path.join(PROJ_DIR, "./src/*.cc");
+      path.join(PROJ_DIR, "./src/*.cc"),
+      path.join(PROJ_DIR, "./deps/bin/ImGui/*.cpp"),
     }
+
+    includedirs {
+      path.join(PROJ_DIR, "./deps/include/"),
+    }
+
+    libdirs {
+      path.join(PROJ_DIR, "./deps/bin/SDL/"),
+      path.join(PROJ_DIR, "./deps/bin/ImGui/"),
+    }
+
+    configuration { "Debug", "x32" }
+      links { 
+        path.join(PROJ_DIR, "./deps/bin/SDL/x32/Debug/SDL2"),
+        path.join(PROJ_DIR, "./deps/bin/SDL/x32/Debug/SDL2main"),
+      }
+    configuration { "Debug", "x64" }
+      links { 
+        path.join(PROJ_DIR, "./deps/bin/SDL/x64/Debug/SDL2"),
+        path.join(PROJ_DIR, "./deps/bin/SDL/x64/Debug/SDL2main"),
+      }
+    configuration { "Release", "x32" }
+      links { 
+        path.join(PROJ_DIR, "./deps/bin/SDL/x32/Release/SDL2"),
+        path.join(PROJ_DIR, "./deps/bin/SDL/x32/Release/SDL2main"),
+      }
+    configuration { "Release", "x64" }
+      links { 
+        path.join(PROJ_DIR, "./deps/bin/SDL/x64/Release/SDL2"),
+        path.join(PROJ_DIR, "./deps/bin/SDL/x64/Release/SDL2main"),
+      }

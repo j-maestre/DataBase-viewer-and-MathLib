@@ -13,6 +13,7 @@ class Sphere : public Entity{
         Sphere(const Sphere& o);
         ~Sphere();
         void Sphere::draw() override;
+        void Sphere::sphereSettings(const char *index);
         
         float radius_;
         oxml::Vec4 sphereColor_;

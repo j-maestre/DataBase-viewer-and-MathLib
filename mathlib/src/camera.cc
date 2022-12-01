@@ -145,7 +145,7 @@ void Camera::movement(){
 
 
   //Rotation mouse
-  
+  mouse_clicked = false;
   if(delta_ != 0.0f && mouse_clicked){
     
     

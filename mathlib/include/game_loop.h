@@ -17,6 +17,7 @@ class GameLoop final {
   void init(SDL_Renderer *rdr, SDL_Window *wnd);
   void run();
   void end();
+  void orderSpheres();
   int sphere_size_;
   Sphere *spheres;
 

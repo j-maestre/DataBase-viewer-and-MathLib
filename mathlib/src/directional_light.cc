@@ -2,7 +2,7 @@
 #include "oxml/Vec4.h"
 #include <ImGui/imgui.h>
 
-DirectionalLight::DirectionalLight() : color_(0.0f,0.0f,0.0f,1.0f), light_direction_(-1.0f, -1.0f, 1.0f){
+DirectionalLight::DirectionalLight() : color_(0.1f,0.1f,0.1f,1.0f), light_direction_(-1.0f, -1.0f, 1.0f){
   /*color_ = oxml::Vec4(1.0f,1.0f,1.0f,1.0f);
   light_direction_ = oxml::Vec3(-1.0f, -1.0f, 1.0f);*/
 
@@ -32,9 +32,9 @@ void DirectionalLight::DirectionalLightSettings(){
   }
 
   if (ImGui::CollapsingHeader("Color")){
-    ImGui::DragFloat("Color.r",&color_.x, 0.005f, -100.0f, 100.0f, "%f");
+    ImGui::DragFloat("Color.r",&color_.z, 0.005f, -100.0f, 100.0f, "%f");
     ImGui::DragFloat("Color.g",&color_.y, 0.005f, -100.0f, 100.0f, "%f");
-    ImGui::DragFloat("Color.b",&color_.z, 0.005f, -100.0f, 100.0f, "%f");
+    ImGui::DragFloat("Color.b",&color_.x, 0.005f, -100.0f, 100.0f, "%f");
     ImGui::DragFloat("Color.a",&color_.w, 0.005f, -100.0f, 100.0f, "%f");
   }
 

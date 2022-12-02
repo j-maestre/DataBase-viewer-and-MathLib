@@ -50,6 +50,18 @@ void RayTracer::onResize(Camera& camera) {
 oxml::Vec4 RayTracer::BlendColors(oxml::Vec4 base,oxml::Vec4 color2){
  
   oxml::Vec4 newColor;
+
+  // Blending Multiply algoritms
+  /*base.Normalize();
+  color2.Normalize();
+  newColor.x = (base.x * color2.x);
+  newColor.y = (base.y * color2.y);
+  newColor.z = (base.z * color2.z);
+  newColor.w = (base.w * color2.w);
+  newColor.Normalize();
+  newColor *= 255.0f;*/
+
+  // Blending Add algoritm 
   newColor.w = 1 - (1 - color2.w) * (1 - base.w);
   newColor.x = color2.x + base.x;
   newColor.y = color2.y + base.y;

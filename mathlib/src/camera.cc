@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <oxml/Mathf.h>
+//#include <oxml/esat/include/esat/math.h>
 #include "camera.h"
 #include "timer.h"
 #include <ImGui/imgui.h>
@@ -154,6 +155,9 @@ void Camera::movement(){
     float yawDelta = (delta_.y * rotation_speed_) * oxml::Mathf::Deg2Rad; // eje y, roll eje z
 
     oxml::Mat4 rotation = oxml::Mat4::Identity();
+    //esat::Mat4 rotationEsat = esat::Mat4Identity();
+
+
 
     rotation = rotation.Multiply(oxml::Mat4::RotateX(pitchDelta));
     rotation = rotation.Multiply(oxml::Mat4::RotateY(yawDelta)) ;

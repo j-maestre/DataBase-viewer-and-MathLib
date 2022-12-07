@@ -109,7 +109,7 @@ Uint32 RayTracer::traceRay(const Ray& ray, const Sphere& sphere, bool &colisione
   return 0xff808080;
 }
 
-void RayTracer::update(Camera& camera) {
+void RayTracer::update(Camera& camera){
   if (pixels_ != nullptr) {
     camera.update();
     onResize(camera);

@@ -22,6 +22,7 @@ class GameLoop final {
   int sphere_size_;
   Sphere *spheres;
   DirectionalLight globalLigt_;
+  void ReallocSpheres(int new_size);
 
  private:
 

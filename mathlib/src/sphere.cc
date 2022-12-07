@@ -57,6 +57,11 @@ void Sphere::sphereSettings(const char *index){
     }
     
   }
+
+  ImGui::Button("Add");
+  if(ImGui::IsItemClicked()){
+    GameLoop::Instance().ReallocSpheres(GameLoop::Instance().sphere_size_+1);
+  }
   //ImGui::ShowDemoWindow();
 
   ImGui::End();

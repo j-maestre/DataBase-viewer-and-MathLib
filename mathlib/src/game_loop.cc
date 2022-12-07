@@ -37,9 +37,34 @@ void GameLoop::init(SDL_Renderer *rdr, SDL_Window *wnd) {
   spheres[1].sphereColor_ = oxml::Vec4(1.0f, 1.0f, 0.0f, 1.0f);
   spheres[1].tag_ = 1;
 
+
   
   
   //spheres[0] = new Sphere();
+}
+
+void GameLoop::ReallocSpheres(int new_size){
+
+  if(new_size != sphere_size_){
+
+    Sphere *spheres_aux = new Sphere[new_size];
+    for (int i = 0; i < sphere_size_; i++){
+      spheres_aux[i] = spheres[i];
+      spheres_aux[i].tag_ = i;
+    }
+    spheres_aux[new_size-1].tag_ = new_size;
+
+
+    sphere_size_ = new_size;
+
+    if(spheres != nullptr){
+        delete[] spheres;
+    }
+    spheres = spheres_aux;
+
+
+  }
+
 }
 
 void GameLoop::run() {
@@ -53,11 +78,14 @@ void GameLoop::run() {
   camera_.cameraSettings();
 
   //Sphere settings
-  char buff[20];
-  itoa(spheres[0].tag_,buff,10);
-  spheres[0].sphereSettings(buff);
-  itoa(spheres[1].tag_,buff,10);
-  spheres[1].sphereSettings(buff);
+  for(int i = 0; i < sphere_size_; i++){
+    char buff[20];
+    itoa(spheres[i].tag_,buff,10);
+    spheres[i].sphereSettings(buff);
+
+  }
+  /*itoa(spheres[1].tag_,buff,10);
+  spheres[1].sphereSettings(buff);*/
   orderSpheres();
   globalLigt_.DirectionalLightSettings();
 

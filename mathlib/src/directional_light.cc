@@ -7,6 +7,7 @@ DirectionalLight::DirectionalLight() : color_(0.1f,0.1f,0.1f,1.0f), light_direct
   light_direction_ = oxml::Vec3(-1.0f, -1.0f, 1.0f);*/
 
 }
+
 DirectionalLight::DirectionalLight(const DirectionalLight& o){
   color_ = o.color_;
   light_direction_ = o.light_direction_;

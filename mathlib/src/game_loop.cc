@@ -103,10 +103,9 @@ void GameLoop::orderSpheres(){
  
 // A function to implement bubble sort
 
-    int i, j;
-    for (i = 0; i < sphere_size_ - 1; i++){
+    for (int i = 0; i < sphere_size_ - 1; i++){
         // Last i elements are already in place
-        for (j = 0; j < sphere_size_ - i - 1; j++){
+        for (int j = 0; j < sphere_size_ - i - 1; j++){
           if (spheres[j].sphereOrigin_.z > spheres[j + 1].sphereOrigin_.z){
             Sphere temp = spheres[j];
             spheres[j] = spheres[j + 1];

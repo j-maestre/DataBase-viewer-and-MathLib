@@ -5,6 +5,10 @@ class PerformanceWindow {
  public:
   PerformanceWindow() = default;
 
+  /**
+   * \brief draw the performance window
+   * 
+   */
   void draw();
 
 };

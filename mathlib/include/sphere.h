@@ -12,7 +12,17 @@ class Sphere : public Entity{
         Sphere();
         Sphere(const Sphere& o);
         ~Sphere();
+
+        /**
+         * \brief draw the sphere
+         * 
+         */
         void Sphere::draw() override;
+        /**
+         * \brief draw the sphere window settings
+         * 
+         * \param index indes of the sphere
+         */
         void Sphere::sphereSettings(const char *index);
         
         float radius_;

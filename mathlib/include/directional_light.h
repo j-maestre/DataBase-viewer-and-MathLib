@@ -10,10 +10,18 @@ class DirectionalLight : public Entity{
     DirectionalLight();
     DirectionalLight(const DirectionalLight& o);
     ~DirectionalLight();
+    
+    
     void draw() override;
+    /**
+     * \brief Show a ImGui window with the settings of the light
+     * 
+     */
     void DirectionalLightSettings();
 
+    //color of the light
     oxml::Vec4 color_;
+    //direction of the light
     oxml::Vec3 light_direction_;
 
   protected:

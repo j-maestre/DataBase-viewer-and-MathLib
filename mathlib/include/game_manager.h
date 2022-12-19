@@ -5,6 +5,11 @@ class GameManager{
     public:
     ~GameManager();
 
+    /**
+     * \brief get the unique instance of the game manager
+     * 
+     * \return GameManager& instance of the game manager
+     */
     static GameManager& Instance(){
       if(GameManager::instance_ == nullptr){
         GameManager::instance_ = new GameManager();

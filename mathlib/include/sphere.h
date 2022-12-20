@@ -11,6 +11,7 @@
 #include <oxml/Vec3.h>
 #include "entity.h"
 
+class RayTracer;
 
 class Sphere : public Entity{
     public:
@@ -23,7 +24,7 @@ class Sphere : public Entity{
          * \brief draw the sphere
          * 
          */
-        void Sphere::draw() override;
+        void Sphere::draw(RayTracer *ray_tracer) override;
         /**
          * \brief draw the sphere window settings
          * 

@@ -80,6 +80,8 @@ class GameLoop final {
   //the performance window
   PerformanceWindow pw_;
 
+  Entity *test;
+
 };
 
 #endif // !__GAME_LOOP_H__

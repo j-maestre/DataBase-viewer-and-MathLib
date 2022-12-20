@@ -13,8 +13,9 @@ RayTracer::RayTracer() {
   pixels_ = nullptr;
   window_ = nullptr;
   renderer_ = nullptr;
-
-}
+  spheres_ = nullptr;
+  numer_spheres_ = 0;
+} 
 
 RayTracer::~RayTracer() {}
 
@@ -124,8 +125,8 @@ void RayTracer::update(Camera& camera){
         for (int x = 0; x < width_; x++) {
             ray.direction = ray_directions[x + y * width_];
             bool colisioned = false;
-            for(int i = 0; i<GameLoop::Instance().sphere_size_ && !colisioned; i++){
-              pixels_[x + ((height_ - 1) - y) * width_] = traceRay(ray, GameLoop::Instance().spheres[i], colisioned);
+            for(int i = 0; i<numer_spheres_ && !colisioned; i++){
+              pixels_[x + ((height_ - 1) - y) * width_] = traceRay(ray, *(spheres_[i]), colisioned);
             }
 
         }
@@ -140,6 +141,7 @@ void RayTracer::update(Camera& camera){
 void RayTracer::draw(Camera& camera) {
   update(camera);
   texture_.draw();
+  clean_buffer();
 }
 
 void RayTracer::end() {
@@ -150,4 +152,30 @@ void RayTracer::end() {
   window_ = nullptr;
   renderer_ = nullptr;
   texture_.free();
+}
+
+void RayTracer::add_sphere(Sphere *sphere) {
+  if (nullptr == sphere) {
+    return;
+  }
+
+  if (spheres_ == nullptr) {
+    spheres_ = (Sphere**) malloc(sizeof(Sphere *));
+    spheres_[0] = sphere;
+  } else {
+    Sphere **aux_spheres = (Sphere **) malloc(sizeof(Sphere*) * numer_spheres_);
+    for (int i = 0; i < numer_spheres_; i++) {
+      aux_spheres[i] = spheres_[i];
+    }
+    aux_spheres[numer_spheres_] = sphere;
+  }
+  numer_spheres_++;
+}
+
+void RayTracer::clean_buffer() {
+  if (spheres_ != nullptr) {
+    free(spheres_);
+    spheres_ = nullptr;
+    numer_spheres_ = 0;
+  }
 }

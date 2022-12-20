@@ -20,8 +20,8 @@ Sphere::Sphere(const Sphere& o){
 Sphere::~Sphere(){}
 
 
-void Sphere::draw(){
-
+void Sphere::draw(RayTracer *ray_tracer){
+  ray_tracer->add_sphere(this);
 }
 
 void Sphere::sphereSettings(const char *index){

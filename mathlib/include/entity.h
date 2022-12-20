@@ -9,6 +9,8 @@
 
 #include <oxml/Vec2.h>
 
+class RayTracer;
+
 class Entity{
   public:
     Entity();
@@ -67,7 +69,7 @@ class Entity{
      * \brief Draw the son classes
      * (this function needs to be implemented in the son class)
      */
-    virtual void draw() = 0;
+    virtual void draw(RayTracer *ray_tracer) = 0;
 
     //tag of the entity
     int tag_;

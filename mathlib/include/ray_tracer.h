@@ -47,6 +47,8 @@ class RayTracer {
    */
   void end();
 
+  void add_sphere(Sphere *sphere);
+
  protected:
 
   /**
@@ -73,6 +75,8 @@ class RayTracer {
    */
   Uint32 traceRay(const Ray& ray,const Sphere& sphere, bool &colisioned);
 
+  void clean_buffer();
+
   /**
    * \brief blend the color between two clolrs
    * 
@@ -94,6 +98,10 @@ class RayTracer {
   int width_;
   //height of the window
   int height_;
+  //buffer of spheres
+  Sphere **spheres_;
+  //lenght of spheres buffer
+  unsigned int numer_spheres_;
 
 };
 

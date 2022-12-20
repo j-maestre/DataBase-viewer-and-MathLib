@@ -11,6 +11,8 @@
 #include "oxml/Vec4.h"
 #include "oxml/Vec3.h"
 
+class RayTracer;
+
 class DirectionalLight : public Entity{
   public:
     DirectionalLight();
@@ -18,7 +20,7 @@ class DirectionalLight : public Entity{
     ~DirectionalLight();
     
     
-    void draw() override;
+    void draw(RayTracer *ray_tracer) override;
     /**
      * \brief Show a ImGui window with the settings of the light
      * 

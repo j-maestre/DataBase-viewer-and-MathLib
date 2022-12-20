@@ -15,7 +15,7 @@ DirectionalLight::DirectionalLight(const DirectionalLight& o){
 
 DirectionalLight::~DirectionalLight(){}
 
-void DirectionalLight::draw(){
+void DirectionalLight::draw(RayTracer *ray_tracer){
 
 }
 

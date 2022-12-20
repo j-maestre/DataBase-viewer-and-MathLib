@@ -37,7 +37,7 @@ void GameLoop::init(SDL_Renderer *rdr, SDL_Window *wnd) {
   spheres[1].sphereColor_ = oxml::Vec4(1.0f, 1.0f, 0.0f, 1.0f);
   spheres[1].tag_ = 1;
 
-
+  test = new Sphere();
   
   
   //spheres[0] = new Sphere();
@@ -72,6 +72,8 @@ void GameLoop::run() {
   ImGui_ImplSDLRenderer_NewFrame();
   ImGui_ImplSDL2_NewFrame(window_);
   ImGui::NewFrame();
+
+  test->draw(&rt_);
 
   pw_.draw();
   rt_.draw(camera_);

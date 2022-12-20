@@ -48,7 +48,7 @@ void App::run() {
           runing = false;
 
           if(event.type == SDL_MOUSEBUTTONDOWN){
-            printf("Click\n");
+            //printf("Click\n");
             Camera::mouse_clicked = true;
           }
           if(event.type == SDL_MOUSEBUTTONUP){

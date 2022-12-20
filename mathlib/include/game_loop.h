@@ -57,7 +57,7 @@ class GameLoop final {
   //size of the spheres pointer
   int sphere_size_;
   //pointer to the all spheres
-  Sphere *spheres;
+  Sphere *spheres_;
   //the direcional light of the scene
   DirectionalLight globalLigt_;
 
@@ -79,8 +79,6 @@ class GameLoop final {
   Camera camera_;
   //the performance window
   PerformanceWindow pw_;
-
-  Entity *spheres_;
 
 };
 

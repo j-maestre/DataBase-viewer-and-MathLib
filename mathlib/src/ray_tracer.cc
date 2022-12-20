@@ -164,7 +164,7 @@ void RayTracer::add_sphere(Sphere *sphere) {
     spheres_ = (Sphere**) malloc(sizeof(Sphere *));
     spheres_[0] = sphere;
   } else {
-    Sphere **aux_spheres = (Sphere **) malloc(sizeof(Sphere*) * numer_spheres_);
+    Sphere **aux_spheres = (Sphere **) malloc(sizeof(Sphere*) * (numer_spheres_ +1));
     for (int i = 0; i < numer_spheres_; i++) {
       aux_spheres[i] = spheres_[i];
     }

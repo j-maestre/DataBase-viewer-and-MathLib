@@ -30,12 +30,12 @@ void GameLoop::init(SDL_Renderer *rdr, SDL_Window *wnd) {
   sphere_size_ = 2;
   rt_.init(renderer_, window_);
   //spheres = (Sphere*) malloc(sizeof(Sphere)*sphere_size_);
-  spheres = new Sphere[sphere_size_];
-  spheres[0].sphereOrigin_ = oxml::Vec3(-0.5f,0.0f,-0.5f);
-  spheres[0].tag_ = 0;
-  spheres[1].sphereOrigin_ = oxml::Vec3(0.0f,0.0f,0.0f);
-  spheres[1].sphereColor_ = oxml::Vec4(1.0f, 1.0f, 0.0f, 1.0f);
-  spheres[1].tag_ = 1;
+  spheres_ = new Sphere[sphere_size_];
+  spheres_[0].sphereOrigin_ = oxml::Vec3(-0.5f,0.0f,-0.5f);
+  spheres_[0].tag_ = 0;
+  spheres_[1].sphereOrigin_ = oxml::Vec3(0.0f,0.0f,0.0f);
+  spheres_[1].sphereColor_ = oxml::Vec4(1.0f, 1.0f, 0.0f, 1.0f);
+  spheres_[1].tag_ = 1;
   
   
   //spheres[0] = new Sphere();
@@ -47,7 +47,7 @@ void GameLoop::ReallocSpheres(int new_size){
 
     Sphere *spheres_aux = new Sphere[new_size];
     for (int i = 0; i < sphere_size_; i++){
-      spheres_aux[i] = spheres[i];
+      spheres_aux[i] = spheres_[i];
       spheres_aux[i].tag_ = i;
     }
     spheres_aux[new_size-1].tag_ = new_size;
@@ -55,10 +55,10 @@ void GameLoop::ReallocSpheres(int new_size){
 
     sphere_size_ = new_size;
 
-    if(spheres != nullptr){
-        delete[] spheres;
+    if(spheres_ != nullptr){
+        delete[] spheres_;
     }
-    spheres = spheres_aux;
+    spheres_ = spheres_aux;
 
 
   }
@@ -73,7 +73,7 @@ void GameLoop::run() {
 
     Entity *aux;
     for(int i = 0; i < sphere_size_; i++) {
-      aux = &spheres[0];
+      aux = &spheres_[i];
       aux->draw(&rt_);
     }
 
@@ -100,10 +100,10 @@ void GameLoop::orderSpheres(){
     for (int i = 0; i < sphere_size_ - 1; i++){
         // Last i elements are already in place
         for (int j = 0; j < sphere_size_ - i - 1; j++){
-          if (spheres[j].sphereOrigin_.z > spheres[j + 1].sphereOrigin_.z){
-            Sphere temp = spheres[j];
-            spheres[j] = spheres[j + 1];
-            spheres[j + 1] = temp;
+          if (spheres_[j].sphereOrigin_.z > spheres_[j + 1].sphereOrigin_.z){
+            Sphere temp = spheres_[j];
+            spheres_[j] = spheres_[j + 1];
+            spheres_[j + 1] = temp;
             
           }
         }

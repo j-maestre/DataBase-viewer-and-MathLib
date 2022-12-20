@@ -140,6 +140,7 @@ void RayTracer::update(Camera& camera){
 
 void RayTracer::draw(Camera& camera) {
   update(camera);
+  order_buffer();
   texture_.draw();
   clean_buffer();
 }
@@ -168,6 +169,8 @@ void RayTracer::add_sphere(Sphere *sphere) {
       aux_spheres[i] = spheres_[i];
     }
     aux_spheres[numer_spheres_] = sphere;
+    free(spheres_);
+    spheres_ = aux_spheres;
   }
   numer_spheres_++;
 }
@@ -178,4 +181,18 @@ void RayTracer::clean_buffer() {
     spheres_ = nullptr;
     numer_spheres_ = 0;
   }
+}
+
+void RayTracer::order_buffer() {
+  for (int i = 0; i < numer_spheres_ - 1; i++){
+        // Last i elements are already in place
+        for (int j = 0; j < numer_spheres_ - i - 1; j++){
+          if (spheres_[j]->sphereOrigin_.z > spheres_[j + 1]->sphereOrigin_.z){
+            Sphere *temp = spheres_[j];
+            spheres_[j] = spheres_[j + 1];
+            spheres_[j + 1] = temp;
+            
+          }
+        }
+    }
 }

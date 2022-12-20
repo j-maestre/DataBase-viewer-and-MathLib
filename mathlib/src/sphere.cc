@@ -21,6 +21,9 @@ Sphere::~Sphere(){}
 
 
 void Sphere::draw(RayTracer *ray_tracer){
+  char buff[20];
+  itoa(tag_,buff,10);
+  sphereSettings(buff);
   ray_tracer->add_sphere(this);
 }
 

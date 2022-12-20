@@ -80,7 +80,7 @@ class GameLoop final {
   //the performance window
   PerformanceWindow pw_;
 
-  Entity *test;
+  Entity *spheres_;
 
 };
 

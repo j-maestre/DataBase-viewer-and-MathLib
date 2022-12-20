@@ -77,6 +77,8 @@ class RayTracer {
 
   void clean_buffer();
 
+  void order_buffer();
+
   /**
    * \brief blend the color between two clolrs
    * 

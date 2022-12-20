@@ -36,8 +36,6 @@ void GameLoop::init(SDL_Renderer *rdr, SDL_Window *wnd) {
   spheres[1].sphereOrigin_ = oxml::Vec3(0.0f,0.0f,0.0f);
   spheres[1].sphereColor_ = oxml::Vec4(1.0f, 1.0f, 0.0f, 1.0f);
   spheres[1].tag_ = 1;
-
-  test = new Sphere();
   
   
   //spheres[0] = new Sphere();
@@ -73,22 +71,16 @@ void GameLoop::run() {
   ImGui_ImplSDL2_NewFrame(window_);
   ImGui::NewFrame();
 
-  test->draw(&rt_);
+    Entity *aux;
+    for(int i = 0; i < sphere_size_; i++) {
+      aux = &spheres[0];
+      aux->draw(&rt_);
+    }
 
   pw_.draw();
   rt_.draw(camera_);
   camera_.cameraSettings();
 
-  //Sphere settings
-  for(int i = 0; i < sphere_size_; i++){
-    char buff[20];
-    itoa(spheres[i].tag_,buff,10);
-    spheres[i].sphereSettings(buff);
-
-  }
-  /*itoa(spheres[1].tag_,buff,10);
-  spheres[1].sphereSettings(buff);*/
-  orderSpheres();
   globalLigt_.DirectionalLightSettings();
 
 

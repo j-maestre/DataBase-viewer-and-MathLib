@@ -8,6 +8,11 @@
 //   m6 m7 m8
 //
 //--------------------------------------------------------------//
+/**
+ * \file entity.h
+ * \author Jose Maria Maestre Quiles <maestrequi@esat-alumni.com>
+ * 
+ */
 #ifndef __MAT3_H__
 #define __MAT3_H__ 1
 

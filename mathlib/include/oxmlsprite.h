@@ -11,6 +11,8 @@
 #include "entity.h"
 #include "texture.h"
 
+class RayTracer;
+
 class Sprite : public Entity{
   public:
     Sprite();
@@ -54,7 +56,7 @@ class Sprite : public Entity{
      * \brief draw the sprite
      * 
      */
-    void draw() override;
+    void draw(RayTracer *ray_tracer) override;
   
   protected:
 

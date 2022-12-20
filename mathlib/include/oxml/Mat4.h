@@ -1,3 +1,8 @@
+/**
+ * \file entity.h
+ * \author Jose Maria Maestre Quiles <maestrequi@esat-alumni.com>
+ * 
+ */
 #ifndef __OXML_MAT4_H__
 #define __OXML_MAT4_H__ 1
 

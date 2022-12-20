@@ -1,3 +1,8 @@
+/**
+ * \file camera.h
+ * \author Hector Ochando <ochandoca@esat-alumni.com>
+ * 
+ */
 #ifndef __OXML_ASSERT_H__
 #define __OXML_ASSERT_H__ 1
 

@@ -8,6 +8,12 @@
 //
 //--------------------------------------------------------------//
 
+/**
+ * \file entity.h
+ * \author Jose Maria Maestre Quiles <maestrequi@esat-alumni.com>
+ * 
+ */
+
 #ifndef __MAT2_H__
 #define __MAT2_H__ 1
 

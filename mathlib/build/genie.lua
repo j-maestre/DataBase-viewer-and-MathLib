@@ -97,6 +97,7 @@ solution("MathLib_" .. _ACTION)
     files {
       path.join(PROJ_DIR, "./src/*.cc"),
       path.join(PROJ_DIR, "./deps/bin/ImGui/*.cpp"),
+      path.join(PROJ_DIR, "./include/*.h")
     }
 
     includedirs {

@@ -1,16 +1,16 @@
-P1-> Pagina 15 punto 2
-P2-> Pagina 15 punto 2.1
-P3-> Pagina 16 punto 3
+P1-> Pagina 4 punto 1
+P2-> Pagina 4 punto 1.1
+P3-> Pagina 7 punto 2
 P4-> (Demostracion)
-P5-> Pagina 17 punto 4
-P6-> Pagina 19 punto 5: 1º parrafo
+P5-> Pagina 12 punto 3
+P6-> Pagina 14 punto 4: 1º parrafo
 
-M1-> Pagina 22 punto 7
-M2-> Pagina 24 punto 8
+M1-> Pagina 17 punto 6
+M2-> Pagina 19 punto 7
 M3-> (Demostracion)
-M4-> Pagina 17 punto 4
+M4-> Pagina 12 punto 3
 
-D1-> Pagina 28 punto 9
-D2-> Pagina 30 punto 10
-D3-> Pagina 28: 2º y 3º parrafo
-D4-> Pagina 19 punto 5
+D1-> Pagina 5 punto 1.2
+D2-> Pagina 7: 2.1.1, pagina 8: 2.2.1, pagina 9: 2.3.1 (ejemplos)
+D3-> Pagina 11: 2º y 3º parrafo
+D4-> Pagina 12 punto 4

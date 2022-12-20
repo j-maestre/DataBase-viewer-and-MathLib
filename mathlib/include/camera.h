@@ -1,3 +1,9 @@
+/**
+ * \file camera.h
+ * \author Hector Ochando <ochandoca@esat-alumni.com>
+ * 
+ */
+
 #ifndef __CAMERA_H__
 #define __CAMERA_H__ 1
 

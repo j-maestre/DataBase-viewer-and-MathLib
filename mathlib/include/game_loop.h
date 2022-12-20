@@ -1,3 +1,9 @@
+/**
+ * \file game_loop.h
+ * \author Hector Ochando <ochandoca@esat-alumni.com>
+ * 
+ */
+
 #ifndef __GAME_LOOP_H__
 #define __GAME_LOOP_H__ 1
 

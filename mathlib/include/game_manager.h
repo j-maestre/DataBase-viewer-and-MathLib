@@ -1,3 +1,9 @@
+/**
+ * \file game_manager.h
+ * \author Jose Maria Maestre Quiles <maestrequi@esat-alumni.com>
+ * 
+ */
+
 #ifndef __GAME_MANAGER_H__
 #define __GAME_MANAGER_H__ 1
 

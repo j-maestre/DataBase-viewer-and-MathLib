@@ -1,3 +1,9 @@
+/**
+ * \file ray_tracer.h
+ * \author Hector Ochando <ochandoca@esat-alumni.com>
+ * 
+ */
+
 #ifndef __RAY_TRACER_H__ 
 #define __RAY_TRACER_H__ 1
 

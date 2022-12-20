@@ -1,3 +1,9 @@
+/**
+ * \file entity.h
+ * \author Jose Maria Maestre Quiles <maestrequi@esat-alumni.com>
+ * 
+ */
+
 #ifndef __ENTITY_H__
 #define __ENTITY_H__ 1
 

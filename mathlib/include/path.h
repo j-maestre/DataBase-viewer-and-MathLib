@@ -1,3 +1,8 @@
+/**
+ * \file path.h
+ * \author Jose Maria Maestre Quiles <maestrequi@esat-alumni.com>
+ * 
+ */
 
 #ifndef _PATH_H__
 #define _PATH_H__ 1

@@ -1,3 +1,9 @@
+/**
+ * \file timer.h
+ * \author Hector Ochando <ochandoca@esat-alumni.com>
+ * 
+ */
+
 #ifndef __TIMER_H__
 #define __TIMER_H__ 1
 

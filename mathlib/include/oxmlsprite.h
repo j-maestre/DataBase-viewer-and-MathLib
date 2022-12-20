@@ -1,3 +1,8 @@
+/**
+ * \file oxmlsprite.h
+ * \author Jose Maria Maestre Quiles <maestrequi@esat-alumni.com>
+ * 
+ */
 
 #ifndef __OXMLSPRITE_H__ 
 #define __OXMLSPRITE_H__ 1

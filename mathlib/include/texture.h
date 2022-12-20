@@ -1,3 +1,9 @@
+/**
+ * \file texture.h
+ * \author Hector Ochando <ochandoca@esat-alumni.com>
+ * 
+ */
+
 #ifndef __TEXTURE_H__
 #define __TEXTURE_H__ 1
 

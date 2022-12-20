@@ -1,3 +1,8 @@
+/**
+ * \file app.h
+ * \author Hector Ochando <ochandoca@esat-alumni.com>
+ * 
+ */
 #ifndef __APP_H__
 #define __APP_H__ 1
 

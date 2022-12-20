@@ -1,3 +1,9 @@
+/**
+ * \file directional_light.h
+ * \author Jose Maria Maestre Quiles <maestrequi@esat-alumni.com>
+ * 
+ */
+
 #ifndef __DIRECTIONAL_LIGHT_H__
 #define __DIRECTIONAL_LIGHT_H__ 1
 

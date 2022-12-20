@@ -1,3 +1,9 @@
+/**
+ * \file sphere.h
+ * \author Jose Maria Maestre Quiles <maestrequi@esat-alumni.com>
+ * 
+ */
+
 #ifndef __SPHERE_H__
 #define __SPHERE_H__ 1
 

@@ -167,6 +167,7 @@ namespace oxml {
     aux.m[1] = sinf(rotation);
     aux.m[3] = sinf(rotation) * -1.0f;
     aux.m[4] = cosf(rotation);
+    // GUSTAVO: There's a return statement missing here.
   }
 
   inline Mat3 Mat3::Multiply(const Mat3& other) const {

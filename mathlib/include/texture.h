@@ -61,6 +61,8 @@ class Texture {
    * \brief draw the texture
    * 
    */
+  // GUSTAVO: Textures shouldn't really draw themselves. Sprites should
+  // implement that function.
   void draw();
 
   /**

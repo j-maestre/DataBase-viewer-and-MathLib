@@ -19,7 +19,7 @@ int Sprite::getWidth() const{
   //return  
   return 0;
 }
-void Sprite::draw(){
+void Sprite::draw(RayTracer *ray_tracer){
 
 }
 

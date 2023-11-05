@@ -2,4 +2,4 @@
 
 ## Hector Ochando && Xema Maestre
 
-### DataBase Viewer && MathLib
+### DataBase Viewer && MathLib developed in C and C++
